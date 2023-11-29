@@ -19,7 +19,6 @@
       "always"
     ],
     "no-unused-vars": "error",
-    "comma-dangle": ["error", "always"],
     "max-len": ["warn", 100],
     "no-console": "warn",
     "no-debugger": "error",
