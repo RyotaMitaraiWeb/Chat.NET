@@ -1,0 +1,21 @@
+version: "3.5"
+name: chatnet
+services:
+  client:
+    container_name: nextjs
+    build:
+      context: ./client
+      dockerfile: dev.Dockerfile
+    
+    environment:
+      - NEXT_API_URL=http://localhost:7000
+      - WATCHPACK_POLLING=true
+    env_file:
+      - .env
+    volumes:
+      - ./client/src:/app/src
+      - ./client/public:/app/public
+    
+    restart: always
+    ports:
+      - 3000:3000
