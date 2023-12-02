@@ -12,5 +12,4 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\Web.ViewModels\Web.ViewModels.csproj" />
   </ItemGroup>
-
 </Project>

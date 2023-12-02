@@ -1,5 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -25,5 +24,4 @@
     <ProjectReference Include="..\Web.Services\Web.Services.csproj" />
     <ProjectReference Include="..\Web.ViewModels\Web.ViewModels.csproj" />
   </ItemGroup>
-
 </Project>
