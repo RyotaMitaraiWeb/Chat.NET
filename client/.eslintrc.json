@@ -35,6 +35,12 @@
     "no-cond-assign": "error",
     "no-bitwise": "error",
     "yoda": "error",
-    "prettier/prettier": "error"
+    "prettier/prettier": "error",
+    "curly": "error",
+    "arrow-parens": "error",
+    "arrow-spacing": "error",
+    "capitalized-comments": "error",
+    "for-direction": "error",
+    "no-class-assign": "error"
   }
 }
