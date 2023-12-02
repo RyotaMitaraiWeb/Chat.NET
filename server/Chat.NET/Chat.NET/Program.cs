@@ -16,26 +16,14 @@ namespace Chat.NET
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddLogging();
 
-            var conn = new NpgsqlConnectionStringBuilder()
-            {
-                Host = "shrek",
-                Port = 54320,
-                Database = "test",
-                Username = "tasa",
-                Password = "admin",
-            };
-
-            var connString = conn.ToString();
-
             builder.Services.AddDbContext<ChatDbContext>(options =>
             {
                 var conn = new NpgsqlConnectionStringBuilder()
                 {
-                    Host = "localhost",
-                    
-                    Database = "postgres",
-                    Username = "postgres",
-                    Password = "admin",
+                    Host = builder.Configuration["POSTGRES_HOST"],
+                    Database = builder.Configuration["POSTGRES_DB"],
+                    Username = builder.Configuration["POSTGRES_USER"],
+                    Password = builder.Configuration["POSTGRES_PASSWORD"],
                 };
 
                 options.UseNpgsql(conn.ToString());
