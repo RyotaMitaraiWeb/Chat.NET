@@ -1,0 +1,46 @@
+{
+  "extends": ["eslint-config-prettier", "next/core-web-vitals"],
+  "plugins": [
+    "prettier",
+    "eslint-plugin-prettier"
+  ],
+  "rules": {
+    "indent": "off",
+    "quotes": [
+      "error",
+      "single"
+    ],
+    "linebreak-style": [
+      "error",
+      "unix"
+    ],
+    "semi": [
+      "error",
+      "always"
+    ],
+    "no-unused-vars": "error",
+    "max-len": ["warn", 100],
+    "no-console": "warn",
+    "no-debugger": "error",
+    "no-eval": "error",
+    "spaced-comment": [
+      "error",
+      "always",
+      {
+        "markers": ["/"]
+      }
+    ],
+    "use-isnan": "error",
+    "eqeqeq": ["error", "smart"],
+    "no-cond-assign": "error",
+    "no-bitwise": "error",
+    "yoda": "error",
+    "prettier/prettier": "error",
+    "curly": "error",
+    "arrow-parens": "error",
+    "arrow-spacing": "error",
+    "capitalized-comments": "error",
+    "for-direction": "error",
+    "no-class-assign": "error"
+  }
+}
