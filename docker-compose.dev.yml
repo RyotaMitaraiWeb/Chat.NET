@@ -26,6 +26,7 @@ services:
       - postgres
       - pgadmin4
       - mongo
+      - redis
     build:
       context: ./server/Chat.NET
       dockerfile: ./Web/Dockerfile
@@ -38,6 +39,7 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:80
+      - REDIS_CONNECTION_STRING=redis
     env_file:
       - .env
     ports:
@@ -82,3 +84,12 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
+  redis:
+    container_name: redis
+    image: redis/redis-stack
+    volumes:
+      - ./redis/:/data redis/redis-stack:latest
+    ports:
+      - 6379:6379
+      - 8001:8001
