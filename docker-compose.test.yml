@@ -1,30 +1,10 @@
 version: "3.5"
 name: chatnet
 services:
-  client:
-    container_name: nextjs
-    depends_on:
-      - server
-    build:
-      context: ./client
-      dockerfile: dev.Dockerfile
-    
-    environment:
-      - NEXT_API_URL=http://localhost:7000
-      - WATCHPACK_POLLING=true
-    volumes:
-      - ./client/src:/app/src
-      - ./client/public:/app/public
-    
-    restart: always
-    ports:
-      - 3000:3000
-  
   server:
     container_name: dotnet
     depends_on:
       - postgres
-      - pgadmin4
       - mongo
       - redis
     build:
@@ -58,20 +38,6 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - ./postgresql:/var/lib/postgresql/data
-  
-  pgadmin4:
-    container_name: pgadmin4
-    image: dpage/pgadmin4
-    user: "${UID}:${GID}"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-    volumes:
-      - ./pgadmin4:/var/lib/pgadmin
-    ports:
-      - 5433:80
-    depends_on:
-      - postgres
 
   mongo:
     container_name: mongodb
