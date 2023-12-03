@@ -437,3 +437,4 @@ next-env.d.ts
 postgresql
 pgadmin4
 mongodb
+redis
