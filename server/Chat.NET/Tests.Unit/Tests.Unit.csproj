@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Chat.NET\Web.csproj" />
+    <ProjectReference Include="..\Web\Web.csproj" />
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
