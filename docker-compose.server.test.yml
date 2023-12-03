@@ -1,5 +1,5 @@
 version: "3.5"
-name: chatnet
+name: chatnet-integration-tests
 services:
   server:
     container_name: dotnet
