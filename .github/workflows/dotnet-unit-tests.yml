@@ -1,4 +1,4 @@
-name: .NET
+name: .NET unit tests
 
 on:
   push:
@@ -24,4 +24,4 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test Tests.Unit --no-build --verbosity normal
