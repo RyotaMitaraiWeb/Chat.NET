@@ -25,6 +25,7 @@ services:
     depends_on:
       - postgres
       - pgadmin4
+      - mongo
     build:
       context: ./server/Chat.NET
       dockerfile: ./Web/Dockerfile
@@ -69,3 +70,15 @@ services:
       - 5433:80
     depends_on:
       - postgres
+
+  mongo:
+    container_name: mongodb
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongodb:/data/db
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
