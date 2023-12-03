@@ -19,7 +19,7 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Docker
-      run: cd ../../ && docker compose -f "docker-compose.test.yml" up -d --build
+      run: cd ../../ && docker compose -f "docker-compose.server.test.yml" up -d --build
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
