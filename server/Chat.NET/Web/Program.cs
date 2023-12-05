@@ -1,12 +1,13 @@
 
 using Infrastructure.Postgres;
 using Infrastructure.Postgres.Entities;
+using Infrastructure.Postgres.Repository;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 
 namespace Chat.NET
 {
-    public class Program
+    public partial class Program
     {
         public static void Main(string[] args)
         {
@@ -16,18 +17,24 @@ namespace Chat.NET
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddLogging();
 
+            var conn = new NpgsqlConnectionStringBuilder()
+            {
+                Host = builder.Configuration["POSTGRES_HOST"],
+                Database = builder.Configuration["POSTGRES_DB"],
+                Username = builder.Configuration["POSTGRES_USER"],
+                Password = builder.Configuration["POSTGRES_PASSWORD"],
+            };
+
+            string connString = conn.ConnectionString;
+
             builder.Services.AddDbContext<ChatDbContext>(options =>
             {
-                var conn = new NpgsqlConnectionStringBuilder()
-                {
-                    Host = builder.Configuration["POSTGRES_HOST"],
-                    Database = builder.Configuration["POSTGRES_DB"],
-                    Username = builder.Configuration["POSTGRES_USER"],
-                    Password = builder.Configuration["POSTGRES_PASSWORD"],
-                };
+                
 
-                options.UseNpgsql(conn.ToString());
+                options.UseNpgsql(connString);
             });
+
+            builder.Services.AddScoped<IRepository, Repository>();
 
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ChatDbContext>();

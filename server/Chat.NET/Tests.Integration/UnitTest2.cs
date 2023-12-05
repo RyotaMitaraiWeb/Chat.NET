@@ -1,13 +1,18 @@
-using Chat.NET;
+﻿using Chat.NET;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Tests.Integration
 {
-    public class Tests
+    public class Tests2
     {
         public IntegrationTestWebAppFactory<Program> factory;
         public HttpClient client;
-        
+
 
         [SetUp]
         public async Task SetUp()
