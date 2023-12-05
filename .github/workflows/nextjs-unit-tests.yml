@@ -1,4 +1,4 @@
-name: Client unit tests
+name: NextJS unit and component tests
 
 on:
   push:
