@@ -4,10 +4,6 @@ import { useState } from 'react';
 export default function Home() {
   const [count, setCount] = useState(0);
 
-  const a = {
-    a: "a"
-  }
-
   return (
     <main>
       <p>test</p>
