@@ -5,5 +5,5 @@ import { ElementProps } from './Element';
  */
 export interface BaseButtonProps extends ElementProps {
   children: React.ReactNode;
-  onClick?: (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onClick?: (event?: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement, MouseEvent>) => void;
 }
