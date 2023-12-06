@@ -1,0 +1,15 @@
+$size-small: 8pt;
+$size-medium: 12pt;
+$size-large: 18pt;
+
+.size-small {
+  font-size: $size-small;
+}
+
+.size-medium {
+  font-size: $size-medium;
+}
+
+.size-large {
+  font-size: $size-large;
+}
