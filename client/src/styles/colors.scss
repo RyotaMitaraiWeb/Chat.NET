@@ -28,6 +28,8 @@ $primary-dark: #9C88FD;
 
 $background-dark: #121212;
 $background-light: #e9e4e4;
+$accent-light: white;
+$accent-dark: #383838;
 $text-emphasis-dark: rgba(255, 255, 255, 0.87);
 $text-medium-dark: rgba(255, 255, 255, 0.6);
 $text-emphasis-light: black;
@@ -39,6 +41,18 @@ $shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 
   @media (prefers-color-scheme: light) {
     color: $background-light;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: background-color 0.2s;
+  }
+}
+
+.accent-background {
+  background-color: $accent-dark;
+
+  @media (prefers-color-scheme: light) {
+    background-color: $accent-light;
   }
 
   @media (prefers-reduced-motion: no-preference) {
