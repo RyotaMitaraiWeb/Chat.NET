@@ -1,0 +1,31 @@
+.component-text-field {
+  border-radius: 5px;
+  border: 1px solid gray;
+
+  &.small {
+    padding: 8px 4px;
+    font-size: 10pt;
+    width: 200px;
+  }
+
+  &.medium {
+    padding: 16px 8px;
+    font-size: 12pt;
+    width: 250px;
+  }
+
+  &.large {
+    padding: 24px 12px;
+    font-size: 14pt;
+    width: 300px;
+  }
+}
+
+textarea.component-text-field {
+  resize: none;
+  overflow: hidden;
+}
+
+input[type="text"].component-text-field {
+  height: inherit;
+}
