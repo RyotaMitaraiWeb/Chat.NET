@@ -7,7 +7,15 @@ import { useEffect, useRef } from 'react';
  * A controlled ``input`` field.
  */
 function TextField(props: TextFieldProps): React.JSX.Element {
-  const { className = '', autoresize, onChange, size = 'medium', type = 'text', ...others } = props;
+  const {
+    className = '',
+    placeholder,
+    autoresize,
+    onChange,
+    size = 'medium',
+    type = 'text',
+    ...others
+  } = props;
   const ref = useRef<HTMLTextAreaElement>(null);
   function handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     if (onChange) {
@@ -37,6 +45,7 @@ function TextField(props: TextFieldProps): React.JSX.Element {
         {...others}
         rows={1}
         ref={ref}
+        placeholder={placeholder ? placeholder + '*' : undefined}
       ></textarea>
     );
   }
@@ -47,6 +56,7 @@ function TextField(props: TextFieldProps): React.JSX.Element {
       onChange={handleChange}
       className={`component-text-field accent-background theme-emphasis-text ${size} ${className}`}
       {...others}
+      placeholder={placeholder ? placeholder + '*' : undefined}
     />
   );
 }
