@@ -1,3 +1,4 @@
+import { HTMLAttributeAnchorTarget } from 'react';
 import { BaseButtonProps } from '../types/BaseButton';
 import { palette, size } from '../types/options';
 
@@ -11,7 +12,7 @@ export interface ButtonProps extends BaseButtonProps {
    * If equal to ``_blank`` and passed alongside a valid ``href``,
    * this will turn the element into an ``<a>`` that is styled like a button
    */
-  target?: string;
+  target?: HTMLAttributeAnchorTarget;
   color?: palette;
   size?: size;
 }
