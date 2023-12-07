@@ -1,6 +1,7 @@
 /**
  * Props that can be applied to every single component. All of those
- * are optional and are applied to the parent tag of the component.
+ * are optional and are applied to the parent tag of the component unless
+ * stated otherwise.
  */
 export interface ElementProps {
   className?: string;
@@ -12,4 +13,5 @@ export interface ElementProps {
   tabIndex?: number;
   lang?: string;
   draggable?: boolean;
+  role?: React.AriaRole;
 }
