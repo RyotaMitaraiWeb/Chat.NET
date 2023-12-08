@@ -17,6 +17,13 @@ function TextField(props: TextFieldProps): React.JSX.Element {
     onChange,
     size = 'medium',
     type = 'text',
+    required,
+    list,
+    readonly,
+    value,
+    name,
+    disabled,
+    form,
     ...others
   } = props;
   const ref = useRef<HTMLTextAreaElement>(null);
@@ -42,33 +49,44 @@ function TextField(props: TextFieldProps): React.JSX.Element {
   if (type === 'text' && autoresize) {
     const height = Number(ref.current?.scrollHeight) || 0;
     return (
-      <label className="component-helper-text-wrapper">
+      <label className={`component-helper-text-wrapper ${className}`} {...others}>
         <LabelText bottom={height} size={size} labelText={label} />
         <HelperText helperText={helperText} />
         <textarea
           onChange={handleChange}
           className={`component-text-field accent-background
         theme-emphasis-text ${size} ${className}`}
-          {...others}
           rows={1}
           ref={ref}
           placeholder={placeholder ? placeholder + '*' : undefined}
+          value={value}
+          form={form}
+          disabled={disabled}
+          name={name}
+          readOnly={readonly}
+          required={required}
         ></textarea>
       </label>
     );
   }
 
   return (
-    <label className="component-helper-text-wrapper">
+    <label className={`component-helper-text-wrapper ${className}`} {...others}>
       <LabelText size={size} labelText={label} />
       <HelperText helperText={helperText} />
       <input
         type={type}
         onChange={handleChange}
         className={`component-text-field
-        accent-background theme-emphasis-text ${size} ${className}`}
-        {...others}
+        accent-background theme-emphasis-text ${size}`}
         placeholder={placeholder ? placeholder + '*' : undefined}
+        value={value}
+        form={form}
+        disabled={disabled}
+        name={name}
+        readOnly={readonly}
+        required={required}
+        list={list}
       />
     </label>
   );
