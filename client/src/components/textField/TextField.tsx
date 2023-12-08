@@ -3,6 +3,7 @@ import { TextFieldProps } from './types';
 import './TextField.scss';
 import '@/styles/colors.scss';
 import { useEffect, useRef } from 'react';
+import { HelperTextProps } from '../types/BaseInput';
 /**
  * A controlled ``input`` field.
  */
@@ -11,6 +12,7 @@ function TextField(props: TextFieldProps): React.JSX.Element {
     className = '',
     placeholder,
     autoresize,
+    helperText,
     onChange,
     size = 'medium',
     type = 'text',
@@ -38,27 +40,42 @@ function TextField(props: TextFieldProps): React.JSX.Element {
 
   if (type === 'text' && autoresize) {
     return (
-      <textarea
-        onChange={handleChange}
-        className={`component-text-field accent-background
+      <label className="component-helper-text-wrapper">
+        <HelperText helperText={helperText} />
+        <textarea
+          onChange={handleChange}
+          className={`component-text-field accent-background
         theme-emphasis-text ${size} ${className}`}
-        {...others}
-        rows={1}
-        ref={ref}
-        placeholder={placeholder ? placeholder + '*' : undefined}
-      ></textarea>
+          {...others}
+          rows={1}
+          ref={ref}
+          placeholder={placeholder ? placeholder + '*' : undefined}
+        ></textarea>
+      </label>
     );
   }
 
   return (
-    <input
-      type={type}
-      onChange={handleChange}
-      className={`component-text-field accent-background theme-emphasis-text ${size} ${className}`}
-      {...others}
-      placeholder={placeholder ? placeholder + '*' : undefined}
-    />
+    <label className="component-helper-text-wrapper">
+      <HelperText helperText={helperText} />
+      <input
+        type={type}
+        onChange={handleChange}
+        className={`component-text-field
+        accent-background theme-emphasis-text ${size} ${className}`}
+        {...others}
+        placeholder={placeholder ? placeholder + '*' : undefined}
+      />
+    </label>
   );
+}
+
+function HelperText(props: HelperTextProps): React.JSX.Element {
+  if (!props.helperText) {
+    return <></>;
+  }
+
+  return <div className="component-helper-text">{props.helperText}</div>;
 }
 
 export default TextField;

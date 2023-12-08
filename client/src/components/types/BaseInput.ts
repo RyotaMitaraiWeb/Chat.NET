@@ -9,3 +9,7 @@ export interface BaseInputProps extends ElementProps {
   disabled?: boolean;
   form?: string;
 }
+
+export interface HelperTextProps {
+  helperText?: string;
+}

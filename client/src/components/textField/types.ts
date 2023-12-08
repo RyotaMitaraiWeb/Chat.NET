@@ -24,4 +24,9 @@ export interface TextFieldProps extends BaseInputProps {
    * adjust its height based on the content.
    */
   autoresize?: boolean;
+
+  /**
+   * Appears below the text field.
+   */
+  helperText?: string;
 }

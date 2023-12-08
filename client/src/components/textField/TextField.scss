@@ -29,3 +29,14 @@ textarea.component-text-field {
 input[type="text"].component-text-field {
   height: inherit;
 }
+
+.component-helper-text-wrapper {
+  position: relative;
+  bottom: 20px;
+
+  .component-helper-text {
+    position: absolute;
+    font-size: 10pt;
+    top: 110%;
+  }
+}
