@@ -21,22 +21,41 @@
   }
 }
 
+input.component-text-field {
+  vertical-align: bottom;
+}
+
 textarea.component-text-field {
   resize: none;
   overflow: hidden;
 }
 
-input[type="text"].component-text-field {
-  height: inherit;
-}
-
 .component-helper-text-wrapper {
   position: relative;
   bottom: 20px;
+  top: 20px;
 
   .component-helper-text {
     position: absolute;
     font-size: 10pt;
-    top: 110%;
+    top: 150%;
+  }
+
+  .component-label-text {
+    position: absolute;
+    &.large {
+      font-size: 11pt;
+      bottom: 75px;
+    }
+
+    &.medium {
+      font-size: 9pt;
+      bottom: 55px;
+    }
+
+    &.small {
+      font-size: 8pt;
+      bottom: 36px;
+    }
   }
 }

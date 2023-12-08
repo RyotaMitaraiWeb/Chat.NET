@@ -1,5 +1,6 @@
 import { HTMLInputTypeAttribute } from 'react';
 import { ElementProps } from './Element';
+import { size } from './options';
 
 export type inputType = HTMLInputTypeAttribute;
 
@@ -12,4 +13,10 @@ export interface BaseInputProps extends ElementProps {
 
 export interface HelperTextProps {
   helperText?: string;
+}
+
+export interface LabelTextProps {
+  labelText: string;
+  size: size;
+  bottom?: number;
 }

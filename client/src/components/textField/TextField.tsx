@@ -3,13 +3,14 @@ import { TextFieldProps } from './types';
 import './TextField.scss';
 import '@/styles/colors.scss';
 import { useEffect, useRef } from 'react';
-import { HelperTextProps } from '../types/BaseInput';
+import { HelperTextProps, LabelTextProps } from '../types/BaseInput';
 /**
  * A controlled ``input`` field.
  */
 function TextField(props: TextFieldProps): React.JSX.Element {
   const {
     className = '',
+    label = '',
     placeholder,
     autoresize,
     helperText,
@@ -39,8 +40,10 @@ function TextField(props: TextFieldProps): React.JSX.Element {
   });
 
   if (type === 'text' && autoresize) {
+    const height = Number(ref.current?.scrollHeight) || 0;
     return (
       <label className="component-helper-text-wrapper">
+        <LabelText bottom={height} size={size} labelText={label} />
         <HelperText helperText={helperText} />
         <textarea
           onChange={handleChange}
@@ -57,6 +60,7 @@ function TextField(props: TextFieldProps): React.JSX.Element {
 
   return (
     <label className="component-helper-text-wrapper">
+      <LabelText size={size} labelText={label} />
       <HelperText helperText={helperText} />
       <input
         type={type}
@@ -76,6 +80,20 @@ function HelperText(props: HelperTextProps): React.JSX.Element {
   }
 
   return <div className="component-helper-text">{props.helperText}</div>;
+}
+
+function LabelText(props: LabelTextProps): React.JSX.Element {
+  if (!props.labelText) {
+    return <></>;
+  }
+
+  const style = props.bottom ? { bottom: props.bottom + 5 } : undefined;
+
+  return (
+    <div style={style} className={`component-label-text theme-emphasis-text ${props.size}`}>
+      {props.labelText}
+    </div>
+  );
 }
 
 export default TextField;

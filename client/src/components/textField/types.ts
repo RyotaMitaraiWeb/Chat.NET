@@ -20,6 +20,11 @@ export interface TextFieldProps extends BaseInputProps {
   value: string;
 
   /**
+   * Appears on the top of the text field
+   */
+  label?: string;
+
+  /**
    * If passed to a ``text`` field, this will make the field
    * adjust its height based on the content.
    */
