@@ -3,8 +3,11 @@
 .component-text-field {
   border-radius: 5px;
   border: 1px solid gray;
-  transition: outline-color 0.25s ease-in-out;
   outline: 1px solid gray;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: outline-color 0.25s ease-in-out;
+  }
 
   &:active:not(:disabled),
   &:focus {
