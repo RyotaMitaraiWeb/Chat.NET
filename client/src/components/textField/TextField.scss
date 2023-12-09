@@ -1,6 +1,25 @@
+@import '../../styles/colors.scss';
+
 .component-text-field {
   border-radius: 5px;
   border: 1px solid gray;
+  transition: outline-color 0.25s ease-in-out;
+  outline: 1px solid gray;
+
+  &:active:not(:disabled),
+  &:focus {
+    border: 1px solid transparent;
+    outline: 3px solid $primary-dark;
+
+    @media (prefers-color-scheme: light) {
+      border: 1px solid transparent;
+      outline: 3px solid $primary-light;
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 
   &.small {
     padding: 8px 4px;
@@ -60,6 +79,16 @@ textarea.component-text-field {
     &.small {
       font-size: 8pt;
       bottom: 36px;
+    }
+  }
+
+  .disabled {
+    color: $text-medium-dark;
+  }
+
+  @media (prefers-color-scheme: light) {
+    .disabled {
+      color: rgba(0, 0, 0, 0.7);
     }
   }
 }

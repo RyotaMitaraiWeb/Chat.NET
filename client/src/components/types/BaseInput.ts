@@ -13,10 +13,12 @@ export interface BaseInputProps extends ElementProps {
 
 export interface HelperTextProps {
   helperText?: string;
+  disabled?: boolean;
 }
 
 export interface LabelTextProps {
   labelText: string;
   size: size;
   bottom?: number;
+  disabled?: boolean;
 }

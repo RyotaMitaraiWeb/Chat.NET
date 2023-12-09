@@ -72,8 +72,8 @@ function TextField(props: TextFieldProps): React.JSX.Element {
 
   return (
     <label className={`component-helper-text-wrapper ${className}`} {...others}>
-      <LabelText size={size} labelText={label} />
-      <HelperText helperText={helperText} />
+      <LabelText disabled={disabled} size={size} labelText={label} />
+      <HelperText disabled={disabled} helperText={helperText} />
       <input
         type={type}
         onChange={handleChange}
@@ -97,7 +97,9 @@ function HelperText(props: HelperTextProps): React.JSX.Element {
     return <></>;
   }
 
-  return <div className="component-helper-text">{props.helperText}</div>;
+  const disabledClass = props.disabled ? 'disabled' : '';
+
+  return <div className={`component-helper-text ${disabledClass}`}>{props.helperText}</div>;
 }
 
 function LabelText(props: LabelTextProps): React.JSX.Element {
@@ -106,9 +108,12 @@ function LabelText(props: LabelTextProps): React.JSX.Element {
   }
 
   const style = props.bottom ? { bottom: props.bottom + 5 } : undefined;
-
+  const disabledClass = props.disabled ? 'disabled' : '';
   return (
-    <div style={style} className={`component-label-text theme-emphasis-text ${props.size}`}>
+    <div
+      style={style}
+      className={`component-label-text theme-emphasis-text ${props.size} ${disabledClass}`}
+    >
       {props.labelText}
     </div>
   );
