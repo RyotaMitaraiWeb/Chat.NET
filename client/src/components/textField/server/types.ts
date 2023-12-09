@@ -5,7 +5,7 @@ export interface ServerTextFieldProps extends BaseInputProps {
   /**
    * Defaults to ``text`` if not passed.
    */
-  type?: React.HTMLInputTypeAttribute;
+  type?: 'text' | 'number';
   required?: boolean;
   list?: string;
   placeholder?: string;
