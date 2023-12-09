@@ -1,6 +1,6 @@
 'use client';
 import { TextFieldProps } from '../types';
-import './TextField.scss';
+import '../TextField.scss';
 import '@/styles/colors.scss';
 import { useEffect, useRef } from 'react';
 import { HelperTextProps, LabelTextProps } from '../../types/BaseInput';

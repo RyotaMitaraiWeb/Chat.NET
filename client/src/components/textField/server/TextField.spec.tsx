@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import TextField from './TextField';
 
-describe('TextField (client)', () => {
+describe('TextField (server)', () => {
   describe('Placeholder', () => {
     it('Displays correct placeholder when passed one', async () => {
-      render(<TextField value="a" onChange={() => {}} placeholder="Test" />);
+      render(<TextField placeholder="Test" />);
       await screen.findByPlaceholderText('Test*');
     });
   });
