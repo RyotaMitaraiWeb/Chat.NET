@@ -1,0 +1,20 @@
+.component-button {
+  border-radius: 5px;
+  border: 0;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+
+  &.size-small {
+    padding: 8px 4px;
+  }
+
+  &.size-medium {
+    padding: 16px 8px;
+  }
+
+  &.size-large {
+    padding: 24px 12px;
+  }
+}

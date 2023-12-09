@@ -1,0 +1,11 @@
+$primary-hover-effect: #531ce9;
+$primary-click-effect: #3000b3;
+
+.primary-hover:hover {
+  background-color: $primary-hover-effect;
+  color: white;
+}
+
+.primary-click:active {
+  background-color: $primary-click-effect;
+}

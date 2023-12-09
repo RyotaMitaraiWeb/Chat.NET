@@ -1,0 +1,97 @@
+@import '../../styles/colors.scss';
+
+.component-text-field {
+  border-radius: 5px;
+  border: 1px solid gray;
+  outline: 1px solid gray;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: outline-color 0.25s ease-in-out;
+  }
+
+  &:active:not(:disabled),
+  &:focus {
+    border: 1px solid transparent;
+    outline: 3px solid $primary-dark;
+
+    @media (prefers-color-scheme: light) {
+      border: 1px solid transparent;
+      outline: 3px solid $primary-light;
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  &.small {
+    padding: 8px 4px;
+    font-size: 10pt;
+    width: 200px;
+  }
+
+  &.medium {
+    padding: 16px 8px;
+    font-size: 12pt;
+    width: 250px;
+  }
+
+  &.large {
+    padding: 24px 12px;
+    font-size: 14pt;
+    width: 300px;
+  }
+}
+
+input.component-text-field {
+  vertical-align: bottom;
+}
+
+textarea.component-text-field {
+  resize: none;
+  overflow: hidden;
+}
+
+.component-helper-text-wrapper {
+  position: relative;
+  bottom: 20px;
+  top: 20px;
+
+  .component-helper-text {
+    position: absolute;
+    font-size: 10pt;
+    top: 150%;
+    left: 0;
+    right: 0;
+  }
+
+  .component-label-text {
+    position: absolute;
+    left: 0;
+    right: 0;
+    &.large {
+      font-size: 11pt;
+      bottom: 75px;
+    }
+
+    &.medium {
+      font-size: 9pt;
+      bottom: 55px;
+    }
+
+    &.small {
+      font-size: 8pt;
+      bottom: 36px;
+    }
+  }
+
+  .disabled {
+    color: $text-medium-dark;
+  }
+
+  @media (prefers-color-scheme: light) {
+    .disabled {
+      color: rgba(0, 0, 0, 0.7);
+    }
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "extends": ["eslint-config-prettier", "next/core-web-vitals"],
+  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "eslint-config-prettier", "next/core-web-vitals"],
   "plugins": [
     "prettier",
     "eslint-plugin-prettier"
@@ -18,7 +18,7 @@
       "error",
       "always"
     ],
-    "no-unused-vars": "error",
+    "@typescript-eslint/no-unused-vars": ["error"],
     "max-len": ["warn", 100],
     "no-console": "warn",
     "no-debugger": "error",

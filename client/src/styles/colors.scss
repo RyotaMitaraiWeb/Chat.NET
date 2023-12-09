@@ -1,0 +1,108 @@
+$primary-light: #4d3ab7;
+$primary-dark: #9c88fd;
+
+.background-primary {
+  background-color: $primary-dark;
+
+  @media (prefers-color-scheme: light) {
+    background-color: $primary-light;
+  }
+}
+
+.text-on-primary {
+  color: #040404;
+
+  @media (prefers-color-scheme: light) {
+    color: white;
+  }
+}
+
+.primary {
+  @extend .text-on-primary;
+  @extend .background-primary;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+}
+
+$background-dark: #121212;
+$background-light: #e9e4e4;
+$accent-light: white;
+$accent-dark: #383838;
+$text-emphasis-dark: rgba(255, 255, 255, 0.87);
+$text-medium-dark: rgba(255, 255, 255, 0.6);
+$text-emphasis-light: black;
+$text-medium-light: #0e0e0e;
+$shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+
+.theme-background {
+  background-color: $background-dark;
+
+  @media (prefers-color-scheme: light) {
+    background-color: $background-light;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: background-color 0.2s;
+  }
+}
+
+.accent-background {
+  background-color: $accent-dark;
+  &:disabled,
+  & :disabled {
+    background-color: rgba(75, 75, 75, 0.55);
+  }
+
+  @media (prefers-color-scheme: light) {
+    background-color: $accent-light;
+
+    &:disabled,
+    & :disabled {
+      background-color: rgba(249, 249, 249, 0.65);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: background-color 0.2s;
+  }
+}
+
+.theme-text {
+  color: $text-medium-dark;
+
+  @media (prefers-color-scheme: light) {
+    color: $text-medium-light;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: color 0.2s;
+  }
+}
+
+.theme-emphasis-text {
+  color: $text-emphasis-dark;
+  &:disabled,
+  & :disabled {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  @media (prefers-color-scheme: light) {
+    color: $text-emphasis-light;
+    &:disabled,
+    & :disabled {
+      color: rgba(0, 0, 0, 0.8);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: color 0.2s;
+  }
+}
+
+.shadow {
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
