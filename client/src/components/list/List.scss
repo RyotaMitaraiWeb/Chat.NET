@@ -1,0 +1,15 @@
+@import '../../styles/colors.scss';
+@import '../../styles/font.scss';
+
+.component-list {
+  list-style: none;
+  padding-left: 0;
+
+  &.outlined > li {
+    border-bottom: 1px solid gray;
+
+    &:last-child {
+      border: none;
+    }
+  }
+}
