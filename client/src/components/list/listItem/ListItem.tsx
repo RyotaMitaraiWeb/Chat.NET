@@ -1,5 +1,5 @@
 import { ListItemProps } from './types';
-import './ListItem.scss';
+import '../ListItem.scss';
 
 /**
  * A standard list item to be used as a child of a ``<List>`` component
