@@ -1,6 +1,6 @@
 import '../ListItem.scss';
 import { ListItemButtonProps } from './types';
-import BaseButton from '@/components/internal/BaseButton';
+import BaseButton from '@/components/internal/baseButton/BaseButton';
 
 /**
  * A button to be used as a child of a ``<List>`` component.

@@ -5,7 +5,7 @@ import './Button.scss';
 import '@/styles/colors.scss';
 import '@/styles/effects.scss';
 import '@/styles/font.scss';
-import BaseButton from '../internal/BaseButton';
+import BaseButton from '../internal/baseButton/BaseButton';
 
 /**
  * A standard client button with preconfigured styling and coloring.

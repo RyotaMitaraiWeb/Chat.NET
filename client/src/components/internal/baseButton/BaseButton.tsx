@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BaseButtonProps } from '../types/BaseButton';
+import { BaseButtonProps } from '../../types/BaseButton';
 import './BaseButton.scss';
 
 /**
