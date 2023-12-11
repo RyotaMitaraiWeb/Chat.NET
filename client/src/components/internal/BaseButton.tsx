@@ -2,10 +2,14 @@ import Link from 'next/link';
 import { BaseButtonProps } from '../types/BaseButton';
 import './BaseButton.scss';
 
+/**
+ * Renders a button with minimal functionality and styling. The button
+ * becomes a ``<Link>`` if a valid ``href`` is passed and it is not disabled.
+ */
 function BaseButton(props: BaseButtonProps): React.JSX.Element {
   const { className = '', disabled, children, href, target, ...others } = props;
-  const classNames = `component-base-button ${className}`;
-  if (href) {
+  const classNames = `component-base-button ${className} ${disabled ? 'disabled' : ''}`;
+  if (href && !disabled) {
     return (
       <Link href={href} target={target} className={classNames}>
         {children}
