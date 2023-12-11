@@ -24,7 +24,9 @@ $primary-click-effect: #3000b3;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    transition: background-color 0.2s, outline-color 0.2s;
+    transition:
+      background-color 0.2s,
+      outline-color 0.2s;
   }
 }
 
