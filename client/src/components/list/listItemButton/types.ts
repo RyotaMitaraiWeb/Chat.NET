@@ -10,5 +10,6 @@ export interface ListItemButtonLinkProps {
   href?: string;
   target?: React.HTMLAttributeAnchorTarget;
   children?: React.ReactNode;
+  disabled?: boolean;
   onClick?: (event?: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement, MouseEvent>) => void;
 }

@@ -7,11 +7,11 @@ import { ListItemButtonLinkProps, ListItemButtonProps } from './types';
  * Can be turned into a hyperlink.
  */
 function ListItemButton(props: ListItemButtonProps): React.JSX.Element {
-  const { className = '', children, href, target, onClick, ...others } = props;
+  const { className = '', children, href, target, onClick, disabled, ...others } = props;
 
   return (
     <li className={`component-list-item-button ${className}`} {...others}>
-      <ButtonLink onClick={onClick} href={href} target={target}>
+      <ButtonLink disabled={disabled} onClick={onClick} href={href} target={target}>
         {children}
       </ButtonLink>
     </li>
@@ -19,9 +19,9 @@ function ListItemButton(props: ListItemButtonProps): React.JSX.Element {
 }
 
 function ButtonLink(props: ListItemButtonLinkProps) {
-  if (!props.href) {
+  if (!props.href || props.disabled) {
     return (
-      <button onClick={props.onClick} className="button">
+      <button disabled={props.disabled} onClick={props.onClick} className="button">
         {props.children}
       </button>
     );

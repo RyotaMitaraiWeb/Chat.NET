@@ -38,6 +38,10 @@
     display: block;
     text-decoration: none;
     cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
     @extend .accent-background;
     @extend .theme-emphasis-text;
     @extend .accent-hover;

@@ -19,13 +19,17 @@ $primary-click-effect: #3000b3;
     outline: 3px solid gray;
   }
 
+  &:disabled {
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+
   @media (prefers-reduced-motion: no-preference) {
     transition: background-color 0.2s, outline-color 0.2s;
   }
 }
 
 .accent-click {
-  &:active {
+  &:active:not(:disabled) {
     background-color: rgba(202, 202, 202, 0.7);
   }
 
