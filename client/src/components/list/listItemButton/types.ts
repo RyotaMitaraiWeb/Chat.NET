@@ -5,11 +5,3 @@ export interface ListItemButtonProps extends BaseListItemProps, BaseButtonProps 
   href?: string;
   target?: React.HTMLAttributeAnchorTarget;
 }
-
-export interface ListItemButtonLinkProps {
-  href?: string;
-  target?: React.HTMLAttributeAnchorTarget;
-  children?: React.ReactNode;
-  disabled?: boolean;
-  onClick?: (event?: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement, MouseEvent>) => void;
-}
