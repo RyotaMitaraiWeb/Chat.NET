@@ -1,0 +1,50 @@
+@import '../../styles/colors.scss';
+@import '../../styles/font.scss';
+@import '../../styles/effects.scss';
+
+.component-list-item,
+.component-list-item-button .button {
+  @extend .accent-background;
+  @extend .theme-emphasis-text;
+  font-weight: bold;
+}
+
+.component-list {
+  &.size-large > .component-list-item,
+  &.size-large > .component-list-item-button .button {
+    padding: 24px 12px;
+  }
+
+  &.size-medium > .component-list-item,
+  &.size-medium > .component-list-item-button .button {
+    padding: 16px 8px;
+  }
+
+  &.size-small > .component-list-item,
+  &.size-small > .component-list-item-button .button {
+    padding: 8px 4px;
+  }
+}
+
+.component-list-item-button {
+  .button {
+    border: none;
+    outline: 1px solid transparent;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+    @extend .accent-background;
+    @extend .theme-emphasis-text;
+    @extend .accent-hover;
+    @extend .accent-click;
+  }
+}
