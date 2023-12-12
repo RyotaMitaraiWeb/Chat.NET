@@ -1,0 +1,23 @@
+@import '../../styles/colors.scss';
+
+.component-heading {
+  @extend .theme-emphasis-text;
+}
+
+h1.component-heading {
+  font-size: 24pt;
+}
+
+h2.component-heading {
+  font-size: 18pt;
+}
+
+h3.component-heading,
+h4.component-heading,
+h5.component-heading {
+  font-size: 16pt;
+}
+
+h6.component-heading {
+  font-size: 12pt;
+}
