@@ -9,4 +9,5 @@ export interface BaseButtonProps extends ElementProps {
   onClick?: (event?: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement, MouseEvent>) => void;
   href?: string;
   target?: React.HTMLAttributeAnchorTarget;
+  icon?: React.ReactNode;
 }

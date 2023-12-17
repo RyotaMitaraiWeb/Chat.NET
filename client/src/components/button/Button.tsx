@@ -19,15 +19,19 @@ function Button(props: ButtonProps): React.JSX.Element {
     size = 'medium',
     children,
     onClick,
+    icon,
     ...others
   } = props;
   return (
     <BaseButton
       className={`component-button 
-        ${color} ${color}-hover ${color}-click size-${size} ${className}`}
+        ${color} ${color}-hover ${color}-click size-${size} ${
+          icon ? 'with-icon' : ''
+        } ${className}`}
       onClick={onClick}
       {...others}
     >
+      {icon}
       {children}
     </BaseButton>
   );
