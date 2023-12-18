@@ -5,10 +5,14 @@ import '../ListItem.scss';
  * A standard list item to be used as a child of a ``<List>`` component
  */
 function ListItem(props: ListItemProps): React.JSX.Element {
-  const { className = '', children, ...others } = props;
+  const { className = '', inset, children, icon, ...others } = props;
   return (
-    <li className={`component-list-item ${className}`} {...others}>
-      {children}
+    <li
+      className={`component-list-item ${icon || inset ? 'with-icon' : ''} ${className}`}
+      {...others}
+    >
+      <div className={`component-list-item-icon ${inset ? 'inset' : ''}`}>{icon}</div>
+      <div className="content">{children}</div>
     </li>
   );
 }

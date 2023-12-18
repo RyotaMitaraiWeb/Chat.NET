@@ -15,4 +15,16 @@
   &.size-large {
     padding: 24px 12px;
   }
+
+  &.with-icon {
+    display: inline-flex;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+
+    svg,
+    span {
+      vertical-align: middle;
+    }
+  }
 }

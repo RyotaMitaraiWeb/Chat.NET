@@ -8,7 +8,7 @@ import './BaseButton.scss';
  */
 function BaseButton(props: BaseButtonProps): React.JSX.Element {
   const { className = '', disabled, children, href, target, ...others } = props;
-  const classNames = `component-base-button ${className} ${disabled ? 'disabled' : ''}`;
+  const classNames = `component-base-button ${disabled ? 'disabled' : ''} ${className}`;
   if (href && !disabled) {
     return (
       <Link href={href} target={target} className={classNames}>

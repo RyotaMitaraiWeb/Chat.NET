@@ -10,3 +10,7 @@ export interface BaseButtonProps extends ElementProps {
   href?: string;
   target?: React.HTMLAttributeAnchorTarget;
 }
+
+export interface BaseButtonWithIconProps extends BaseButtonProps {
+  icon?: React.ReactNode;
+}

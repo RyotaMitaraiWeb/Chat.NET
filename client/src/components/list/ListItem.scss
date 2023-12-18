@@ -9,6 +9,28 @@
   font-weight: bold;
 }
 
+.component-list-item,
+.component-list-item-button .button {
+  width: 100%;
+  &.with-icon {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-direction: row;
+
+    &.content {
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+    }
+  }
+
+  .inset {
+    width: 24px;
+    height: 24px;
+  }
+}
+
 .component-list {
   &.size-large > .component-list-item,
   &.size-large > .component-list-item-button .button {
