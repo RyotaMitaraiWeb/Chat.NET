@@ -1,6 +1,6 @@
+import BaseButtonWithIcon from '@/components/internal/baseButton/BaseButtonWithIcon';
 import '../ListItem.scss';
 import { ListItemButtonProps } from './types';
-import BaseButton from '@/components/internal/baseButton/BaseButton';
 
 /**
  * A button to be used as a child of a ``<List>`` component.
@@ -24,7 +24,7 @@ function ListItemButton(props: ListItemButtonProps): React.JSX.Element {
       className={`component-list-item-button ${icon || inset ? 'with-icon' : ''} ${className}`}
       {...others}
     >
-      <BaseButton
+      <BaseButtonWithIcon
         className="button"
         disabled={disabled}
         onClick={onClick}
@@ -34,7 +34,7 @@ function ListItemButton(props: ListItemButtonProps): React.JSX.Element {
       >
         <div className={`component-list-item-icon ${inset ? 'inset' : ''}`}>{icon}</div>
         <div className="content">{children}</div>
-      </BaseButton>
+      </BaseButtonWithIcon>
     </li>
   );
 }

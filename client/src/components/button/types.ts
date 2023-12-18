@@ -1,8 +1,8 @@
 import { HTMLAttributeAnchorTarget } from 'react';
-import { BaseButtonProps } from '../types/BaseButton';
+import { BaseButtonWithIconProps } from '../types/BaseButton';
 import { palette, size } from '../types/options';
 
-export interface ButtonProps extends BaseButtonProps {
+export interface ButtonProps extends BaseButtonWithIconProps {
   /** Passing this property to the element with a valid value
    * will turn it into a <Link> that is styled like a button
    */

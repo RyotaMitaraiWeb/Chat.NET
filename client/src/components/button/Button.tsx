@@ -5,7 +5,7 @@ import './Button.scss';
 import '@/styles/colors.scss';
 import '@/styles/effects.scss';
 import '@/styles/font.scss';
-import BaseButton from '../internal/baseButton/BaseButton';
+import BaseButtonWithIcon from '../internal/baseButton/BaseButtonWithIcon';
 
 /**
  * A standard client button with preconfigured styling and coloring.
@@ -23,7 +23,8 @@ function Button(props: ButtonProps): React.JSX.Element {
     ...others
   } = props;
   return (
-    <BaseButton
+    <BaseButtonWithIcon
+      icon={icon}
       className={`component-button 
         ${color} ${color}-hover ${color}-click size-${size} ${
           icon ? 'with-icon' : ''
@@ -33,7 +34,7 @@ function Button(props: ButtonProps): React.JSX.Element {
     >
       {icon}
       {children}
-    </BaseButton>
+    </BaseButtonWithIcon>
   );
 }
 
