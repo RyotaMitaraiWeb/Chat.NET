@@ -3,7 +3,7 @@ import Box from '../box/Box';
 import { DialogProps } from './types';
 import Overlay from '../internal/overlay/Overlay';
 import './Dialog.scss';
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 /**
  * Conveys information to the user while disrupting their work.
@@ -26,11 +26,26 @@ function Dialog(props: DialogProps): React.JSX.Element {
     body.classList.remove('locked');
   }
 
+  const handleEscape = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.code === 'Escape') {
+        if (onClose) {
+          onClose();
+        }
+
+        body.classList.remove('locked');
+        window.removeEventListener('keydown', handleEscape);
+      }
+    },
+    [onClose, body.classList],
+  );
   useEffect(() => {
     if (!body.classList.contains('locked') && open) {
       body.classList.add('locked');
     }
-  }, [body.classList, open]);
+
+    window.addEventListener('keydown', handleEscape);
+  }, [body.classList, open, handleEscape]);
 
   if (!open) {
     return <></>;
