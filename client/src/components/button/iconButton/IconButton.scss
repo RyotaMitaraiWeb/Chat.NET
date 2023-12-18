@@ -1,0 +1,16 @@
+.component-icon-button {
+  border-radius: 50%;
+  .component-icon {
+    &.size-large {
+      padding: 12px;
+    }
+
+    &.size-medium {
+      padding: 8px;
+    }
+
+    &.size-small {
+      padding: 5px;
+    }
+  }
+}
