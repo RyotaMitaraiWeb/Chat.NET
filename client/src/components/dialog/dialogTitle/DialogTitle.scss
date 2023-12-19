@@ -1,0 +1,11 @@
+@import '../../../styles/colors.scss';
+
+.component-dialog-title {
+  border-bottom: 1px solid gray;
+  width: calc(100% + 16px);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 16px;
+  @extend .accent-background;
+}
