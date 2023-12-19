@@ -4,6 +4,7 @@ The following stylesheets can be used across the project:
 - ``colors`` which provides classes, variables, and mixins for colors (e.g. primary, accent, light/dark mode)
 - ``effects`` which provides classes, variables, and mixins for user actions (e.g. styling for hovering or focusing)
 - ``font`` which provides classes, variables, and mixins for fonts (e.g. classes for big, medium, and small fonts).
+- ``animations`` which provides classes, variables, and mixins for animations. All animations can occur only if the user explicitly allows them (via system settings).
 
 The colors and effects also take into account the user's preferences in regards to motion animations and color schema; for example, the exposed primary color changes depending on if the user's system prefers light or dark mode. Likewise, color changes are only animated if the user's system explicitly allows it.
 
@@ -68,3 +69,9 @@ $size-small;
 $size-medium;
 $size-large;
 ```
+
+### Animations
+```scss
+@mixin fadeInFromTransparentToSemiTransparent($time: 0.3s)
+```
+Applying this mixin to a component will cause it to "fade in" from a transparent state to a semi-transparent state. In other words, the component will go from opacity ``0`` to opacity ``0.5`` within the passed ``$time``.
