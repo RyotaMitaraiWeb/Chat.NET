@@ -13,10 +13,16 @@
   height: 100%;
 
   .component-box {
-    width: 60%;
-    height: 60%;
+    width: 75%;
+    height: 75%;
     overflow-y: auto;
     position: relative;
     z-index: 100;
+    border-radius: 5px;
+
+    @media screen and (max-width: 1023px) {
+      width: 90%;
+      height: 90%;
+    }
   }
 }
