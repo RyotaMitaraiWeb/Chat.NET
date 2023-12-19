@@ -17,14 +17,12 @@ import { findFirstFocusableElement } from '../internal/overlay/findFirstFocusabl
  */
 function Dialog(props: DialogProps): React.JSX.Element {
   const { className = '', children, open, onClose, ...others } = props;
-
-  const body = document.body;
   function handleClose() {
     if (onClose) {
       onClose();
     }
 
-    body.classList.remove('locked');
+    document.body.classList.remove('locked');
   }
 
   const handleEscape = useCallback(
@@ -34,15 +32,15 @@ function Dialog(props: DialogProps): React.JSX.Element {
           onClose();
         }
 
-        body.classList.remove('locked');
+        document.body.classList.remove('locked');
         window.removeEventListener('keydown', handleEscape);
       }
     },
-    [onClose, body.classList],
+    [onClose],
   );
   useEffect(() => {
-    if (!body.classList.contains('locked') && open) {
-      body.classList.add('locked');
+    if (!document.body.classList.contains('locked') && open) {
+      document.body.classList.add('locked');
     }
 
     const firstFocusableElement = findFirstFocusableElement('.component-dialog');
@@ -52,7 +50,7 @@ function Dialog(props: DialogProps): React.JSX.Element {
     }
 
     window.addEventListener('keydown', handleEscape);
-  }, [body.classList, open, handleEscape]);
+  }, [open, handleEscape]);
 
   if (!open) {
     return <></>;
