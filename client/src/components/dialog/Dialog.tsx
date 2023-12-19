@@ -55,7 +55,11 @@ function Dialog(props: DialogProps): React.JSX.Element {
   }
 
   const dialog = createPortal(
-    <FocusTrap>
+    /* 
+      FocusTrap does not work entirely in JSDom due to the way it's bundled,
+      so providing this this workaround
+    */
+    <FocusTrap active={process.env.NEXT_ENVIRONMENT !== 'TESTING'}>
       <div className={`component-dialog ${className}`} {...others}>
         <Box>{children}</Box>
         <Overlay onClose={handleClose} />

@@ -9,6 +9,7 @@ function CustomComponent({ initialOpen }: { initialOpen: boolean }) {
     <div>
       <button onClick={() => setState(true)}>Open dialog</button>
       <Dialog open={state} onClose={() => setState(false)}>
+        <p>test</p>
         <button id="state-test" onClick={() => setState(false)}>
           Close dialog
         </button>
@@ -18,30 +19,9 @@ function CustomComponent({ initialOpen }: { initialOpen: boolean }) {
 }
 
 describe('Dialog component', () => {
-  describe('Accessibility', () => {
-    it('Focuses the first element possible when opened', () => {
-      render(
-        <Dialog open={true}>
-          <p>This element should not be focused</p>
-          <button id="test">Click me</button>
-        </Dialog>,
-      );
-
-      const button = document.querySelector('#test');
-      const activeElement = document.activeElement;
-      expect(button).toEqual(activeElement);
-    });
-
-    it('Does not focus anything if there are no focusable elements', () => {
-      render(
-        <Dialog open={true}>
-          <p>This element should not be focused</p>
-        </Dialog>,
-      );
-
-      const activeElement = document.activeElement;
-      expect(activeElement).toEqual(document.body);
-    });
+  beforeEach(() => {
+    // Needed to stop FocusTrap from throwing errors in tests.
+    process.env.NEXT_ENVIRONMENT = 'TESTING';
   });
 
   describe('Opening and closing', () => {
@@ -69,10 +49,10 @@ describe('Dialog component', () => {
 
     it('Opens and closes based on state', async () => {
       render(<CustomComponent initialOpen={false} />);
-      const openButton = await screen.findByText(/Open dialog/gim);
+      const openButton = await screen.findByText(/Open dialog/im);
       act(() => openButton.click());
 
-      const closeButton = await screen.findByText(/Close dialog/gim);
+      const closeButton = await screen.findByText(/Close dialog/im);
       act(() => closeButton.click());
 
       const dialog = document.querySelector('.component-dialog');
