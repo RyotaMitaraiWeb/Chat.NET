@@ -4,6 +4,7 @@ import { DialogProps } from './types';
 import Overlay from '../internal/overlay/Overlay';
 import './Dialog.scss';
 import { useCallback, useEffect } from 'react';
+import { findFirstFocusableElement } from '../internal/overlay/findFirstFocusableElement';
 
 /**
  * Conveys information to the user while disrupting their work.
@@ -42,6 +43,12 @@ function Dialog(props: DialogProps): React.JSX.Element {
   useEffect(() => {
     if (!body.classList.contains('locked') && open) {
       body.classList.add('locked');
+    }
+
+    const firstFocusableElement = findFirstFocusableElement('.component-dialog');
+
+    if (firstFocusableElement) {
+      firstFocusableElement.focus();
     }
 
     window.addEventListener('keydown', handleEscape);
