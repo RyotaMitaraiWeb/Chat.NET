@@ -16,12 +16,18 @@ $primary-click-effect: #3000b3;
 $secondary-hover-effect: #e3b914;
 $secondary-click-effect: #a98d1d;
 
+$error-hover-effect: #cc0000;
+$error-click-effect: #a50101;
 .primary-effects {
   @include applyEffectTheme($primary-hover-effect, white, $primary-click-effect, white);
 }
 
 .secondary-effects {
   @include applyEffectTheme($secondary-hover-effect, black, $secondary-click-effect, black);
+}
+
+.error-effects {
+  @include applyEffectTheme($error-hover-effect, white, $error-click-effect, white);
 }
 
 .accent-hover {

@@ -4,6 +4,9 @@ $primary-dark: #9c88fd;
 $secondary-light: #ffd637;
 $secondary-dark: #ffe478;
 
+$error-light: #e53935;
+$error-dark: #ff9999;
+
 .background-primary {
   background-color: $primary-dark;
 
@@ -51,6 +54,31 @@ $secondary-dark: #ffe478;
       background-color 0.2s,
       color 0.2s;
   }
+}
+
+.background-error {
+  background-color: $error-dark;
+  @media (prefers-color-scheme: light) {
+    background-color: $error-light;
+  }
+}
+
+.text-on-error {
+  color: black;
+  @media (prefers-color-scheme: light) {
+    color: white;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+}
+
+.error {
+  @extend .text-on-error;
+  @extend .background-error;
 }
 
 $background-dark: #121212;
