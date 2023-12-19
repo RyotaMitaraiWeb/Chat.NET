@@ -5,7 +5,7 @@ import Overlay from '../internal/overlay/Overlay';
 import './Dialog.scss';
 import { useCallback, useEffect } from 'react';
 import { findFirstFocusableElement } from '../internal/overlay/findFirstFocusableElement';
-
+import FocusTrap from 'focus-trap-react';
 /**
  * Conveys information to the user while disrupting their work.
  * The dialog blocks scrolling in the page (though you can scroll in the
@@ -53,11 +53,11 @@ function Dialog(props: DialogProps): React.JSX.Element {
       document.body.classList.add('locked');
     }
 
-    const firstFocusableElement = findFirstFocusableElement('.component-dialog');
+    // const firstFocusableElement = findFirstFocusableElement('.component-dialog');
 
-    if (firstFocusableElement) {
-      firstFocusableElement.focus();
-    }
+    // if (firstFocusableElement) {
+    //   firstFocusableElement.focus();
+    // }
 
     window.addEventListener('keydown', handleEscape);
   }, [open, handleEscape]);
@@ -67,10 +67,12 @@ function Dialog(props: DialogProps): React.JSX.Element {
   }
 
   const dialog = createPortal(
-    <div className={`component-dialog ${className}`} {...others}>
-      <Box>{children}</Box>
-      <Overlay onClose={handleClose} />
-    </div>,
+    <FocusTrap>
+      <div className={`component-dialog ${className}`} {...others}>
+        <Box>{children}</Box>
+        <Overlay onClose={handleClose} />
+      </div>
+    </FocusTrap>,
     document.body,
   );
 
