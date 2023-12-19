@@ -1,0 +1,14 @@
+@import '../../../styles/colors.scss';
+
+
+.component-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+  flex-wrap: wrap;
+  position: sticky;
+  bottom: 0;
+  padding: 16px;
+  border-top: 1px solid gray;
+  @extend .accent-background;
+}
