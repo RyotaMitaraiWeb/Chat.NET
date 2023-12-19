@@ -1,0 +1,14 @@
+@keyframes fadeInTransparently {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.5;
+  }
+}
+
+@mixin fadeInFromTransparentToSemiTransparent($time: 0.3s) {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: fadeInTransparently $time;
+  }
+}
