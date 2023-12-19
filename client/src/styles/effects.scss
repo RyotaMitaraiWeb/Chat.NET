@@ -1,13 +1,27 @@
+@mixin applyEffectTheme($hoverBg, $hoverText, $clickBg, $clickText) {
+  &:hover, &:focus {
+    background-color: $hoverBg;
+    color: $hoverText;
+  }
+
+  &:active {
+    background-color: $clickBg;
+    color: $clickText;
+  }
+}
+
 $primary-hover-effect: #531ce9;
 $primary-click-effect: #3000b3;
 
-.primary-hover:hover {
-  background-color: $primary-hover-effect;
-  color: white;
+$secondary-hover-effect: #e3b914;
+$secondary-click-effect: #a98d1d;
+
+.primary-effects {
+  @include applyEffectTheme($primary-hover-effect, white, $primary-click-effect, white);
 }
 
-.primary-click:active {
-  background-color: $primary-click-effect;
+.secondary-effects {
+  @include applyEffectTheme($secondary-hover-effect, black, $secondary-click-effect, black);
 }
 
 .accent-hover {

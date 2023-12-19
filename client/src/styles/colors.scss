@@ -1,6 +1,9 @@
 $primary-light: #4d3ab7;
 $primary-dark: #9c88fd;
 
+$secondary-light: #ffd637;
+$secondary-dark: #ffe478;
+
 .background-primary {
   background-color: $primary-dark;
 
@@ -20,6 +23,28 @@ $primary-dark: #9c88fd;
 .primary {
   @extend .text-on-primary;
   @extend .background-primary;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+  }
+}
+
+.background-secondary {
+  background-color: $secondary-dark;
+  @media (prefers-color-scheme: light) {
+    background-color: $secondary-light;
+  }
+}
+
+.text-on-secondary {
+  color: black;
+}
+
+.secondary {
+  @extend .text-on-secondary;
+  @extend .background-secondary;
 
   @media (prefers-reduced-motion: no-preference) {
     transition:
