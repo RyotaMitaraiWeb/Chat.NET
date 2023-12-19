@@ -4,7 +4,6 @@ import { DialogProps } from './types';
 import Overlay from '../internal/overlay/Overlay';
 import './Dialog.scss';
 import { useCallback, useEffect } from 'react';
-import { findFirstFocusableElement } from '../internal/overlay/findFirstFocusableElement';
 import FocusTrap from 'focus-trap-react';
 /**
  * Conveys information to the user while disrupting their work.
@@ -52,12 +51,6 @@ function Dialog(props: DialogProps): React.JSX.Element {
     if (!document.body.classList.contains('locked') && open) {
       document.body.classList.add('locked');
     }
-
-    // const firstFocusableElement = findFirstFocusableElement('.component-dialog');
-
-    // if (firstFocusableElement) {
-    //   firstFocusableElement.focus();
-    // }
 
     window.addEventListener('keydown', handleEscape);
   }, [open, handleEscape]);
