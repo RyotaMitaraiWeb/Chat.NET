@@ -14,7 +14,14 @@ import FocusTrap from 'focus-trap-react';
  * and implement such logic. Note that the dialog is mounted
  * directly in the body via a portal.
  *
- * The dialog handles the automatic focusing on opening and closing.
+ * The dialog handles the automatic focusing on opening and closing, as
+ * well as focus trapping.
+ *
+ * **Usage notes:** you may want to use the ``<DialogTitle>``, ``<DialogComponent>``,
+ * and ``<DialogFooter>`` components to better describe the content
+ * of your dialog. Some of those also come with some functionalities
+ * and styling. You also need to have at least one focusable element
+ * within ``children`` (such as a button or a hyperlink).
  *
  * **Accessibility notes:** you should always pass an appropriate ``role``
  * (e.g. ``alertdialog``) when using this component.
@@ -57,7 +64,7 @@ function Dialog(props: DialogProps): React.JSX.Element {
   const dialog = createPortal(
     /* 
       FocusTrap does not work entirely in JSDom due to the way it's bundled,
-      so providing this this workaround
+      so providing this workaround
     */
     <FocusTrap active={process.env.NEXT_ENVIRONMENT !== 'TESTING'}>
       <div className={`component-dialog ${className}`} {...others}>
