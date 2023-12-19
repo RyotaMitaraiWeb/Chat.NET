@@ -8,9 +8,9 @@ import './DialogFooter.scss';
 function DialogFooter(props: DialogFooterProps): React.JSX.Element {
   const { className = '', children, ...others } = props;
   return (
-    <div className={`component-dialog-footer ${className}`} {...others}>
+    <footer className={`component-dialog-footer ${className}`} {...others}>
       {children}
-    </div>
+    </footer>
   );
 }
 

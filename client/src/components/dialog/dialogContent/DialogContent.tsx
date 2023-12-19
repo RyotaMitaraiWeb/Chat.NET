@@ -7,9 +7,9 @@ import { DialogContentProps } from './types';
 function DialogContent(props: DialogContentProps): React.JSX.Element {
   const { className = '', children, ...others } = props;
   return (
-    <div className={`component-dialog-content ${className}`} {...others}>
+    <section className={`component-dialog-content ${className}`} {...others}>
       {children}
-    </div>
+    </section>
   );
 }
 

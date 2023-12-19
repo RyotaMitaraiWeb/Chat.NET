@@ -61,7 +61,7 @@ function Dialog(props: DialogProps): React.JSX.Element {
     */
     <FocusTrap active={process.env.NEXT_ENVIRONMENT !== 'TESTING'}>
       <div className={`component-dialog ${className}`} {...others}>
-        <Box>{children}</Box>
+        <Box selector="section">{children}</Box>
         <Overlay onClose={handleClose} />
       </div>
     </FocusTrap>,

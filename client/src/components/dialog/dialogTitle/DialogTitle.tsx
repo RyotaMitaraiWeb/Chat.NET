@@ -8,9 +8,9 @@ import './DialogTitle.scss';
 function DialogTitle(props: DialogTitleProps): React.JSX.Element {
   const { className = '', children, ...others } = props;
   return (
-    <div className={`component-dialog-title ${className}`} {...others}>
+    <header className={`component-dialog-title ${className}`} {...others}>
       <Heading level={2}>{children}</Heading>
-    </div>
+    </header>
   );
 }
 
