@@ -14,15 +14,10 @@ import FocusTrap from 'focus-trap-react';
  * and implement such logic. Note that the dialog is mounted
  * directly in the body via a portal.
  *
- * When the dialog is opened,
- * the first focusable element within it will receive focus, if
- * such exists.
+ * The dialog handles the automatic focusing on opening and closing.
  *
  * **Accessibility notes:** you should always pass an appropriate ``role``
- * (e.g. ``alertdialog``) when using this component. In addition,
- * if the dialog can be opened explicitly by the user (e.g. by clicking a button),
- * you should return the focus to the element that opened the dialog upon
- * closing.
+ * (e.g. ``alertdialog``) when using this component.
  */
 function Dialog(props: DialogProps): React.JSX.Element {
   const { className = '', children, open, onClose, ...others } = props;
