@@ -1,5 +1,7 @@
 .component-dialog {
-  animation: dialogFadeIn 0.3s;
+  @media (prefers-reduced-motion: no-preference) {
+    animation: dialogFadeIn 0.3s;
+  }
   position: absolute;
   top: 50%;
   left: 50%;
