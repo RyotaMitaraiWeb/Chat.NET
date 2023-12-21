@@ -6,7 +6,6 @@
 .component-list-item-button .button {
   @extend .accent-background;
   @extend .theme-emphasis-text;
-  font-weight: bold;
 }
 
 .component-list-item,
@@ -32,6 +31,10 @@
 }
 
 .component-list {
+  .bolded, .bolded .button {
+    font-weight: bold;
+  }
+
   &.size-large > .component-list-item,
   &.size-large > .component-list-item-button .button {
     padding: 24px 12px;
