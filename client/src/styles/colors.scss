@@ -28,11 +28,19 @@ $error-colors: (
   'contrast-text-dark': black,
 );
 
+$warning-colors: (
+  'light': #ef8b00,
+  'dark': #ffa726,
+  'contrast-text-light': black,
+  'contrast-text-dark': black,
+);
+
 $palette: (
   'primary': $primary-colors,
   'secondary': $secondary-colors,
   'success': $success-colors,
   'error': $error-colors,
+  'warning': $warning-colors,
 );
 
 @each $color, $values in $palette {
