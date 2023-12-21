@@ -1,10 +1,6 @@
-import { createPortal } from 'react-dom';
-import Box from '../box/Box';
 import { DialogProps } from './types';
-import Overlay from '../internal/overlay/Overlay';
 import './Dialog.scss';
-import { useCallback, useEffect } from 'react';
-import FocusTrap from 'focus-trap-react';
+import BaseModal from '../internal/baseModal/BaseModal';
 /**
  * Conveys information to the user while disrupting their work.
  * The dialog blocks scrolling in the page (though you can scroll in the
@@ -28,54 +24,16 @@ import FocusTrap from 'focus-trap-react';
  */
 function Dialog(props: DialogProps): React.JSX.Element {
   const { className = '', children, open, onClose, ...others } = props;
-  function handleClose() {
-    if (onClose) {
-      onClose();
-    }
-
-    document.body.classList.remove('locked');
-  }
-
-  const handleEscape = useCallback(
-    (event: KeyboardEvent) => {
-      if (event.code === 'Escape') {
-        if (onClose) {
-          onClose();
-        }
-
-        document.body.classList.remove('locked');
-        window.removeEventListener('keydown', handleEscape);
-      }
-    },
-    [onClose],
+  return (
+    <BaseModal
+      open={open}
+      onClose={onClose}
+      className={`component-dialog ${className}`}
+      {...others}
+    >
+      {children}
+    </BaseModal>
   );
-  useEffect(() => {
-    if (!document.body.classList.contains('locked') && open) {
-      document.body.classList.add('locked');
-    }
-
-    window.addEventListener('keydown', handleEscape);
-  }, [open, handleEscape]);
-
-  if (!open) {
-    return <></>;
-  }
-
-  const dialog = createPortal(
-    /* 
-      FocusTrap does not work entirely in JSDom due to the way it's bundled,
-      so providing this workaround
-    */
-    <FocusTrap active={process.env.NEXT_ENVIRONMENT !== 'TESTING'}>
-      <div className={`component-dialog ${className}`} {...others}>
-        <Box selector="section">{children}</Box>
-        <Overlay onClose={handleClose} />
-      </div>
-    </FocusTrap>,
-    document.body,
-  );
-
-  return dialog;
 }
 
 export default Dialog;
