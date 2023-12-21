@@ -62,6 +62,13 @@ $palette: (
     }
   }
 
+  .text-#{$color} {
+    color: map.get($values, 'dark');
+    @media (prefers-color-scheme: light) {
+      background-color: map.get($values, 'light');
+    }
+  }
+
   .text-on-#{$color} {
     color: map.get($values, 'contrast-text-dark');
 
