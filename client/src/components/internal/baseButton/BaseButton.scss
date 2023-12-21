@@ -1,4 +1,9 @@
 .component-base-button {
   cursor: pointer;
   text-decoration: none;
+
+  &:disabled,
+  &.disabled {
+    cursor: not-allowed;
+  }
 }
