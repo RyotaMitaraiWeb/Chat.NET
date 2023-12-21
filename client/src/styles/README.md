@@ -48,17 +48,9 @@ To apply effects for accent containers, use ``.accent-hover`` and ``.accent-clic
 ### Font
 The following classes are available:
 ```css
-.size-small
-.size-medium
-.size-large
-```
-
-They are implemented using the following variables:
-
-```scss
-$size-small;
-$size-medium;
-$size-large;
+.size-small /* 8pt */
+.size-medium /* 12pt */
+.size-large /* 18pt */
 ```
 
 ### Animations

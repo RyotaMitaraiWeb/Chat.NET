@@ -1,15 +1,13 @@
-$size-small: 8pt;
-$size-medium: 12pt;
-$size-large: 18pt;
+@use "sass:map";
 
-.size-small {
-  font-size: $size-small;
-}
+$sizes: (
+  'small': 8pt,
+  'medium': 12pt,
+  'large': 18pt,
+);
 
-.size-medium {
-  font-size: $size-medium;
-}
-
-.size-large {
-  font-size: $size-large;
+@each $size, $value in $sizes {
+  .size-#{$size} {
+    font-size: $value;
+  }
 }
