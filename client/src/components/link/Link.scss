@@ -1,0 +1,17 @@
+.component-link {
+  &:hover {
+    text-decoration: none;
+  }
+
+  &.text-default {
+    color: rgb(144, 202, 249);
+
+    @media (prefers-color-scheme: light) {
+      color: rgb(25, 118, 210);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition: color 0.2s;
+    }
+  }
+}
