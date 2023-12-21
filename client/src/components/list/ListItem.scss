@@ -7,11 +7,20 @@
   @extend .accent-background;
   @extend .theme-emphasis-text;
   width: 100%;
+
   &.with-icon {
     display: flex;
     align-items: center;
     gap: 16px;
     flex-direction: row;
+    .component-list-item-icon,
+    .component-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
     &.content {
       display: flex;
@@ -23,6 +32,10 @@
   .inset {
     width: 24px;
     height: 24px;
+  }
+
+  svg {
+    vertical-align: middle;
   }
 }
 
