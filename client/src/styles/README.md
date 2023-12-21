@@ -42,6 +42,8 @@ It is preferable to extend the classes rather than use the variables, as those a
 To apply the effects for a given palette (e.g. primary, secondary, etc.), use a
 ``.[palette]-effects`` class (e.g. ``.primary-effects``).
 
+To apply effects for accent containers, use ``.accent-hover`` and ``.accent-click``.
+
 
 ### Font
 The following classes are available:
