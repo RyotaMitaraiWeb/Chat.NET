@@ -1,46 +1,83 @@
-@mixin applyEffectTheme($hoverBg, $hoverText, $clickBg, $clickText) {
-  &:hover, &:focus {
-    background-color: $hoverBg;
-    color: $hoverText;
+@use 'sass:map';
+
+@mixin applyEffectTheme($hover-bg, $hover-text, $click-bg, $click-text) {
+  &:hover:not(:disabled),
+  &:focus {
+    background-color: $hover-bg;
+    color: $hover-text;
   }
 
-  &:active {
-    background-color: $clickBg;
-    color: $clickText;
+  &:active:not(:disabled) {
+    background-color: $click-bg;
+    color: $click-text;
   }
 }
 
-$primary-hover-effect: #531ce9;
-$primary-click-effect: #3000b3;
+$primary-effects: (
+  'hover-bg': #531ce9,
+  'click-bg': #3000b3,
+  'hover-text': white,
+  'click-text': white,
+);
 
-$secondary-hover-effect: #e3b914;
-$secondary-click-effect: #a98d1d;
+$secondary-effects: (
+  'hover-bg': #e3b914,
+  'click-bg': #a98d1d,
+  'hover-text': black,
+  'click-text': black,
+);
 
-$error-hover-effect: #cc0000;
-$error-click-effect: #a50101;
-.primary-effects {
-  @include applyEffectTheme($primary-hover-effect, white, $primary-click-effect, white);
+$error-effects: (
+  'hover-bg': #cc0000,
+  'click-bg': #a50101,
+  'hover-text': white,
+  'click-text': white,
+);
+
+$effects: (
+  'primary': $primary-effects,
+  'secondary': $secondary-effects,
+  'error': $error-effects,
+);
+
+@each $palette, $values in $effects {
+  .#{$palette}-effects {
+    @include applyEffectTheme(
+      map.get($values, 'hover-bg'),
+      map.get($values, 'hover-text'),
+      map.get($values, 'click-bg'),
+      map.get($values, 'click-text')
+    );
+  }
 }
+// $primary-hover-effect: #531ce9;
+// $primary-click-effect: #3000b3;
 
-.secondary-effects {
-  @include applyEffectTheme($secondary-hover-effect, black, $secondary-click-effect, black);
-}
+// $secondary-hover-effect: #e3b914;
+// $secondary-click-effect: #a98d1d;
 
-.error-effects {
-  @include applyEffectTheme($error-hover-effect, white, $error-click-effect, white);
-}
+// $error-hover-effect: #cc0000;
+// $error-click-effect: #a50101;
+
+// .primary-effects {
+//   @include applyEffectTheme($primary-hover-effect, white, $primary-click-effect, white);
+// }
+
+// .secondary-effects {
+//   @include applyEffectTheme($secondary-hover-effect, black, $secondary-click-effect, black);
+// }
+
+// .error-effects {
+//   @include applyEffectTheme($error-hover-effect, white, $error-click-effect, white);
+// }
 
 .accent-hover {
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: rgba(202, 202, 202, 0.5);
   }
 
   &:focus {
     outline: 3px solid gray;
-  }
-
-  &:disabled {
-    background-color: rgba(255, 255, 255, 0.4);
   }
 
   @media (prefers-reduced-motion: no-preference) {
