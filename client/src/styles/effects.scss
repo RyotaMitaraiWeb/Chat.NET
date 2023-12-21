@@ -27,6 +27,13 @@ $secondary-effects: (
   'click-text': black,
 );
 
+$success-effects: (
+  'hover-bg': #388e3c,
+  'click-bg': #1b5e20,
+  'hover-text': white,
+  'click-text': white,
+);
+
 $error-effects: (
   'hover-bg': #cc0000,
   'click-bg': #a50101,
@@ -37,6 +44,7 @@ $error-effects: (
 $effects: (
   'primary': $primary-effects,
   'secondary': $secondary-effects,
+  'success': $success-effects,
   'error': $error-effects,
 );
 

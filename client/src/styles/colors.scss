@@ -14,6 +14,13 @@ $secondary-colors: (
   'contrast-text-dark': black,
 );
 
+$success-colors: (
+  'light': #32c938,
+  'dark': #66bb6a,
+  'contrast-text-light': black,
+  'contrast-text-dark': black,
+);
+
 $error-colors: (
   'light': #e53935,
   'dark': #ff9999,
@@ -24,6 +31,7 @@ $error-colors: (
 $palette: (
   'primary': $primary-colors,
   'secondary': $secondary-colors,
+  'success': $success-colors,
   'error': $error-colors,
 );
 
