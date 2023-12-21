@@ -12,7 +12,9 @@ The colors and effects also take into account the user's preferences in regards 
 ### Colors
 
 When you want to apply a palette color (e.g. primary, secondary) to a component, you can use classes like ``.primary``, ``.secondary`` and similar.
-These classes are a combination of the ``.background-[palette]`` and ``.text-on-[palette]`` classes which you can also use if you wish to.
+These classes are a combination of the ``.background-[palette]`` and ``.text-on-[palette]`` classes which you can also use if you wish to. ``text-[palette]`` applies a text color of the given palette.
+
+Currently, the palette options are primary, secondary, success, warning, and error.
 
 The following SCSS variables (representing the app's theming) are available:
 ```scss
