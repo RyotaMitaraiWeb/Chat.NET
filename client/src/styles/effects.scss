@@ -1,10 +1,15 @@
 @use 'sass:map';
 
+$outline-color: #50dfff;
+
 @mixin applyEffectTheme($hover-bg, $hover-text, $click-bg, $click-text) {
-  &:hover:not(:disabled),
-  &:focus {
+  &:hover:not(:disabled) {
     background-color: $hover-bg;
     color: $hover-text;
+  }
+
+  &:focus {
+    outline: 3px solid $outline-color;
   }
 
   &:active:not(:disabled) {
@@ -73,7 +78,7 @@ $effects: (
   }
 
   &:focus {
-    outline: 3px solid gray;
+    outline: 3px solid $outline-color;
   }
 
   @media (prefers-reduced-motion: no-preference) {
