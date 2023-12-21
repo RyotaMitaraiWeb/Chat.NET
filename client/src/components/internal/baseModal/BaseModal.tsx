@@ -3,28 +3,38 @@ import { BaseModalProps } from '@/components/types/BaseModal';
 import FocusTrap from 'focus-trap-react';
 import Overlay from '../overlay/Overlay';
 import { createPortal } from 'react-dom';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 function BaseModal(props: BaseModalProps): React.JSX.Element {
   const { className = '', children, open, onClose, ...others } = props;
-  function handleClose() {
-    if (onClose) {
-      onClose();
-    }
+  const [isOpen, setOpen] = useState(true);
 
-    document.body.classList.remove('locked');
-    window.removeEventListener('keydown', handleEscape);
+  function handleClose() {
+    setOpen(false);
+    setTimeout(() => {
+      if (onClose) {
+        onClose();
+      }
+
+      document.body.classList.remove('locked');
+      window.removeEventListener('keydown', handleEscape);
+      setOpen(true);
+    }, 300);
   }
 
   const handleEscape = useCallback(
     (event: KeyboardEvent) => {
       if (event.code === 'Escape') {
-        if (onClose) {
-          onClose();
-        }
+        setOpen(false);
+        setTimeout(() => {
+          if (onClose) {
+            onClose();
+          }
 
-        document.body.classList.remove('locked');
-        window.removeEventListener('keydown', handleEscape);
+          document.body.classList.remove('locked');
+          window.removeEventListener('keydown', handleEscape);
+          setOpen(true);
+        }, 300);
       }
     },
     [onClose],
@@ -54,7 +64,7 @@ function BaseModal(props: BaseModalProps): React.JSX.Element {
     <FocusTrap active={process.env.NEXT_ENVIRONMENT !== 'TESTING'}>
       <div className={`component-base-modal ${className}`} {...others}>
         <Box selector="section">{children}</Box>
-        <Overlay onClose={handleClose} />
+        <Overlay open={isOpen} onClose={handleClose} />
       </div>
     </FocusTrap>,
     document.body,
