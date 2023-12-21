@@ -26,9 +26,7 @@ function Button(props: ButtonProps): React.JSX.Element {
     <BaseButtonWithIcon
       icon={icon}
       className={`component-button 
-        ${color} ${color}-hover ${color}-click size-${size} ${
-          icon ? 'with-icon' : ''
-        } ${className}`}
+        ${color} ${color}-effects size-${size} ${icon ? 'with-icon' : ''} ${className}`}
       onClick={onClick}
       {...others}
     >

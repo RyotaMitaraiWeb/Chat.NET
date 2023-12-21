@@ -1,26 +1,84 @@
-$primary-hover-effect: #531ce9;
-$primary-click-effect: #3000b3;
+@use 'sass:map';
 
-.primary-hover:hover {
-  background-color: $primary-hover-effect;
-  color: white;
+$outline-color: #50dfff;
+
+@mixin applyEffectTheme($hover-bg, $hover-text, $click-bg, $click-text) {
+  &:hover:not(:disabled) {
+    background-color: $hover-bg;
+    color: $hover-text;
+  }
+
+  &:focus {
+    outline: 3px solid $outline-color;
+  }
+
+  &:active:not(:disabled) {
+    background-color: $click-bg;
+    color: $click-text;
+  }
 }
 
-.primary-click:active {
-  background-color: $primary-click-effect;
+$primary-effects: (
+  'hover-bg': #531ce9,
+  'click-bg': #3000b3,
+  'hover-text': white,
+  'click-text': white,
+);
+
+$secondary-effects: (
+  'hover-bg': #e3b914,
+  'click-bg': #a98d1d,
+  'hover-text': black,
+  'click-text': black,
+);
+
+$success-effects: (
+  'hover-bg': #388e3c,
+  'click-bg': #1b5e20,
+  'hover-text': white,
+  'click-text': white,
+);
+
+$error-effects: (
+  'hover-bg': #cc0000,
+  'click-bg': #a50101,
+  'hover-text': white,
+  'click-text': white,
+);
+
+$warning-effects: (
+  'hover-bg': #f1b94b,
+  'click-bg': #cc8a06,
+  'hover-text': white,
+  'click-text': white,
+);
+
+$effects: (
+  'primary': $primary-effects,
+  'secondary': $secondary-effects,
+  'success': $success-effects,
+  'error': $error-effects,
+  'warning': $warning-effects,
+);
+
+@each $palette, $values in $effects {
+  .#{$palette}-effects {
+    @include applyEffectTheme(
+      map.get($values, 'hover-bg'),
+      map.get($values, 'hover-text'),
+      map.get($values, 'click-bg'),
+      map.get($values, 'click-text')
+    );
+  }
 }
 
 .accent-hover {
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: rgba(202, 202, 202, 0.5);
   }
 
   &:focus {
-    outline: 3px solid gray;
-  }
-
-  &:disabled {
-    background-color: rgba(255, 255, 255, 0.4);
+    outline: 3px solid $outline-color;
   }
 
   @media (prefers-reduced-motion: no-preference) {

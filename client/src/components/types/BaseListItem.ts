@@ -8,4 +8,5 @@ export interface BaseListItemProps extends ElementProps {
    * ones.
    */
   inset?: boolean;
+  bold?: boolean;
 }

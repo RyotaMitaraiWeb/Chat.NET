@@ -15,13 +15,16 @@ function ListItemButton(props: ListItemButtonProps): React.JSX.Element {
     target,
     onClick,
     disabled,
+    bold,
     icon,
     ...others
   } = props;
 
   return (
     <li
-      className={`component-list-item-button ${icon || inset ? 'with-icon' : ''} ${className}`}
+      className={`component-list-item-button ${bold ? 'bolded' : ''}  ${
+        icon || inset ? 'with-icon' : ''
+      } ${className}`}
       {...others}
     >
       <BaseButtonWithIcon

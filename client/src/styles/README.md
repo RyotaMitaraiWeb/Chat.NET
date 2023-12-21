@@ -11,9 +11,12 @@ The colors and effects also take into account the user's preferences in regards 
 ## Useful classes, variables, and mixins
 ### Colors
 
-- ``.primary`` - applies the primary color as a background and an appropriate text color. This is a combination of the ``.background-primary`` and ``.text-on-primary`` classes.
+When you want to apply a palette color (e.g. primary, secondary) to a component, you can use classes like ``.primary``, ``.secondary`` and similar.
+These classes are a combination of the ``.background-[palette]`` and ``.text-on-[palette]`` (which applies an appropriate constrast text color) classes which you can also use if you wish to. ``text-[palette]`` applies a text color of the given palette.
 
-The following SCSS variables (representing the app's color palette) are available:
+Currently, the palette options are primary, secondary, success, warning, and error.
+
+The following SCSS variables (representing the app's theming) are available:
 ```scss
 $background-dark
 $background-light
@@ -38,36 +41,18 @@ These variables can also be included with the following classes:
 It is preferable to extend the classes rather than use the variables, as those also handle the user's preferences.
 
 ### Effects
-The following classes are available:
+To apply the effects for a given palette (e.g. primary, secondary, etc.), use a
+``.[palette]-effects`` class (e.g. ``.primary-effects``).
 
-```css
-.primary-hover
-.primary-click:active
-.accent-hover
-.accent-click
-```
-These classes also apply special styling for disabled elements (whether it be the element itself or its children).
+To apply effects for accent containers, use ``.accent-hover`` and ``.accent-click``.
 
-The following SCSS variables are also available for custom implementations:
-```scss
-$primary-hover-effect;
-$primary-click-effect;
-```
 
 ### Font
 The following classes are available:
 ```css
-.size-small
-.size-medium
-.size-large
-```
-
-They are implemented using the following variables:
-
-```scss
-$size-small;
-$size-medium;
-$size-large;
+.size-small /* 8pt */
+.size-medium /* 12pt */
+.size-large /* 18pt */
 ```
 
 ### Animations
