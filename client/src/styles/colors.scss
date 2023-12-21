@@ -1,84 +1,79 @@
-$primary-light: #4d3ab7;
-$primary-dark: #9c88fd;
+@use 'sass:map';
 
-$secondary-light: #ffd637;
-$secondary-dark: #ffe478;
+$primary-colors: (
+  'light': #4d3ab7,
+  'dark': #9c88fd,
+  'contrast-text-light': white,
+  'contrast-text-dark': black,
+);
 
-$error-light: #e53935;
-$error-dark: #ff9999;
+$secondary-colors: (
+  'light': #ffd637,
+  'dark': #ffe478,
+  'contrast-text-light': black,
+  'contrast-text-dark': black,
+);
 
-.background-primary {
-  background-color: $primary-dark;
+$error-colors: (
+  'light': #e53935,
+  'dark': #ff9999,
+  'contrast-text-light': white,
+  'contrast-text-dark': black,
+);
 
-  @media (prefers-color-scheme: light) {
-    background-color: $primary-light;
-  }
-}
+$palette: (
+  'primary': $primary-colors,
+  'secondary': $secondary-colors,
+  'error': $error-colors,
+);
 
-.text-on-primary {
-  color: #040404;
+@each $color, $values in $palette {
+  .background-#{$color} {
+    background-color: map.get($values, 'dark');
 
-  @media (prefers-color-scheme: light) {
-    color: white;
-  }
-}
+    &:disabled,
+    & :disabled {
+      background-color: rgba(255, 255, 255, 0.12);
+    }
 
-.primary {
-  @extend .text-on-primary;
-  @extend .background-primary;
+    @media (prefers-color-scheme: light) {
+      background-color: map.get($values, 'light');
 
-  @media (prefers-reduced-motion: no-preference) {
-    transition:
-      background-color 0.2s,
-      color 0.2s;
-  }
-}
-
-.background-secondary {
-  background-color: $secondary-dark;
-  @media (prefers-color-scheme: light) {
-    background-color: $secondary-light;
-  }
-}
-
-.text-on-secondary {
-  color: black;
-}
-
-.secondary {
-  @extend .text-on-secondary;
-  @extend .background-secondary;
-
-  @media (prefers-reduced-motion: no-preference) {
-    transition:
-      background-color 0.2s,
-      color 0.2s;
-  }
-}
-
-.background-error {
-  background-color: $error-dark;
-  @media (prefers-color-scheme: light) {
-    background-color: $error-light;
-  }
-}
-
-.text-on-error {
-  color: black;
-  @media (prefers-color-scheme: light) {
-    color: white;
+      &:disabled,
+      & .disabled {
+        background-color: rgba(0, 0, 0, 0.12);
+      }
+    }
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    transition:
-      background-color 0.2s,
-      color 0.2s;
-  }
-}
+  .text-on-#{$color} {
+    color: map.get($values, 'contrast-text-dark');
 
-.error {
-  @extend .text-on-error;
-  @extend .background-error;
+    &:disabled,
+    & :disabled {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    @media (prefers-color-scheme: light) {
+      color: map.get($values, 'contrast-text-light');
+
+      &:disabled,
+      & .disabled {
+        color: rgba(0, 0, 0, 0.26);
+      }
+    }
+  }
+
+  .#{$color} {
+    @extend .text-on-#{$color};
+    @extend .background-#{$color};
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition:
+        background-color 0.2s,
+        color 0.2s;
+    }
+  }
 }
 
 $background-dark: #121212;
@@ -107,15 +102,15 @@ $shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   background-color: $accent-dark;
   &:disabled,
   & :disabled {
-    background-color: rgba(75, 75, 75, 0.55);
+    background-color: rgba(255, 255, 255, 0.12);
   }
 
   @media (prefers-color-scheme: light) {
     background-color: $accent-light;
 
     &:disabled,
-    & :disabled {
-      background-color: rgba(138, 138, 138, 0.65);
+    & .disabled {
+      background-color: rgba(0, 0, 0, 0.12);
     }
   }
 
@@ -127,8 +122,17 @@ $shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 .theme-text {
   color: $text-medium-dark;
 
+  &:disabled,
+  & :disabled {
+    color: rgba(255, 255, 255, 0.3);
+  }
+
   @media (prefers-color-scheme: light) {
     color: $text-medium-light;
+    &:disabled,
+    & .disabled {
+      color: rgba(0, 0, 0, 0.26);
+    }
   }
 
   @media (prefers-reduced-motion: no-preference) {
@@ -140,14 +144,14 @@ $shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   color: $text-emphasis-dark;
   &:disabled,
   & :disabled {
-    color: rgba(255, 255, 255, 0.6);
+    color: rgba(255, 255, 255, 0.3);
   }
 
   @media (prefers-color-scheme: light) {
     color: $text-emphasis-light;
     &:disabled,
-    & :disabled {
-      color: rgba(0, 0, 0, 0.584);
+    & .disabled {
+      color: rgba(0, 0, 0, 0.26);
     }
   }
 
