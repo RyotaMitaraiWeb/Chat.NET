@@ -15,7 +15,7 @@
 
   &.closed {
     @media (prefers-reduced-motion: no-preference) {
-      transition: opacity 0.3s;
+      transition: opacity 0.1s;
     }
 
     opacity: 0;

@@ -28,7 +28,7 @@ function Dialog(props: DialogProps): React.JSX.Element {
     <BaseModal
       open={open}
       onClose={onClose}
-      className={`component-dialog ${className} ${open ? '' : 'closed'}`}
+      className={`component-dialog ${className}`}
       {...others}
     >
       {children}

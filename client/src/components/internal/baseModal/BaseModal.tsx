@@ -23,24 +23,23 @@ function BaseModal(props: BaseModalProps): React.JSX.Element {
           window.removeEventListener('keydown', handleEscape);
           setOpen(false);
           setOverlayOpen(true);
-        }, 300);
+        }, 200);
       }
     },
     [onClose],
   );
 
   const handleClose = useCallback(() => {
+    document.body.classList.remove('locked');
+    window.removeEventListener('keydown', handleEscape);
     setOverlayOpen(false);
     setTimeout(() => {
       if (onClose) {
         onClose();
       }
-
-      document.body.classList.remove('locked');
-      window.removeEventListener('keydown', handleEscape);
       setOpen(false);
       setOverlayOpen(true);
-    }, 300);
+    }, 200);
   }, [handleEscape, onClose]);
 
   useEffect(() => {
@@ -55,6 +54,7 @@ function BaseModal(props: BaseModalProps): React.JSX.Element {
       window.removeEventListener('keydown', handleEscape);
       handleClose();
     }
+
     setOverlayOpen(open || false);
   }, [open, handleEscape, handleClose]);
 
@@ -69,7 +69,9 @@ function BaseModal(props: BaseModalProps): React.JSX.Element {
     */
     <FocusTrap active={process.env.NEXT_ENVIRONMENT !== 'TESTING'}>
       <div className={`component-base-modal ${className}`} {...others}>
-        <Box selector="section">{children}</Box>
+        <Box selector="section" className={overlayIsOpen ? 'open' : 'closed'}>
+          {children}
+        </Box>
         <Overlay open={overlayIsOpen} onClose={handleClose} />
       </div>
     </FocusTrap>,
