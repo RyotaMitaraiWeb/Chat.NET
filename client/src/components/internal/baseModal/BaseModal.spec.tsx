@@ -1,5 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
-import Dialog from './Dialog';
+import BaseModal from './BaseModal';
 import { useState } from 'react';
 
 function CustomComponent({ initialOpen }: { initialOpen: boolean }) {
@@ -8,20 +8,21 @@ function CustomComponent({ initialOpen }: { initialOpen: boolean }) {
   return (
     <div>
       <button onClick={() => setState(true)}>Open dialog</button>
-      <Dialog open={state} onClose={() => setState(false)}>
+      <BaseModal open={state} onClose={() => setState(false)}>
         <p>test</p>
         <button id="state-test" onClick={() => setState(false)}>
           Close dialog
         </button>
-      </Dialog>
+      </BaseModal>
     </div>
   );
 }
 
-describe('Dialog component', () => {
+describe('BaseModal component', () => {
   beforeEach(() => {
     // Needed to stop FocusTrap from throwing errors in tests.
     process.env.NEXT_ENVIRONMENT = 'TESTING';
+    jest.useFakeTimers();
   });
 
   describe('Opening and closing', () => {
@@ -34,17 +35,24 @@ describe('Dialog component', () => {
         });
       });
 
-      const dialog = document.querySelector('.component-dialog');
-      expect(dialog).toBeNull();
+      act(() => {
+        jest.runAllTimers();
+      });
+
+      const modal = document.querySelector('.component-base-modal');
+      expect(modal).toBeNull();
     });
 
     it('Closes when the overlay is clicked', () => {
       render(<CustomComponent initialOpen={true} />);
       const overlay = document.querySelector('.component-overlay')!;
       fireEvent.click(overlay);
+      act(() => {
+        jest.runAllTimers();
+      });
 
-      const dialog = document.querySelector('.component-dialog');
-      expect(dialog).toBeNull();
+      const modal = document.querySelector('.component-base-modal');
+      expect(modal).toBeNull();
     });
 
     it('Opens and closes based on state', async () => {
@@ -55,8 +63,12 @@ describe('Dialog component', () => {
       const closeButton = await screen.findByText(/Close dialog/im);
       act(() => closeButton.click());
 
-      const dialog = document.querySelector('.component-dialog');
-      expect(dialog).toBeNull();
+      act(() => {
+        jest.runAllTimers();
+      });
+
+      const modal = document.querySelector('.component-base-modal');
+      expect(modal).toBeNull();
     });
   });
 });

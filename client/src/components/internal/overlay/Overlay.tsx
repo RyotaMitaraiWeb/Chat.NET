@@ -9,8 +9,15 @@ import './Overlay.scss';
  * is using this overlay.
  */
 function Overlay(props: OverlayProps): React.JSX.Element {
-  const { className = '', onClose, ...others } = props;
-  return <div onClick={onClose} className={`component-overlay ${className}`} {...others}></div>;
+  const { className = '', onClose, open, ...others } = props;
+
+  return (
+    <div
+      onClick={onClose}
+      className={`component-overlay ${className} ${open ? '' : 'closed'}`}
+      {...others}
+    ></div>
+  );
 }
 
 export default Overlay;
