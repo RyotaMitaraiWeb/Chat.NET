@@ -18,10 +18,11 @@ function CustomComponent({ initialOpen }: { initialOpen: boolean }) {
   );
 }
 
-describe('Dialog component', () => {
+describe('BaseModal component', () => {
   beforeEach(() => {
     // Needed to stop FocusTrap from throwing errors in tests.
     process.env.NEXT_ENVIRONMENT = 'TESTING';
+    jest.useFakeTimers();
   });
 
   describe('Opening and closing', () => {
@@ -34,6 +35,10 @@ describe('Dialog component', () => {
         });
       });
 
+      act(() => {
+        jest.runAllTimers();
+      });
+
       const modal = document.querySelector('.component-base-modal');
       expect(modal).toBeNull();
     });
@@ -42,6 +47,9 @@ describe('Dialog component', () => {
       render(<CustomComponent initialOpen={true} />);
       const overlay = document.querySelector('.component-overlay')!;
       fireEvent.click(overlay);
+      act(() => {
+        jest.runAllTimers();
+      });
 
       const modal = document.querySelector('.component-base-modal');
       expect(modal).toBeNull();
@@ -54,6 +62,10 @@ describe('Dialog component', () => {
 
       const closeButton = await screen.findByText(/Close dialog/im);
       act(() => closeButton.click());
+
+      act(() => {
+        jest.runAllTimers();
+      });
 
       const modal = document.querySelector('.component-base-modal');
       expect(modal).toBeNull();

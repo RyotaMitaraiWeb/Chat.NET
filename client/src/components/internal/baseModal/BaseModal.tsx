@@ -7,25 +7,13 @@ import { useCallback, useEffect, useState } from 'react';
 
 function BaseModal(props: BaseModalProps): React.JSX.Element {
   const { className = '', children, open, onClose, ...others } = props;
-  const [isOpen, setOpen] = useState(true);
-
-  function handleClose() {
-    setOpen(false);
-    setTimeout(() => {
-      if (onClose) {
-        onClose();
-      }
-
-      document.body.classList.remove('locked');
-      window.removeEventListener('keydown', handleEscape);
-      setOpen(true);
-    }, 300);
-  }
+  const [isOpen, setOpen] = useState(open);
+  const [overlayIsOpen, setOverlayOpen] = useState(true);
 
   const handleEscape = useCallback(
     (event: KeyboardEvent) => {
       if (event.code === 'Escape') {
-        setOpen(false);
+        setOverlayOpen(false);
         setTimeout(() => {
           if (onClose) {
             onClose();
@@ -33,12 +21,27 @@ function BaseModal(props: BaseModalProps): React.JSX.Element {
 
           document.body.classList.remove('locked');
           window.removeEventListener('keydown', handleEscape);
-          setOpen(true);
+          setOpen(false);
+          setOverlayOpen(true);
         }, 300);
       }
     },
     [onClose],
   );
+
+  const handleClose = useCallback(() => {
+    setOverlayOpen(false);
+    setTimeout(() => {
+      if (onClose) {
+        onClose();
+      }
+
+      document.body.classList.remove('locked');
+      window.removeEventListener('keydown', handleEscape);
+      setOpen(false);
+      setOverlayOpen(true);
+    }, 300);
+  }, [handleEscape, onClose]);
 
   useEffect(() => {
     if (!document.body.classList.contains('locked') && open) {
@@ -47,12 +50,15 @@ function BaseModal(props: BaseModalProps): React.JSX.Element {
 
     if (open) {
       window.addEventListener('keydown', handleEscape);
+      setOpen(true);
     } else {
       window.removeEventListener('keydown', handleEscape);
+      handleClose();
     }
-  }, [open, handleEscape]);
+    setOverlayOpen(open || false);
+  }, [open, handleEscape, handleClose]);
 
-  if (!open) {
+  if (!isOpen) {
     return <></>;
   }
 
@@ -64,7 +70,7 @@ function BaseModal(props: BaseModalProps): React.JSX.Element {
     <FocusTrap active={process.env.NEXT_ENVIRONMENT !== 'TESTING'}>
       <div className={`component-base-modal ${className}`} {...others}>
         <Box selector="section">{children}</Box>
-        <Overlay open={isOpen} onClose={handleClose} />
+        <Overlay open={overlayIsOpen} onClose={handleClose} />
       </div>
     </FocusTrap>,
     document.body,
