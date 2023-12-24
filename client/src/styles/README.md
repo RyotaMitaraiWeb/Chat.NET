@@ -60,3 +60,8 @@ The following classes are available:
 @mixin fadeInFromTransparentToSemiTransparent($time: 0.3s)
 ```
 Applying this mixin to a component will cause it to "fade in" from a transparent state to a semi-transparent state. In other words, the component will go from opacity ``0`` to opacity ``0.5`` within the passed ``$time``.
+
+```scss
+@mixin slide-in-from($side, $time: 1s)
+```
+Smoothly transitions into the specified ``$side`` (for example, sliding into the left side means that the element will appear on the left side of the screen). The valid values for ``$side`` are ``left``, ``right``, ``bottom``, and ``top``. Note that the element is always positioned at value ``0`` of the respective side.
