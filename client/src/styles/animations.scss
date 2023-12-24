@@ -1,3 +1,5 @@
+@use 'sass:list';
+
 @keyframes fadeInTransparently {
   from {
     opacity: 0;
@@ -10,5 +12,24 @@
 @mixin fadeInFromTransparentToSemiTransparent($time: 0.3s) {
   @media (prefers-reduced-motion: no-preference) {
     animation: fadeInTransparently $time;
+  }
+}
+
+$sides: ('left', 'right', 'top', 'bottom');
+
+@each $side in $sides {
+  @keyframes slide-in-from-#{$side} {
+    from {
+      #{$side}: -5000px;
+    }
+    to {
+      #{$side}: 0;
+    }
+  }
+}
+
+@mixin slide-in-from($s, $time: 1s) {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: slide-in-from-#{$s} $time;
   }
 }
