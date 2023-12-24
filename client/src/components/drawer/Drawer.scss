@@ -1,0 +1,47 @@
+@import '../../styles/animations.scss';
+
+.component-drawer {
+  position: relative;
+  overflow: hidden;
+
+  .component-box {
+    position: fixed;
+    z-index: 1000;
+    overflow: hidden;
+  }
+
+  &.left,
+  &.right {
+    .component-box {
+      width: 300px;
+      height: 100%;
+      top: 0;
+    }
+  }
+
+  &.top,
+  &.bottom {
+    .component-box {
+      width: 100%;
+      height: 300px;
+    }
+  }
+
+  @each $side in $sides {
+    &.#{$side} {
+      #{$side}: 0;
+
+      .component-box {
+        @include slide-in-from($side, 0.7s);
+        #{$side}: 0;
+
+        &.closed {
+          #{$side}: -5000px;
+          @media (prefers-reduced-motion: no-preference) {
+            transition: #{$side} 1s;
+          }
+        }
+      }
+    }
+  }
+}
