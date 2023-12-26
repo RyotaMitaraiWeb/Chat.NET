@@ -6,10 +6,15 @@ type Page = {
 };
 
 export const usePagination = (totalItems: number, pageSize = 5, startingPage: number = 1) => {
-  const [page, setPage] = useState(startingPage || 1);
+  const [page, setStatePage] = useState(startingPage || 1);
   const [pages, setPages] = useState([] as Page[]);
   const count = Math.ceil(totalItems / pageSize);
 
+  function setPage(value: number) {
+    if (value >= 1 && value <= count) {
+      setStatePage(value);
+    }
+  }
   useMemo(() => {
     const pages: Page[] = [];
     for (let i = 1; i <= count; i++) {
