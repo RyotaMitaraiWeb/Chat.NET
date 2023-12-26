@@ -14,4 +14,7 @@ export interface PaginationProps extends ElementProps {
    * Turns the component into a controlled one.
    */
   page?: number;
+
+  showNext?: boolean;
+  showPrev?: boolean;
 }

@@ -3,7 +3,16 @@ import { PaginationProps } from './types';
 import './Pagination.scss';
 
 function Pagination(props: PaginationProps): React.JSX.Element {
-  const { className = '', page, onChangePage, pageSize, totalItems, ...others } = props;
+  const {
+    className = '',
+    page,
+    onChangePage,
+    pageSize,
+    showNext,
+    showPrev,
+    totalItems,
+    ...others
+  } = props;
   const pagination = usePagination(totalItems, pageSize, page);
 
   function handleChangePage(value: number) {
@@ -17,6 +26,12 @@ function Pagination(props: PaginationProps): React.JSX.Element {
   }
   return (
     <div className={`component-pagination ${className}`} {...others}>
+      <button
+        onClick={() => handleChangePage(pagination.page - 1)}
+        className={`previous-page-button ${showPrev ? 'visible' : 'invisible'}`}
+      >
+        Previous page
+      </button>
       {pagination.pages.map((p) => (
         <button
           key={p.page}
@@ -26,6 +41,12 @@ function Pagination(props: PaginationProps): React.JSX.Element {
           {p.page}
         </button>
       ))}
+      <button
+        onClick={() => handleChangePage(pagination.page + 1)}
+        className={`next-page-button ${showNext ? 'visible' : 'invisible'}`}
+      >
+        Next page
+      </button>
     </div>
   );
 }
