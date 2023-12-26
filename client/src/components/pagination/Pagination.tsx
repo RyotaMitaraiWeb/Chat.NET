@@ -1,6 +1,7 @@
 import { usePagination } from '@/app/hooks/usePagination/usePagination';
 import { PaginationProps } from './types';
 import './Pagination.scss';
+import { useEffect } from 'react';
 
 function Pagination(props: PaginationProps): React.JSX.Element {
   const {
@@ -24,6 +25,12 @@ function Pagination(props: PaginationProps): React.JSX.Element {
       }
     }
   }
+
+  useEffect(() => {
+    if (page && onChangePage) {
+      pagination.setPage(page);
+    }
+  }, [page, onChangePage, pagination]);
   return (
     <div className={`component-pagination ${className}`} {...others}>
       <button
