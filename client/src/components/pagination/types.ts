@@ -17,4 +17,6 @@ export interface PaginationProps extends ElementProps {
 
   showNext?: boolean;
   showPrev?: boolean;
+
+  disabled?: boolean;
 }

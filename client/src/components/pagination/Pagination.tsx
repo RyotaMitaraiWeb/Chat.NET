@@ -2,7 +2,9 @@ import { usePagination } from '@/app/hooks/usePagination/usePagination';
 import { PaginationProps } from './types';
 import './Pagination.scss';
 import { useEffect } from 'react';
-
+import BaseButton from '../internal/baseButton/BaseButton';
+import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import Icon from '../icon/Icon';
 function Pagination(props: PaginationProps): React.JSX.Element {
   const {
     className = '',
@@ -12,6 +14,7 @@ function Pagination(props: PaginationProps): React.JSX.Element {
     showNext,
     showPrev,
     totalItems,
+    disabled,
     ...others
   } = props;
   const pagination = usePagination(totalItems, pageSize, page);
@@ -31,29 +34,41 @@ function Pagination(props: PaginationProps): React.JSX.Element {
       pagination.setPage(page);
     }
   }, [page, onChangePage, pagination]);
+
   return (
     <div className={`component-pagination ${className}`} {...others}>
-      <button
+      <BaseButton
+        disabled={disabled || pagination.page === 1}
+        aria-label="Go to previous page"
         onClick={() => handleChangePage(pagination.page - 1)}
-        className={`previous-page-button ${showPrev ? 'visible' : 'invisible'}`}
+        className={`component-page-item previous-page-button ${showPrev ? 'visible' : 'invisible'}`}
       >
-        Previous page
-      </button>
-      {pagination.pages.map((p) => (
-        <button
-          key={p.page}
-          className={`component-page-item ${p.isSelected ? 'selected' : ''}`}
-          onClick={() => handleChangePage(p.page)}
-        >
-          {p.page}
-        </button>
-      ))}
-      <button
+        <Icon>
+          <MdKeyboardArrowLeft />
+        </Icon>
+      </BaseButton>
+      <div className="pages">
+        {pagination.pages.map((p) => (
+          <BaseButton
+            key={p.page}
+            disabled={disabled}
+            className={`component-page-item ${p.isSelected ? 'selected' : ''}`}
+            onClick={() => handleChangePage(p.page)}
+          >
+            {p.page}
+          </BaseButton>
+        ))}
+      </div>
+      <BaseButton
         onClick={() => handleChangePage(pagination.page + 1)}
-        className={`next-page-button ${showNext ? 'visible' : 'invisible'}`}
+        aria-label="Go to next page"
+        disabled={disabled || pagination.page === pagination.pages.length}
+        className={`component-page-item next-page-button ${showNext ? 'visible' : 'invisible'}`}
       >
-        Next page
-      </button>
+        <Icon>
+          <MdKeyboardArrowRight />
+        </Icon>
+      </BaseButton>
     </div>
   );
 }

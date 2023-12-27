@@ -1,5 +1,63 @@
+@import '../../styles/colors.scss';
+
 .component-pagination {
-  .selected {
-    color: red;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 1s;
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: background-color 0.3s;
+  }
+
+  .pages {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .component-page-item {
+    background: none;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 4px;
+    color: white;
+    transition: background-color 0.1s;
+    @media (prefers-color-scheme: light) {
+      color: black;
+    }
+
+    &:hover:not(:disabled),
+    &:focus {
+      background-color: rgba(255, 255, 255, 0.08);
+
+      @media (prefers-color-scheme: light) {
+        background-color: rgb(0, 0, 0, 0.08);
+      }
+    }
+
+    &.selected {
+      background-color: rgba(255, 255, 255, 0.16);
+
+      @media (prefers-color-scheme: light) {
+        background-color: rgb(0, 0, 0, 0.16);
+      }
+    }
+
+    &:disabled {
+      opacity: 0.8;
+      color: gray;
+    }
+
+    &.invisible {
+      visibility: hidden;
+    }
+
+    svg {
+      vertical-align: middle;
+    }
   }
 }
