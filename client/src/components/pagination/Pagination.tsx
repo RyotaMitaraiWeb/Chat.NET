@@ -64,6 +64,7 @@ function Pagination(props: PaginationProps): React.JSX.Element {
         {pagination.pages.map((p) => (
           <BaseButton
             key={p.page}
+            data-page={p.page}
             disabled={disabled}
             className={`component-page-item ${p.isSelected ? 'selected' : ''}`}
             onClick={() => handleChangePage(p.page)}
