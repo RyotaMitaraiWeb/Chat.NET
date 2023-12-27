@@ -19,4 +19,9 @@ export interface PaginationProps extends ElementProps {
   showPrev?: boolean;
 
   disabled?: boolean;
+
+  /**
+   * This will convert all pages to hyperlinks (using Next's ``Link`` component)
+   */
+  urls?: string[];
 }
