@@ -15,6 +15,8 @@ import Icon from '../icon/Icon';
  * When using URLs, you need to pass a state to ``page``, which will typically
  * be the current ``page`` query string (or whatever parameter you are using),
  * as the component will not be able to update the selected page otherwise.
+ * Passing ``count`` is also unnecessary in this case, as the component will
+ * resort to calculating the amount of pages using the array length itself.
  */
 function Pagination(props: PaginationProps): React.JSX.Element {
   const {
@@ -28,7 +30,7 @@ function Pagination(props: PaginationProps): React.JSX.Element {
     urls,
     ...others
   } = props;
-  const pagination = usePagination(count, page);
+  const pagination = usePagination(urls?.length || count || 1, page);
 
   function handleChangePage(value: number) {
     if (page === undefined) {

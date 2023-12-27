@@ -98,4 +98,12 @@ describe('Pagination component', () => {
     // 9 pages + next and prev, which are also rendered as hyperlinks
     expect(hyperlinks).toHaveLength(11);
   });
+
+  it('Prioritizes URLs array length over count', () => {
+    const urls = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => `http://localhost:3000?page=${n}`);
+    render(<Pagination urls={urls} showPrev showNext count={3} page={2} />);
+    const hyperlinks = document.querySelectorAll('a');
+
+    expect(hyperlinks).toHaveLength(11);
+  });
 });

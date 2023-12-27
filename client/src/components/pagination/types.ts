@@ -1,7 +1,7 @@
 import { ElementProps } from '../types/Element';
 
 export interface PaginationProps extends ElementProps {
-  count: number;
+  count?: number;
 
   onChangePage?: (value: number) => void;
 
