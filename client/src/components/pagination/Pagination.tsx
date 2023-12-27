@@ -21,15 +21,14 @@ function Pagination(props: PaginationProps): React.JSX.Element {
     className = '',
     page,
     onChangePage,
-    pageSize,
     showNext,
     showPrev,
-    totalItems,
+    count,
     disabled,
     urls,
     ...others
   } = props;
-  const pagination = usePagination(totalItems, pageSize, page);
+  const pagination = usePagination(count, page);
 
   function handleChangePage(value: number) {
     if (page === undefined) {

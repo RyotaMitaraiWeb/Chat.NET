@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 describe('Pagination component', () => {
   it('Generates correct amount of pages and hides arrow buttons by default', () => {
-    render(<Pagination totalItems={11} pageSize={10} />);
+    render(<Pagination count={2} />);
     const pages = document.querySelectorAll('button[data-page]');
     expect(pages.length).toBe(2);
 
@@ -13,33 +13,33 @@ describe('Pagination component', () => {
   });
 
   it('Shows next button', () => {
-    render(<Pagination totalItems={11} showNext pageSize={10} />);
+    render(<Pagination count={2} showNext />);
 
     const next = document.querySelectorAll('.visible');
     expect(next).toHaveLength(1);
   });
 
   it('Shows previous button', () => {
-    render(<Pagination totalItems={11} showPrev pageSize={10} />);
+    render(<Pagination count={2} showPrev />);
 
     const next = document.querySelectorAll('.visible');
     expect(next).toHaveLength(1);
   });
 
   it('Disables next button if at last page', () => {
-    render(<Pagination totalItems={11} showNext pageSize={10} page={2} />);
+    render(<Pagination count={2} showNext page={2} />);
     const next = document.querySelector('.visible');
     expect(next).toBeDisabled();
   });
 
   it('Disables prev button if at page 1', () => {
-    render(<Pagination totalItems={11} showPrev pageSize={10} page={1} />);
+    render(<Pagination count={2} showPrev page={1} />);
     const prev = document.querySelector('.visible');
     expect(prev).toBeDisabled();
   });
 
   it('Previous and next buttons work', async () => {
-    render(<Pagination totalItems={11} showPrev pageSize={1} />);
+    render(<Pagination count={11} showPrev />);
     const prev = await screen.findByLabelText(/Go to previous page/im);
     const next = await screen.findByLabelText(/Go to next page/im);
     act(() => next.click());
@@ -55,7 +55,7 @@ describe('Pagination component', () => {
   });
 
   it('Page updates successfully', async () => {
-    render(<Pagination totalItems={9} showPrev pageSize={1} />);
+    render(<Pagination count={9} showPrev />);
     const page1 = await screen.findByLabelText(/Go to page 1/im);
     expect(page1.classList.contains('selected')).toBe(true);
 
@@ -73,9 +73,7 @@ describe('Pagination component', () => {
   it('Works as a controlled component', async () => {
     function ControlledPagination() {
       const [state, setState] = useState(1);
-      return (
-        <Pagination totalItems={9} showPrev pageSize={1} page={state} onChangePage={setState} />
-      );
+      return <Pagination count={9} showPrev page={state} onChangePage={setState} />;
     }
 
     render(<ControlledPagination />);
@@ -93,7 +91,7 @@ describe('Pagination component', () => {
 
   it('Renders pages and next/prev buttons as hyperlinks when passed a urls prop', () => {
     const urls = [1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => `http://localhost:3000?page=${n}`);
-    render(<Pagination urls={urls} showPrev showNext totalItems={9} page={2} pageSize={1} />);
+    render(<Pagination urls={urls} showPrev showNext count={9} page={2} />);
 
     const hyperlinks = document.querySelectorAll('a');
 
