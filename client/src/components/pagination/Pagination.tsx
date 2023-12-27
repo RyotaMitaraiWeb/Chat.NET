@@ -1,4 +1,4 @@
-import { usePagination } from '@/app/hooks/usePagination/usePagination';
+import { usePagination } from '@/hooks/usePagination/usePagination';
 import { PaginationProps } from './types';
 import './Pagination.scss';
 import { useEffect } from 'react';
