@@ -11,7 +11,8 @@ export interface BaseRadioProps extends ElementProps {
   value?: string;
 
   /**
-   * Turns the radio button into an uncontrolled component
+   * Use this if you want to set an initial checked state for an uncontrolled
+   * radio button
    */
   defaultChecked?: boolean;
 }

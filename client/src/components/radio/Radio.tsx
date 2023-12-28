@@ -2,6 +2,10 @@ import BaseRadio from '../internal/baseRadio/BaseRadio';
 import { RadioProps } from './types';
 import './Radio.scss';
 import '@/styles/colors.scss';
+
+/**
+ * A styled radio button whose color, positioning, and size can be configured.
+ */
 function Radio(props: RadioProps): React.JSX.Element {
   const {
     className = '',

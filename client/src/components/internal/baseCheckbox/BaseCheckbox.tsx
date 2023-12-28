@@ -1,6 +1,12 @@
 import { BaseCheckboxProps } from './types';
 import './BaseCheckbox.scss';
 
+/**
+ * This component can be used to implement checkbox-like components.
+ * The base checkbox hides the native control entirely, allowing
+ * you to replace it with a custom one. This component
+ * supports both uncontrolled and controlled checkboxes.
+ */
 function BaseCheckbox(props: BaseCheckboxProps): React.JSX.Element {
   const { className = '', checked, defaultChecked, ...others } = props;
   const classNames = `component-base-checkbox ${className}`;
