@@ -5,6 +5,10 @@ import { MdDone } from 'react-icons/md';
 import './Checkbox.scss';
 import '@/styles/colors.scss';
 
+/**
+ * A styled checkbox whose color, size, positioning, and icon can be
+ * configured.
+ */
 function Checkbox(props: CheckboxProps): React.JSX.Element {
   const {
     className = '',
