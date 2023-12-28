@@ -26,13 +26,13 @@ function Checkbox(props: CheckboxProps): React.JSX.Element {
       } ${side} ${size} ${className}`}
       {...others}
     >
+      <span className="component-checkbox-label">{label}</span>
       <div className={`checkbox ${size} ${color}`}>
         <Icon size={size} className="component-checkbox-icon">
           {icon}
         </Icon>
         <BaseCheckbox value={value} checked={checked} onChange={onChange} name={name} />
       </div>
-      <span className="component-checkbox-label">{label}</span>
     </label>
   );
 }

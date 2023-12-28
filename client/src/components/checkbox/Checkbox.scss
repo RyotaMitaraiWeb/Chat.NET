@@ -1,5 +1,44 @@
 .component-checkbox {
   cursor: pointer;
+  display: flex;
+  gap: 4px;
+  text-align: center;
+
+  &.right,
+  &.left {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &.top,
+  &.bottom {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &.left,
+  .top {
+    .checkbox {
+      order: 2;
+    }
+
+    .component-checkbox-label {
+      order: 1;
+    }
+  }
+
+  &.right,
+  &.bottom {
+    .checkbox {
+      order: 1;
+    }
+
+    .component-checkbox-label {
+      order: 2;
+    }
+  }
+
   .checkbox {
     border: 3px solid gray;
     border-radius: 4px;
