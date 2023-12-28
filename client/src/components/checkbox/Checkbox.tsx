@@ -21,13 +21,15 @@ function Checkbox(props: CheckboxProps): React.JSX.Element {
     value,
     checked,
     name,
+    defaultChecked,
     ...others
   } = props;
+
   return (
     <label
-      className={`component-checkbox ${
-        checked ? 'checked' : 'unchecked'
-      } ${side} ${size} ${className}`}
+      className={`component-checkbox ${generateCheckedClassName(
+        checked,
+      )} ${side} ${size} ${className}`}
       {...others}
     >
       <span className="component-checkbox-label">{label}</span>
@@ -35,10 +37,24 @@ function Checkbox(props: CheckboxProps): React.JSX.Element {
         <Icon size={size} className="component-checkbox-icon">
           {icon}
         </Icon>
-        <BaseCheckbox value={value} checked={checked} onChange={onChange} name={name} />
+        <BaseCheckbox
+          defaultChecked={defaultChecked}
+          value={value}
+          checked={checked}
+          onChange={onChange}
+          name={name}
+        />
       </div>
     </label>
   );
+}
+
+function generateCheckedClassName(checked?: boolean): string {
+  if (checked === undefined) {
+    return 'default-check';
+  }
+
+  return checked ? 'checked' : 'unchecked';
 }
 
 export default Checkbox;

@@ -88,7 +88,7 @@
     }
   }
 
-  &.checked {
+  &.checked, &:has(:checked) {
     .checkbox {
       border: 3px solid transparent;
 
@@ -106,7 +106,7 @@
     }
   }
 
-  &.unchecked {
+  &.unchecked, &:not(:has(:checked)) {
     .checkbox {
       background-color: transparent;
     }

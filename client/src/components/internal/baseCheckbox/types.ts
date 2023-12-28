@@ -6,4 +6,9 @@ export interface BaseCheckboxProps extends ElementProps {
   disabled?: boolean;
   name?: string;
   value?: string;
+
+  /**
+   * Turns the checkbox into an uncontrolled component.
+   */
+  defaultChecked?: boolean;
 }
