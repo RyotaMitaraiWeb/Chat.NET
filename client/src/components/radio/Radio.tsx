@@ -14,12 +14,13 @@ function Radio(props: RadioProps): React.JSX.Element {
     checked,
     name,
     defaultChecked,
+    disabled,
     ...others
   } = props;
 
   return (
     <label
-      className={`component-radio ${
+      className={`component-radio ${disabled ? 'disabled' : 'enabled'} ${
         checked ? 'checked' : 'unchecked'
       } ${side} ${size} ${className}`}
       {...others}
@@ -33,6 +34,7 @@ function Radio(props: RadioProps): React.JSX.Element {
             checked={checked}
             onChange={onChange}
             name={name}
+            disabled={disabled}
           />
         </span>
       </div>

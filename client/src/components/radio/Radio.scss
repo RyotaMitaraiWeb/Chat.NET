@@ -4,6 +4,15 @@
   gap: 4px;
   text-align: center;
 
+  @media (prefers-reduced-motion: no-preference) {
+    transition: opacity 0.1s;
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
   &:has(:focus-visible) {
     .radio {
       outline: 3px solid #50dfff;
@@ -78,9 +87,6 @@
     &.large {
       width: 36px;
       height: 36px;
-      // .radio-button {
-      //   margin-left: auto;
-      // }
     }
   }
 
