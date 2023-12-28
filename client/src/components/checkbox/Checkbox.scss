@@ -1,0 +1,67 @@
+.component-checkbox {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0 auto;
+  cursor: pointer;
+  .checkbox {
+    border: 3px solid gray;
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.1s;
+    overflow: hidden;
+
+    svg {
+      display: block;
+    }
+
+    .component-icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    &.small {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      border: 2px solid gray;
+    }
+
+    &.medium {
+      width: 24px;
+      height: 24px;
+    }
+
+    &.large {
+      width: 36px;
+      height: 36px;
+    }
+  }
+
+  &.checked {
+    .checkbox {
+      border: 3px solid transparent;
+
+      &.small {
+        border: 2px solid transparent;
+      }
+      
+      transition: border-color 0.1s;
+      .component-icon {
+        visibility: visible;
+      }
+    }
+  }
+
+  &.unchecked {
+    .checkbox {
+      background-color: transparent;
+    }
+  }
+}
