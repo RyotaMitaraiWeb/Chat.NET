@@ -15,7 +15,7 @@ function Checkbox(props: CheckboxProps): React.JSX.Element {
     icon = <MdDone />,
     color = 'primary',
     side = 'right',
-    label,
+    children,
     size = 'medium',
     onChange,
     value,
@@ -32,7 +32,7 @@ function Checkbox(props: CheckboxProps): React.JSX.Element {
       )} ${side} ${size} ${className}`}
       {...others}
     >
-      <span className="component-checkbox-label">{label}</span>
+      <div className="component-checkbox-label">{children}</div>
       <div className={`checkbox ${size} ${color}`}>
         <Icon size={size} className="component-checkbox-icon">
           {icon}
