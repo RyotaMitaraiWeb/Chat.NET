@@ -1,9 +1,4 @@
 .component-checkbox {
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  margin: 0 auto;
   cursor: pointer;
   .checkbox {
     border: 3px solid gray;
@@ -51,7 +46,7 @@
       &.small {
         border: 2px solid transparent;
       }
-      
+
       transition: border-color 0.1s;
       .component-icon {
         visibility: visible;
