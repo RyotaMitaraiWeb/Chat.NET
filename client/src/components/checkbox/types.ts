@@ -2,7 +2,7 @@ import { BaseCheckboxProps } from '../internal/baseCheckbox/types';
 import { palette, side, size } from '../types/options';
 
 export interface CheckboxProps extends BaseCheckboxProps {
-  label?: string;
+  children?: React.ReactNode;
   /**
    * When passing an icon, you should pass just the icon itself
    * (aka do not wrap it in an ``<Icon>`` tag, this is taken care of by the

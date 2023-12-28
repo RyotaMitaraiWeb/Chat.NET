@@ -6,6 +6,11 @@
   gap: 4px;
   text-align: center;
 
+  &.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
   &:has(:focus-visible) {
     .checkbox {
       outline: 3px solid #50dfff;
@@ -88,7 +93,8 @@
     }
   }
 
-  &.checked {
+  &.checked,
+  &:has(:checked) {
     .checkbox {
       border: 3px solid transparent;
 
@@ -106,7 +112,8 @@
     }
   }
 
-  &.unchecked {
+  &.unchecked,
+  &:not(:has(:checked)) {
     .checkbox {
       background-color: transparent;
     }
