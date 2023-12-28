@@ -1,8 +1,16 @@
+@import '../../styles/colors.scss';
+
 .component-checkbox {
   cursor: pointer;
   display: flex;
   gap: 4px;
   text-align: center;
+
+  &:has(:focus-visible) {
+    .checkbox {
+      outline: 3px solid #50dfff;
+    }
+  }
 
   &.right,
   &.left {
