@@ -22,14 +22,15 @@ function Checkbox(props: CheckboxProps): React.JSX.Element {
     checked,
     name,
     defaultChecked,
+    disabled,
     ...others
   } = props;
 
   return (
     <label
-      className={`component-checkbox ${generateCheckedClassName(
-        checked,
-      )} ${side} ${size} ${className}`}
+      className={`component-checkbox ${generateCheckedClassName(checked)} ${side} ${size} ${
+        disabled ? 'disabled' : 'enabled'
+      } ${className}`}
       {...others}
     >
       <div className="component-checkbox-label">{children}</div>
@@ -43,6 +44,7 @@ function Checkbox(props: CheckboxProps): React.JSX.Element {
           checked={checked}
           onChange={onChange}
           name={name}
+          disabled={disabled}
         />
       </div>
     </label>
