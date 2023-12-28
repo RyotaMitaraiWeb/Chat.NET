@@ -13,6 +13,7 @@ function Radio(props: RadioProps): React.JSX.Element {
     value,
     checked,
     name,
+    defaultChecked,
     ...others
   } = props;
 
@@ -26,7 +27,13 @@ function Radio(props: RadioProps): React.JSX.Element {
       <div className="component-radio-label">{children}</div>
       <div className={`radio ${size}`}>
         <span className={`radio-button ${color}`}>
-          <BaseRadio value={value} checked={checked} onChange={onChange} name={name} />
+          <BaseRadio
+            defaultChecked={defaultChecked}
+            value={value}
+            checked={checked}
+            onChange={onChange}
+            name={name}
+          />
         </span>
       </div>
     </label>
