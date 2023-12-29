@@ -7,6 +7,7 @@ import Icon from '../icon/Icon';
 import AlertTitle from './alertTitle/AlertTitle';
 import AlertActions from './alertActions/AlertActions';
 import AlertContent from './alertContent/AlertContent';
+
 const icons: Record<severity, React.ReactNode> = {
   success: <MdCheckCircleOutline />,
   info: <MdInfoOutline />,
@@ -14,6 +15,13 @@ const icons: Record<severity, React.ReactNode> = {
   warning: <MdWarning />,
 };
 
+/**
+ * An alert displays an important message or content that the user
+ * needs to read immediately. Each alert in the app has
+ * a title and some content. Optionally, you can pass
+ * actions which allow the user to resolve the issue or
+ * as a way to conditionally show and later on close the alert.
+ */
 function Alert(props: AlertProps): React.JSX.Element {
   const {
     className = '',

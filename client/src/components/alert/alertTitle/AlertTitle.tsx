@@ -1,5 +1,6 @@
 import { AlertTitleProps } from './types';
 import './AlertTitle.scss';
+
 function AlertTitle(props: AlertTitleProps): React.JSX.Element {
   const { className = '', children, ...others } = props;
   return (
