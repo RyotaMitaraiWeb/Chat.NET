@@ -26,6 +26,10 @@ const titles: Record<severity, string> = {
  * However, you should still avoid defining side effects outside
  * of ones involving the closing of the snackbar.
  *
+ * The component currently does not support multiple snackbars being
+ * displayed together; if two snackbars are active, one of them will appear
+ * on top of another, effectively hiding it.
+ *
  * The snackbar is added to the body of the document through a portal.
  *
  * **Note:** if the user does not allow animations on their system,
