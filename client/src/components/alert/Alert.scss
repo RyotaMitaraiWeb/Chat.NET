@@ -4,11 +4,31 @@
   display: flex;
   align-items: center;
   flex-direction: row;
-  padding: 12px 0;
   padding-left: 8px;
+  padding-top: 4px;
+  padding-bottom: 12px;
   gap: 8px;
+
+  &:has(.component-alert-title) {
+    align-items: start;
+    .component-alert-title {
+      margin-top: 2px;
+    }
+  }
+
+  .component-icon {
+    margin: 0;
+    padding: 0;
+    align-self: flex-start;
+  }
+  .component-alert-title {
+    margin: 0;
+    padding: 0;
+  }
 
   svg {
     display: block;
+    margin: 0;
+    padding: 0;
   }
 }
