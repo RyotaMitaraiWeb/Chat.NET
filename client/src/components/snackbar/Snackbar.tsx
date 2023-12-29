@@ -74,6 +74,8 @@ function Snackbar(props: SnackbarProps): JSX.Element {
          * and unnecessary side effects
          */
         timeoutFn.current = setTimeout(close, duration);
+      } else {
+        timeoutFn.current = () => {};
       }
       window.addEventListener('keydown', closebByEscape);
     }
