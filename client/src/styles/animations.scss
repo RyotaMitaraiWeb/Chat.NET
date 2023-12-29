@@ -9,6 +9,15 @@
   }
 }
 
+@keyframes zoomIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
 @mixin fadeInFromTransparentToSemiTransparent($time: 0.3s) {
   @media (prefers-reduced-motion: no-preference) {
     animation: fadeInTransparently $time;
@@ -31,5 +40,11 @@ $sides: ('left', 'right', 'top', 'bottom');
 @mixin slide-in-from($s, $time: 1s) {
   @media (prefers-reduced-motion: no-preference) {
     animation: slide-in-from-#{$s} $time;
+  }
+}
+
+@mixin zoom-in($time: 0.2s) {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: zoomIn $time;
   }
 }

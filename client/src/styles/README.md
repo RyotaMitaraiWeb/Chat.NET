@@ -14,7 +14,14 @@ The colors and effects also take into account the user's preferences in regards 
 When you want to apply a palette color (e.g. primary, secondary) to a component, you can use classes like ``.primary``, ``.secondary`` and similar.
 These classes are a combination of the ``.background-[palette]`` and ``.text-on-[palette]`` (which applies an appropriate constrast text color) classes which you can also use if you wish to. ``text-[palette]`` applies a text color of the given palette.
 
-Currently, the palette options are primary, secondary, success, warning, and error.
+Normally, each palette class defines a contrast text for its color. However, this occassionally does not apply correctly to some elements (e.g. a native ``button`` tag). You can bypass it like this:
+
+```css
+/** Substitute ``primary`` with whatever color you want */
+.primary .contrast-text-color
+```
+
+Currently, the palette options are primary, secondary, success, warning, info, and error.
 
 The following SCSS variables (representing the app's theming) are available:
 ```scss
@@ -65,3 +72,8 @@ Applying this mixin to a component will cause it to "fade in" from a transparent
 @mixin slide-in-from($side, $time: 1s)
 ```
 Smoothly transitions into the specified ``$side`` (for example, sliding into the left side means that the element will appear on the left side of the screen). The valid values for ``$side`` are ``left``, ``right``, ``bottom``, and ``top``. Note that the element is always positioned at value ``0`` of the respective side.
+
+```scss
+@mixin zoom-in($time: 0.2s)
+```
+The element transitions from ``scale(0)`` to ``scale(1)``.
