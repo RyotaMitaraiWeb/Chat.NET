@@ -1,35 +1,35 @@
 .component-alert {
   width: 100%;
   border-radius: 4px;
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-  padding-left: 8px;
-  padding-top: 4px;
-  padding-bottom: 12px;
-  gap: 8px;
+  padding-left: 12px;
 
-  &:has(.component-alert-title):has(.component-alert-content) {
-    align-items: start;
+  .title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    padding-top: 8px;
+
     .component-alert-title {
-      margin-top: 2px;
+      margin: 0;
+      padding: 0;
     }
   }
 
-  .component-icon {
-    margin: 0;
-    padding: 0;
-    align-self: flex-start;
-  }
+  .alert-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    justify-content: space-between;
+    padding-left: 28px;
 
-  .component-alert-title {
-    margin: 0;
-    padding: 0;
+    .component-alert-actions {
+      justify-self: flex-end;
+    }
   }
 
   svg {
     display: block;
-    margin: 0;
-    padding: 0;
   }
 }
