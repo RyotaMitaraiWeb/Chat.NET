@@ -1,4 +1,8 @@
-export type palette = 'primary' | 'secondary' | 'error' | 'warning' | 'success';
+/**
+ * Unless stated otherwise, defaults to ``success``
+ */
+export type severity = 'success' | 'info' | 'error' | 'warning';
+export type palette = 'primary' | 'secondary' | severity;
 export type size = 'small' | 'medium' | 'large';
 
 /**

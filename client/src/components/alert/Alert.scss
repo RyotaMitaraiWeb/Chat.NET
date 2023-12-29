@@ -1,0 +1,35 @@
+.component-alert {
+  width: 100%;
+  border-radius: 4px;
+  padding-left: 12px;
+
+  .title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    padding-top: 8px;
+
+    .component-alert-title {
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  .alert-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 4px;
+    justify-content: space-between;
+    padding-left: 28px;
+
+    .component-alert-actions {
+      justify-self: flex-end;
+    }
+  }
+
+  svg {
+    display: block;
+  }
+}

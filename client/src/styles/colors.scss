@@ -35,12 +35,20 @@ $warning-colors: (
   'contrast-text-dark': black,
 );
 
+$info-colors: (
+  'light': #1250ba,
+  'dark': #02abd1,
+  'contrast-text-light': white,
+  'contrast-text-dark': black,
+);
+
 $palette: (
   'primary': $primary-colors,
   'secondary': $secondary-colors,
   'success': $success-colors,
   'error': $error-colors,
   'warning': $warning-colors,
+  'info': $info-colors,
 );
 
 @each $color, $values in $palette {
