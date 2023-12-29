@@ -1,3 +1,5 @@
+@import '../../styles/animations.scss';
+
 .component-snackbar {
   width: 500px;
   position: fixed;
@@ -6,7 +8,7 @@
   transform: translate(-50%);
 
   .component-alert {
-    animation: zoomIn 0.2s;
+    @include zoom-in();
   }
 
   .snackbar-close-button {
@@ -14,13 +16,11 @@
     border: none;
     cursor: pointer;
   }
-}
 
-@keyframes zoomIn {
-  from {
-    transform: scale(0);
-  }
-  to {
-    transform: scale(1);
+  &.disappear {
+    opacity: 0;
+    @media (prefers-reduced-motion: no-preference) {
+      transition: opacity 0.3s;
+    }
   }
 }
