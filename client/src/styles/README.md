@@ -65,3 +65,8 @@ Applying this mixin to a component will cause it to "fade in" from a transparent
 @mixin slide-in-from($side, $time: 1s)
 ```
 Smoothly transitions into the specified ``$side`` (for example, sliding into the left side means that the element will appear on the left side of the screen). The valid values for ``$side`` are ``left``, ``right``, ``bottom``, and ``top``. Note that the element is always positioned at value ``0`` of the respective side.
+
+```scss
+@mixin zoom-in($time: 0.2s)
+```
+The element transitions from ``scale(0)`` to ``scale(1)``.

@@ -13,6 +13,25 @@ const titles: Record<severity, string> = {
   warning: 'Warning!',
 };
 
+/**
+ * A snackbar appears around the bottom of the screen to alert or inform
+ * the user about something. The snackbar is persistent until the user
+ * closes it, unless a ``duration`` is passed. The user can close
+ * the snackbar by pressing Escape or by clicking the close button
+ * (assuming you have passed an ``onClose`` handler). ``duration``
+ * is passed in miliseconds.
+ *
+ * The snackbar component clears out any timeouts it creates, preventing
+ * memory leaks and stopping side effects from occurring after it's unmounted.
+ * However, you should still avoid defining side effects outside
+ * of ones involving the closing of the snackbar.
+ *
+ * The snackbar is added to the body of the document through a portal.
+ *
+ * **Note:** if the user does not allow animations on their system,
+ * the snackbar will be transparent for less than a second when closed.
+ * However, this has virtually no effect for the user.
+ */
 function Snackbar(props: SnackbarProps): JSX.Element {
   const {
     className = '',
