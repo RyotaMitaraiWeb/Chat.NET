@@ -9,7 +9,7 @@ $outline-color: #50dfff;
     color: $hover-text;
   }
 
-  &:focus {
+  &:focus:focus-visible {
     outline: 3px solid $outline-color;
   }
 
@@ -89,7 +89,7 @@ $effects: (
     background-color: rgba(202, 202, 202, 0.5);
   }
 
-  &:focus {
+  &:focus-visible {
     outline: 3px solid $outline-color;
   }
 }

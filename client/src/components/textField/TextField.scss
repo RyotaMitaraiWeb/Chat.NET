@@ -1,4 +1,6 @@
 @import '../../styles/colors.scss';
+@import '../../styles/effects.scss';
+@import '../../styles/util.scss';
 
 .component-text-field {
   border-radius: 5px;
@@ -10,14 +12,9 @@
   }
 
   &:active:not(:disabled),
-  &:focus {
+  &:focus-visible {
     border: 1px solid transparent;
-    outline: 3px solid $primary-dark;
-
-    @media (prefers-color-scheme: light) {
-      border: 1px solid transparent;
-      outline: 3px solid $primary-light;
-    }
+    outline: 3px solid gray;
   }
 
   &:disabled {
