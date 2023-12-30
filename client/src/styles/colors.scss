@@ -54,47 +54,43 @@ $palette: (
 
 @each $color, $values in $palette {
   .background-#{$color} {
-    background-color: map.get($values, 'dark');
     @include apply-transition(background-color 0.2s);
+    @include apply-values-for-modes(
+      background-color,
+      map.get($values, 'dark'),
+      map.get($values, 'light')
+    );
 
     &:disabled,
     & :disabled {
-      background-color: rgba(255, 255, 255, 0.12);
-    }
-
-    @media (prefers-color-scheme: light) {
-      background-color: map.get($values, 'light');
-
-      &:disabled,
-      & .disabled {
-        background-color: rgba(0, 0, 0, 0.12);
-      }
+      @include apply-values-for-modes(
+        background-color,
+        rgba(255, 255, 255, 0.12),
+        rgba(0, 0, 0, 0.12)
+      );
     }
   }
 
   .text-#{$color} {
-    color: map.get($values, 'dark');
-    @media (prefers-color-scheme: light) {
-      background-color: map.get($values, 'light');
-    }
+    @include apply-values-for-modes(
+      background-color,
+      map.get($values, 'dark'),
+      map.get($values, 'light')
+    );
   }
 
   .text-on-#{$color} {
     color: map.get($values, 'contrast-text-dark');
     @include apply-transition(color 0.2s);
+    @include apply-values-for-modes(
+      color,
+      map.get($values, 'contrast-text-dark'),
+      map.get($values, 'contrast-text-light')
+    );
 
     &:disabled,
     & :disabled {
-      color: rgba(255, 255, 255, 0.3);
-    }
-
-    @media (prefers-color-scheme: light) {
-      color: map.get($values, 'contrast-text-light');
-
-      &:disabled,
-      & .disabled {
-        color: rgba(0, 0, 0, 0.26);
-      }
+      @include apply-values-for-modes(color, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.26));
     }
   }
 
@@ -105,12 +101,12 @@ $palette: (
     @include apply-transition(background-color 0.2s, color 0.2s);
 
     .contrast-text-color {
-      color: map.get($values, 'contrast-text-dark');
       @include apply-transition(color 0.2s);
-
-      @media (prefers-color-scheme: light) {
-        color: map.get($values, 'contrast-text-light');
-      }
+      @include apply-values-for-modes(
+        color,
+        map.get($values, 'contrast-text-dark'),
+        map.get($values, 'contrast-text-light')
+      );
     }
   }
 }
@@ -128,63 +124,40 @@ $shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 .theme-background {
   background-color: $background-dark;
   @include apply-transition(background-color 0.2s);
-
-  @media (prefers-color-scheme: light) {
-    background-color: $background-light;
-  }
+  @include apply-values-for-modes(background-color, $background-dark, $background-light);
 }
 
 .accent-background {
-  background-color: $accent-dark;
+  @include apply-values-for-modes(background-color, $accent-dark, $accent-light);
   @include apply-transition(background-color 0.2s);
 
   &:disabled,
   & :disabled {
-    background-color: rgba(255, 255, 255, 0.12);
-  }
-
-  @media (prefers-color-scheme: light) {
-    background-color: $accent-light;
-
-    &:disabled,
-    & .disabled {
-      background-color: rgba(0, 0, 0, 0.12);
-    }
+    @include apply-values-for-modes(
+      background-color,
+      rgba(255, 255, 255, 0.12),
+      rgba(0, 0, 0, 0.12)
+    );
   }
 }
 
 .theme-text {
-  color: $text-medium-dark;
+  @include apply-values-for-modes(color, $text-medium-dark, $text-medium-light);
   @include apply-transition(color 0.2s);
 
   &:disabled,
   & :disabled {
-    color: rgba(255, 255, 255, 0.3);
-  }
-
-  @media (prefers-color-scheme: light) {
-    color: $text-medium-light;
-    &:disabled,
-    & .disabled {
-      color: rgba(0, 0, 0, 0.26);
-    }
+    @include apply-values-for-modes(color, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.26));
   }
 }
 
 .theme-emphasis-text {
-  color: $text-emphasis-dark;
-  @include apply-transition(background-color 0.2s);
+  @include apply-values-for-modes(color, $text-emphasis-dark, $text-emphasis-light);
+  @include apply-transition(color 0.2s);
+
   &:disabled,
   & :disabled {
-    color: rgba(255, 255, 255, 0.3);
-  }
-
-  @media (prefers-color-scheme: light) {
-    color: $text-emphasis-light;
-    &:disabled,
-    & .disabled {
-      color: rgba(0, 0, 0, 0.26);
-    }
+    @include apply-values-for-modes(color, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.26));
   }
 }
 
