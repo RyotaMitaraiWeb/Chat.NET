@@ -1,6 +1,9 @@
+@import '../../../styles/effects.scss';
+
 .component-base-button {
   cursor: pointer;
   text-decoration: none;
+  @extend .ripple;
 
   &:disabled,
   &.disabled {

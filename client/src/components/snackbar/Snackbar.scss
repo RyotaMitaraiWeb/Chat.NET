@@ -1,6 +1,7 @@
 @import '../../styles/animations.scss';
 @import '../../styles/colors.scss';
 @import '../../styles/util.scss';
+@import '../../styles/effects.scss';
 
 .component-snackbar {
   width: 500px;
@@ -17,6 +18,7 @@
     background: none;
     border: none;
     cursor: pointer;
+    @extend .ripple;
 
     &:hover {
       opacity: 0.6;
