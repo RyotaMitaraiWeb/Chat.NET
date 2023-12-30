@@ -54,12 +54,20 @@ $warning-effects: (
   'click-text': white,
 );
 
+$info-effects: (
+  'hover-bg': #1327c0,
+  'click-bg': #001eff,
+  'hover-text': white,
+  'click-text': white,
+);
+
 $effects: (
   'primary': $primary-effects,
   'secondary': $secondary-effects,
   'success': $success-effects,
   'error': $error-effects,
   'warning': $warning-effects,
+  'info': $info-effects,
 );
 
 @each $palette, $values in $effects {
