@@ -5,3 +5,11 @@
     transition: $properties-and-times;
   }
 }
+
+@mixin apply-values-for-modes($property, $dark-mode-value, $light-mode-value) {
+  #{$property}: $dark-mode-value;
+
+  @media (prefers-color-scheme: light) {
+    #{$property}: $light-mode-value;
+  }
+}
