@@ -1,6 +1,5 @@
 @import '../../styles/colors.scss';
 
 .component-box {
-  @extend .accent-background;
-  @extend .theme-text;
+  @extend .accent;
 }
