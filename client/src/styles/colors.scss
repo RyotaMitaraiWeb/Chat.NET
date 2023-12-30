@@ -1,4 +1,5 @@
 @use 'sass:map';
+@import './util.scss';
 
 $primary-colors: (
   'light': #4d3ab7,
@@ -54,6 +55,7 @@ $palette: (
 @each $color, $values in $palette {
   .background-#{$color} {
     background-color: map.get($values, 'dark');
+    @include apply-transition(background-color 0.2s);
 
     &:disabled,
     & :disabled {
@@ -79,6 +81,7 @@ $palette: (
 
   .text-on-#{$color} {
     color: map.get($values, 'contrast-text-dark');
+    @include apply-transition(color 0.2s);
 
     &:disabled,
     & :disabled {
@@ -99,17 +102,15 @@ $palette: (
     @extend .text-on-#{$color};
     @extend .background-#{$color};
 
+    @include apply-transition(background-color 0.2s, color 0.2s);
+
     .contrast-text-color {
       color: map.get($values, 'contrast-text-dark');
+      @include apply-transition(color 0.2s);
+
       @media (prefers-color-scheme: light) {
         color: map.get($values, 'contrast-text-light');
       }
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
-      transition:
-        background-color 0.2s,
-        color 0.2s;
     }
   }
 }
@@ -126,18 +127,17 @@ $shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 
 .theme-background {
   background-color: $background-dark;
+  @include apply-transition(background-color 0.2s);
 
   @media (prefers-color-scheme: light) {
     background-color: $background-light;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    transition: background-color 0.2s;
   }
 }
 
 .accent-background {
   background-color: $accent-dark;
+  @include apply-transition(background-color 0.2s);
+
   &:disabled,
   & :disabled {
     background-color: rgba(255, 255, 255, 0.12);
@@ -151,14 +151,11 @@ $shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
       background-color: rgba(0, 0, 0, 0.12);
     }
   }
-
-  @media (prefers-reduced-motion: no-preference) {
-    transition: background-color 0.2s;
-  }
 }
 
 .theme-text {
   color: $text-medium-dark;
+  @include apply-transition(color 0.2s);
 
   &:disabled,
   & :disabled {
@@ -172,14 +169,11 @@ $shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
       color: rgba(0, 0, 0, 0.26);
     }
   }
-
-  @media (prefers-reduced-motion: no-preference) {
-    transition: color 0.2s;
-  }
 }
 
 .theme-emphasis-text {
   color: $text-emphasis-dark;
+  @include apply-transition(background-color 0.2s);
   &:disabled,
   & :disabled {
     color: rgba(255, 255, 255, 0.3);
@@ -192,10 +186,18 @@ $shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
       color: rgba(0, 0, 0, 0.26);
     }
   }
+}
 
-  @media (prefers-reduced-motion: no-preference) {
-    transition: color 0.2s;
-  }
+.accent {
+  @extend .accent-background;
+  @extend .theme-text;
+  @include apply-transition(background-color 0.2s, color 0.2s);
+}
+
+.accent-emphasis {
+  @extend .accent-background;
+  @extend .theme-emphasis-text;
+  @include apply-transition(background-color 0.2s, color 0.2s);
 }
 
 .shadow {
