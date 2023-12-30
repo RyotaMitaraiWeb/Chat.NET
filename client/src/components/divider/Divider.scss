@@ -1,8 +1,10 @@
+@import '../../styles/util.scss';
+
 .component-divider {
   border-width: 0 0 thin;
   border-style: solid;
-  border-color: rgba(255, 255, 255, 0.12);
   margin: 0;
+  @include apply-values-for-modes(border-color, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.12));
 
   &.vertical {
     padding: 0;
@@ -10,9 +12,5 @@
     border-left-width: thin;
     height: auto;
     width: 1px;
-  }
-
-  @media (prefers-color-scheme: light) {
-    border-color: rgba(0, 0, 0, 0.12);
   }
 }

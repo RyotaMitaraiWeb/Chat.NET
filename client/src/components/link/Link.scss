@@ -1,17 +1,14 @@
+@import '../../styles/util.scss';
+@import '../../styles/util.scss';
+
 .component-link {
+  @include apply-transition(color 0.2s);
+
   &:hover {
     text-decoration: none;
   }
 
   &.text-default {
-    color: rgb(144, 202, 249);
-
-    @media (prefers-color-scheme: light) {
-      color: rgb(25, 118, 210);
-    }
-
-    @media (prefers-reduced-motion: no-preference) {
-      transition: color 0.2s;
-    }
+    @include apply-values-for-modes(color, rgb(144, 202, 249), rgb(25, 118, 210));
   }
 }

@@ -1,4 +1,5 @@
 @import '../../styles/animations.scss';
+@import '../../styles/util.scss';
 
 .component-drawer {
   position: relative;
@@ -37,9 +38,7 @@
 
         &.closed {
           #{$side}: -5000px;
-          @media (prefers-reduced-motion: no-preference) {
-            transition: #{$side} 1s;
-          }
+          @include apply-transition(#{$side} 1s);
         }
       }
     }

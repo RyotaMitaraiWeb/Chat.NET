@@ -1,4 +1,5 @@
 @import '../../styles/colors.scss';
+@import '../../styles/util.scss';
 
 .component-pagination {
   display: flex;
@@ -6,11 +7,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  transition: background-color 1s;
-
-  @media (prefers-reduced-motion: no-preference) {
-    transition: background-color 0.3s;
-  }
+  @include apply-transition(background-color 0.3s);
 
   .pages {
     display: flex;
@@ -24,27 +21,24 @@
     border: none;
     padding: 12px 16px;
     border-radius: 4px;
-    color: white;
-    transition: background-color 0.1s;
-    @media (prefers-color-scheme: light) {
-      color: black;
-    }
+    @include apply-values-for-modes(color, white, black);
+    @include apply-transition(background-color 0.2s, color 0.2s);
 
     &:hover:not(:disabled),
     &:focus {
-      background-color: rgba(255, 255, 255, 0.08);
-
-      @media (prefers-color-scheme: light) {
-        background-color: rgb(0, 0, 0, 0.08);
-      }
+      @include apply-values-for-modes(
+        background-color,
+        rgba(255, 255, 255, 0.08),
+        rgba(0, 0, 0, 0.08)
+      );
     }
 
     &.selected {
-      background-color: rgba(255, 255, 255, 0.16);
-
-      @media (prefers-color-scheme: light) {
-        background-color: rgb(0, 0, 0, 0.16);
-      }
+      @include apply-values-for-modes(
+        background-color,
+        rgba(255, 255, 255, 0.16),
+        rgba(0, 0, 0, 0.16)
+      );
     }
 
     &:disabled {
