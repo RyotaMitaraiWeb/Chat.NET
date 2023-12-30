@@ -9,7 +9,7 @@ $outline-color: #50dfff;
     color: $hover-text;
   }
 
-  &:focus:focus-visible {
+  &:focus-visible {
     outline: 3px solid $outline-color;
   }
 

@@ -25,7 +25,7 @@
     @include apply-transition(background-color 0.2s, color 0.2s);
 
     &:hover:not(:disabled),
-    &:focus:focus-visible {
+    &:focus-visible {
       @include apply-values-for-modes(
         background-color,
         rgba(255, 255, 255, 0.08),
