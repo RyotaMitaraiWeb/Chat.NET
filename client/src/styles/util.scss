@@ -1,6 +1,6 @@
 @use 'sass:list';
 
-@mixin apply-value-with-transition($time, $property, $values...) {
+@mixin apply-value-with-transition($property, $time, $values...) {
   @if (length($list: $values) != 0) {
     #{$property}: $values;
   }
