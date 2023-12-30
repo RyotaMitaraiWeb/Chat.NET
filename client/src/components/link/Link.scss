@@ -1,7 +1,7 @@
 @import '../../styles/util.scss';
 
 .component-link {
-  @include apply-value-with-transition(color, 0.2s);
+  @include apply-transition(color 0.2s);
 
   &:hover {
     text-decoration: none;

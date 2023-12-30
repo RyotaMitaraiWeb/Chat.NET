@@ -1,11 +1,7 @@
 @use 'sass:list';
 
-@mixin apply-value-with-transition($property, $time, $values...) {
-  @if (length($list: $values) != 0) {
-    #{$property}: $values;
-  }
-
+@mixin apply-transition($properties-and-times...) {
   @media (prefers-reduced-motion: no-preference) {
-    transition: $property $time;
+    transition: $properties-and-times;
   }
 }
