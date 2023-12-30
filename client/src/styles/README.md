@@ -5,6 +5,7 @@ The following stylesheets can be used across the project:
 - ``effects`` which provides classes, variables, and mixins for user actions (e.g. styling for hovering or focusing)
 - ``font`` which provides classes, variables, and mixins for fonts (e.g. classes for big, medium, and small fonts).
 - ``animations`` which provides classes, variables, and mixins for animations. All animations can occur only if the user explicitly allows them (via system settings).
+- ``util`` which hosts useful mixins to ease up some tasks.
 
 The colors and effects also take into account the user's preferences in regards to motion animations and color schema; for example, the exposed primary color changes depending on if the user's system prefers light or dark mode. Likewise, color changes are only animated if the user's system explicitly allows it.
 
@@ -42,6 +43,8 @@ These variables can also be included with the following classes:
 .accent-background
 .theme-text
 .theme-emphasis-text
+.accent /* .accent-background + .theme-text */
+.accent-emphasis /* .accent-background + .theme-emphasis-text */
 .shadow
 ```
 
@@ -77,3 +80,19 @@ Smoothly transitions into the specified ``$side`` (for example, sliding into the
 @mixin zoom-in($time: 0.2s)
 ```
 The element transitions from ``scale(0)`` to ``scale(1)``.
+
+### Utility mixins
+```scss
+@mixin apply-transition($properties-and-times...)
+```
+Applies a ``transition`` property with all values provided via ```$properties-and-times`` with a media query that checks for no
+preference in reduced motion. In other words, this is the same as applying
+the transition in a ``prefers-reduced-motion`` media query manually.
+
+```scss
+@mixin apply-values-for-modes($property, $dark-mode-value, $light-mode-value)
+```
+Applies the ``$dark-mode-value`` to the passed ``$property``. If
+the user prefers a light scheme, ``$light-mode-value`` will be applied instead. In other words, this is the same as defining the dark mode value for the given property and then creating a ``prefers-color-scheme`` media query for the light mode value.
+
+Note that ``$property`` is NOT passed as a string (so pass ``color`` and not ``'color'``).
