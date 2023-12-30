@@ -1,4 +1,5 @@
 @use 'sass:map';
+@import './util.scss';
 
 $outline-color: #50dfff;
 
@@ -73,18 +74,14 @@ $effects: (
 }
 
 .accent-hover {
+  @include apply-transition(background-color 0.2s, color 0.2s);
+
   &:hover:not(:disabled) {
     background-color: rgba(202, 202, 202, 0.5);
   }
 
   &:focus {
     outline: 3px solid $outline-color;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    transition:
-      background-color 0.2s,
-      outline-color 0.2s;
   }
 }
 
@@ -93,7 +90,5 @@ $effects: (
     background-color: rgba(202, 202, 202, 0.7);
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    transition: background-color 0.2s;
-  }
+  @include apply-transition(background-color 0.2s);
 }
