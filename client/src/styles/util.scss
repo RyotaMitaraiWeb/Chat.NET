@@ -1,0 +1,9 @@
+@mixin apply-value-with-transition($time, $property, $values...) {
+  @if ($values == ()) {
+    #{$property}: $values;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    transition: $property $time;
+  }
+}
