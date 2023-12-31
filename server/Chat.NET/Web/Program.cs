@@ -40,6 +40,7 @@ namespace Chat.NET
             });
 
             builder.Services.AddScoped<IRepository, Repository>();
+            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddSingleton<IJwtService, JwtService>();
 
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
