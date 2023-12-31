@@ -1,9 +1,14 @@
 
+using Contracts;
 using Infrastructure.Postgres;
 using Infrastructure.Postgres.Entities;
 using Infrastructure.Postgres.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Npgsql;
+using System.Text;
+using Web.Services.Authentication;
 
 namespace Chat.NET
 {
@@ -35,9 +40,35 @@ namespace Chat.NET
             });
 
             builder.Services.AddScoped<IRepository, Repository>();
+            builder.Services.AddSingleton<IJwtService, JwtService>();
 
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ChatDbContext>();
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                string? secret = builder.Configuration["JWT_SECRET"];
+                secret ??= string.Empty;
+
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = builder.Configuration["JWT_VALID_ISSUER"],
+                    ValidAudience = builder.Configuration["JWT_VALID_AUDIENCE"],
+                    IssuerSigningKey = new SymmetricSecurityKey
+                    (Encoding.UTF8.GetBytes(secret)),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                };
+            });
+
+            builder.Services.AddAuthorization();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -55,6 +86,7 @@ namespace Chat.NET
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 
