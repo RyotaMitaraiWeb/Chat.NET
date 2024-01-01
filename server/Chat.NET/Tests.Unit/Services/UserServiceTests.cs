@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Web.Services.Authentication;
 using Web.ViewModels.Authentication;
 
-namespace Tests.Unit
+namespace Tests.Unit.Services
 {
     public class UserServiceTests
     {
@@ -21,8 +21,8 @@ namespace Tests.Unit
         [SetUp]
         public void Setup()
         {
-            this.UserManager = UserManagerMock.Create();
-            this.UserService = new UserService(this.UserManager);
+            UserManager = UserManagerMock.Create();
+            UserService = new UserService(UserManager);
         }
 
         [Test]
@@ -39,15 +39,15 @@ namespace Tests.Unit
                 UserName = register.Username,
             };
 
-            this.UserManager
+            UserManager
                 .CreateAsync(appUser, register.Password)
                 .ReturnsForAnyArgs(IdentityResult.Success);
 
-            this.UserManager
+            UserManager
                 .AddToRoleAsync(appUser, Roles.User)
                 .Returns(IdentityResult.Success);
 
-            var result = await this.UserService.Register(register);
+            var result = await UserService.Register(register);
             Assert.That(result?.Username, Is.EqualTo(register.Username));
         }
 
@@ -65,7 +65,7 @@ namespace Tests.Unit
                 UserName = register.Username,
             };
 
-            this.UserManager
+            UserManager
                 .CreateAsync(appUser, register.Password)
                 .ReturnsForAnyArgs(IdentityResult.Failed
                 (
@@ -76,7 +76,7 @@ namespace Tests.Unit
                     }
                 ));
 
-            var result = await this.UserService.Register(register);
+            var result = await UserService.Register(register);
             Assert.That(result, Is.Null);
         }
 
@@ -94,8 +94,8 @@ namespace Tests.Unit
                 UserName = login.Username,
             };
 
-            this.UserManager.FindByNameAsync(login.Username).Returns(appUser);
-            this.UserManager.CheckPasswordAsync(appUser, login.Username).ReturnsForAnyArgs(true);
+            UserManager.FindByNameAsync(login.Username).Returns(appUser);
+            UserManager.CheckPasswordAsync(appUser, login.Username).ReturnsForAnyArgs(true);
 
 
             var result = await UserService.Login(login);
@@ -111,7 +111,7 @@ namespace Tests.Unit
                 Password = "123456",
             };
 
-            this.UserManager.FindByNameAsync(login.Username).ReturnsNull();
+            UserManager.FindByNameAsync(login.Username).ReturnsNull();
 
             var result = await UserService.Login(login);
             Assert.That(result, Is.Null);
@@ -131,8 +131,8 @@ namespace Tests.Unit
                 UserName = login.Username,
             };
 
-            this.UserManager.FindByNameAsync(login.Username).Returns(appUser);
-            this.UserManager.CheckPasswordAsync(appUser, login.Username).ReturnsForAnyArgs(false);
+            UserManager.FindByNameAsync(login.Username).Returns(appUser);
+            UserManager.CheckPasswordAsync(appUser, login.Username).ReturnsForAnyArgs(false);
 
             var result = await UserService.Login(login);
             Assert.That(result, Is.Null);
@@ -159,8 +159,8 @@ namespace Tests.Unit
                 }
             };
 
-            this.UserManager.FindByNameAsync(username).Returns(appUser);
-            var user = await this.UserService.FindUserByUsername(username);
+            UserManager.FindByNameAsync(username).Returns(appUser);
+            var user = await UserService.FindUserByUsername(username);
             Assert.That(user?.Username, Is.EqualTo(username));
         }
 
@@ -169,8 +169,8 @@ namespace Tests.Unit
         {
             string username = "test";
 
-            this.UserManager.FindByNameAsync(username).ReturnsNull();
-            var user = await this.UserService.FindUserByUsername(username);
+            UserManager.FindByNameAsync(username).ReturnsNull();
+            var user = await UserService.FindUserByUsername(username);
             Assert.That(user, Is.Null);
         }
     }
