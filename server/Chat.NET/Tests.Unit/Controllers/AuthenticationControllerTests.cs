@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Win32;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using Web.Controllers.Areas;
+using Web.Controllers.Areas.Authentication;
 using Web.ViewModels.Authentication;
 using Web.ViewModels.User;
 

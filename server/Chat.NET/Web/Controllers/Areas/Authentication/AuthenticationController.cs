@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.ViewModels.Authentication;
 
-namespace Web.Controllers.Areas
+namespace Web.Controllers.Areas.Authentication
 {
 
     [ApiController]
@@ -18,13 +18,13 @@ namespace Web.Controllers.Areas
         [Route("register")]
         public async Task<IActionResult> Register(UserRegisterViewModel model)
         {
-            var user = await this.userService.Register(model);
+            var user = await userService.Register(model);
             if (user == null)
             {
                 return BadRequest();
             }
 
-            string? token = this.jwtService.GenerateJWT(user);
+            string? token = jwtService.GenerateJWT(user);
             var payload = new SuccessfulAuthenticationResponse
             {
                 Token = token,
@@ -39,13 +39,13 @@ namespace Web.Controllers.Areas
         [Route("login")]
         public async Task<IActionResult> Login(UserLoginViewModel model)
         {
-            var user = await this.userService.Login(model);
+            var user = await userService.Login(model);
             if (user == null)
             {
                 return Unauthorized();
             }
 
-            string? token = this.jwtService.GenerateJWT(user);
+            string? token = jwtService.GenerateJWT(user);
             var payload = new SuccessfulAuthenticationResponse()
             {
                 Token = token,
@@ -60,7 +60,7 @@ namespace Web.Controllers.Areas
         [Route("username-exists/{username}")]
         public async Task<IActionResult> CheckIfUsernameExists(string username)
         {
-            var user = await this.userService.FindUserByUsername(username);
+            var user = await userService.FindUserByUsername(username);
             if (user == null)
             {
                 return NotFound();
