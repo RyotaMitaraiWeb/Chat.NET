@@ -54,5 +54,19 @@ namespace Web.Controllers.Areas
 
             return Created("/profile/" + user.Username, payload);
         }
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("username-exists/{username}")]
+        public async Task<IActionResult> CheckIfUsernameExists(string username)
+        {
+            var user = await this.userService.FindUserByUsername(username);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return Ok();
+        }
     }
 }

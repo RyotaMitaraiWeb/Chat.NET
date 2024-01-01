@@ -5,6 +5,7 @@ using NSubstitute;
 using NSubstitute.ReturnsExtensions;
 using Web.Controllers.Areas;
 using Web.ViewModels.Authentication;
+using Web.ViewModels.User;
 
 namespace Tests.Unit.Controllers
 {
@@ -110,6 +111,31 @@ namespace Tests.Unit.Controllers
             this.UserService.Login(login).ReturnsNullForAnyArgs();
             var result = await this.AuthenticationController.Login(login);
             Assert.That(result, Is.TypeOf<UnauthorizedResult>());
+        }
+
+        [Test]
+        public async Task Test_CheckIfUsernameExistsReturnsOkIfTheUsernameDoesExist()
+        {
+            string username = "test";
+            var user = new UserViewModel()
+            {
+                Username = username,
+            };
+
+            this.UserService.FindUserByUsername(username).Returns(user);
+
+            var result = await this.AuthenticationController.CheckIfUsernameExists(username);
+            Assert.That(result, Is.TypeOf<OkResult>());
+        }
+
+        [Test]
+        public async Task Test_CheckIfUsernameExistsReturnsNotFoundIfTheUsernameDoesNotExist()
+        {
+            string username = "test";
+            this.UserService.FindUserByUsername(username).ReturnsNull();
+
+            var result = await this.AuthenticationController.CheckIfUsernameExists(username);
+            Assert.That(result, Is.TypeOf<NotFoundResult>());
         }
     }
 }
