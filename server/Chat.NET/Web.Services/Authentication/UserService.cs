@@ -3,6 +3,7 @@ using Contracts;
 using Infrastructure.Postgres.Entities;
 using Microsoft.AspNetCore.Identity;
 using Web.ViewModels.Authentication;
+using Web.ViewModels.User;
 
 namespace Web.Services.Authentication
 {
@@ -56,6 +57,24 @@ namespace Web.Services.Authentication
                 Id = appUser.Id.ToString(),
                 Username = user.Username,
             };
+        }
+
+        public async Task<UserViewModel?> FindUserByUsername(string username)
+        {
+            var user = await this.userManager.FindByNameAsync(username);
+            if (user == null)
+            {
+                return null;
+            }
+
+            var data = new UserViewModel()
+            {
+                Id = user.Id.ToString(),
+                Username = user.UserName,
+                Roles = user.UserRoles.Select(ur => ur.Role.Name).ToArray()
+            };
+
+            return data;
         }
     }
 }

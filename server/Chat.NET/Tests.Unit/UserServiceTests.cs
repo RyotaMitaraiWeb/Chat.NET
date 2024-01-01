@@ -138,5 +138,40 @@ namespace Tests.Unit
             Assert.That(result, Is.Null);
         }
 
+        [Test]
+        public async Task Test_FindUserByUsernameReturnsWhateverUserManagerReturns()
+        {
+            string username = "test";
+
+            var appUser = new ApplicationUser()
+            {
+                Id = Guid.NewGuid(),
+                UserName = username,
+                UserRoles = new[]
+                {
+                    new ApplicationUserRole()
+                    {
+                        Role = new ApplicationRole()
+                        {
+                            Name = "User",
+                        }
+                    },
+                }
+            };
+
+            this.UserManager.FindByNameAsync(username).Returns(appUser);
+            var user = await this.UserService.FindUserByUsername(username);
+            Assert.That(user?.Username, Is.EqualTo(username));
+        }
+
+        [Test]
+        public async Task Test_FindUserByUsernameReturnsNullIfTheUsernameDoesNotExist()
+        {
+            string username = "test";
+
+            this.UserManager.FindByNameAsync(username).ReturnsNull();
+            var user = await this.UserService.FindUserByUsername(username);
+            Assert.That(user, Is.Null);
+        }
     }
 }
