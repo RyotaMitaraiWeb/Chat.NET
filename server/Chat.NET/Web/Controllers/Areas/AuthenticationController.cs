@@ -33,5 +33,26 @@ namespace Web.Controllers.Areas
 
             return Created("/profile/" + user.Username, payload);
         }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login(UserLoginViewModel model)
+        {
+            var user = await this.userService.Login(model);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            string? token = this.jwtService.GenerateJWT(user);
+            var payload = new SuccessfulAuthenticationResponse()
+            {
+                Token = token,
+                User = user,
+            };
+
+            return Created("/profile/" + user.Username, payload);
+        }
     }
 }
