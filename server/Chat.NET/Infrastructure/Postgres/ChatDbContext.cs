@@ -12,7 +12,6 @@ namespace Infrastructure.Postgres
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            base.OnModelCreating(builder);
             builder.Entity<ApplicationUser>(b =>
             {
                 b.HasMany(e => e.UserRoles)
@@ -28,6 +27,8 @@ namespace Infrastructure.Postgres
                     .HasForeignKey(ur => ur.RoleId)
                     .IsRequired();
             });
+
+            builder.ApplyConfiguration(new RoleConfigurer());
         }
     }
 }

@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Web.ViewModels\Web.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>
