@@ -36,5 +36,26 @@ namespace Web.Services.Authentication
             };
 
         }
+
+        public async Task<UserClaimsViewModel?> Login(UserLoginViewModel user)
+        {
+            var appUser = await this.userManager.FindByNameAsync(user.Username);
+            if (appUser == null)
+            {
+                return null;
+            }
+
+            bool passwordIsCorrect = await this.userManager.CheckPasswordAsync(appUser, user.Password);
+            if (!passwordIsCorrect)
+            {
+                return null;
+            }
+
+            return new UserClaimsViewModel()
+            {
+                Id = appUser.Id.ToString(),
+                Username = user.Username,
+            };
+        }
     }
 }

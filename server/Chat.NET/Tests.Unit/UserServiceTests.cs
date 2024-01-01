@@ -2,6 +2,7 @@
 using Infrastructure.Postgres.Entities;
 using Microsoft.AspNetCore.Identity;
 using NSubstitute;
+using NSubstitute.ReturnsExtensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,6 +77,64 @@ namespace Tests.Unit
                 ));
 
             var result = await this.UserService.Register(register);
+            Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public async Task Test_LoginReturnsUserClaimsWhenSuccessful()
+        {
+            var login = new UserLoginViewModel()
+            {
+                Username = "test",
+                Password = "123456",
+            };
+
+            var appUser = new ApplicationUser()
+            {
+                UserName = login.Username,
+            };
+
+            this.UserManager.FindByNameAsync(login.Username).Returns(appUser);
+            this.UserManager.CheckPasswordAsync(appUser, login.Username).ReturnsForAnyArgs(true);
+
+
+            var result = await UserService.Login(login);
+            Assert.That(result?.Username, Is.EqualTo(login.Username));
+        }
+
+        [Test]
+        public async Task Test_LoginReturnsNullIfTheUsernameCannotBeFound()
+        {
+            var login = new UserLoginViewModel()
+            {
+                Username = "test",
+                Password = "123456",
+            };
+
+            this.UserManager.FindByNameAsync(login.Username).ReturnsNull();
+
+            var result = await UserService.Login(login);
+            Assert.That(result, Is.Null);
+        }
+
+        [Test]
+        public async Task Test_LoginReturnsNullForIncorrectPassword()
+        {
+            var login = new UserLoginViewModel()
+            {
+                Username = "test",
+                Password = "123456",
+            };
+
+            var appUser = new ApplicationUser()
+            {
+                UserName = login.Username,
+            };
+
+            this.UserManager.FindByNameAsync(login.Username).Returns(appUser);
+            this.UserManager.CheckPasswordAsync(appUser, login.Username).ReturnsForAnyArgs(false);
+
+            var result = await UserService.Login(login);
             Assert.That(result, Is.Null);
         }
 
