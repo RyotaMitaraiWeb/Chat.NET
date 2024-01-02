@@ -52,9 +52,6 @@ namespace Tests.Integration
                 }
 
                 this.InitializeAsync().Wait();
-                var conn = postgreSqlContainer.GetConnectionString();
-                //services.AddDbContext<ChatDbContext>(options =>
-                //    options.UseNpgsql(postgreSqlContainer.GetConnectionString()));
 
                 services.AddDbContext<ChatDbContext>(options =>
                 {
