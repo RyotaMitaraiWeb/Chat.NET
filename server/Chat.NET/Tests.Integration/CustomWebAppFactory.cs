@@ -1,8 +1,10 @@
-﻿using Infrastructure.Postgres;
+﻿using Chat.NET;
+using Infrastructure.Postgres;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using Testcontainers.PostgreSql;
@@ -19,6 +21,23 @@ namespace Tests.Integration
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            builder.UseEnvironment("Test");
+            builder.ConfigureAppConfiguration(b =>
+            {
+                b.AddInMemoryCollection(new Dictionary<string, string?>()
+                {
+                    ["JWT_SECRET"] = "weoknwehnwlkehnklwenhlkwenhklwenklhnweklhnwlkehnlwke",
+                });
+            });
+
+            builder.ConfigureAppConfiguration(config =>
+            {
+                var testConfig = new ConfigurationBuilder()
+                    .AddEnvironmentVariables()
+                    .Build();
+
+                config.AddConfiguration(testConfig);
+            });
             builder.ConfigureTestServices(services =>
             {
                 var descriptorType =
@@ -33,9 +52,6 @@ namespace Tests.Integration
                 }
 
                 this.InitializeAsync().Wait();
-                var conn = postgreSqlContainer.GetConnectionString();
-                //services.AddDbContext<ChatDbContext>(options =>
-                //    options.UseNpgsql(postgreSqlContainer.GetConnectionString()));
 
                 services.AddDbContext<ChatDbContext>(options =>
                 {
