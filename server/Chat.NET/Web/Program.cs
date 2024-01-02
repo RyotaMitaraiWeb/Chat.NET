@@ -97,6 +97,14 @@ namespace Chat.NET
 
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseCors(options =>
+            {
+                string? origin = builder.Configuration["ALLOWED_ORIGINS"];
+                origin ??= "localhost";
+                options.WithOrigins(origin);
+                options.WithMethods("GET", "POST", "PUT", "DELETE", "PATCH");
+                options.AllowAnyHeader();
+            });
 
 
             app.MapControllers();
