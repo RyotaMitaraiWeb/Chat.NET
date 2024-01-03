@@ -13,6 +13,7 @@
     "test:ci": "jest --ci"
   },
   "dependencies": {
+    "@microsoft/signalr": "^8.0.0",
     "eslint-plugin-prettier": "^5.0.1",
     "focus-trap-react": "^10.2.3",
     "next": "14.0.3",
