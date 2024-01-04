@@ -147,19 +147,13 @@ namespace Tests.Unit.Services
             {
                 Id = Guid.NewGuid(),
                 UserName = username,
-                UserRoles = new[]
-                {
-                    new ApplicationUserRole()
-                    {
-                        Role = new ApplicationRole()
-                        {
-                            Name = "User",
-                        }
-                    },
-                }
             };
 
-            UserManager.FindByNameAsync(username).Returns(appUser);
+            this.UserManager.FindByNameAsync(username).Returns(appUser);
+            this.UserManager
+                .GetRolesAsync(Arg.Is<ApplicationUser>(au => au.UserName == appUser.UserName))
+                .Returns(new string[] { Roles.User });
+
             var user = await UserService.FindUserByUsername(username);
             Assert.That(user?.Username, Is.EqualTo(username));
         }
