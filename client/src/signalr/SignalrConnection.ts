@@ -23,7 +23,14 @@ export abstract class SignalrConnection<TC extends string, TS extends string>
    */
   constructor(hub: string) {
     this.connection = new signalr.HubConnectionBuilder()
-      .withUrl(`http://localhost:5000/${hub}`)
+      .withUrl(`http://localhost:5000/${hub}`, {
+        accessTokenFactory() {
+          return localStorage.getItem('access_token') || '';
+        },
+        skipNegotiation: true,
+        transport: signalr.HttpTransportType.WebSockets,
+        withCredentials: true,
+      })
       .withAutomaticReconnect()
       .build();
   }
