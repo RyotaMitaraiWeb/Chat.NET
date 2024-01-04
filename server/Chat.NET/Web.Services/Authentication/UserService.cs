@@ -76,5 +76,24 @@ namespace Web.Services.Authentication
 
             return data;
         }
+
+        public async Task<UserViewModel?> FindUserById(string id)
+        {
+            var user = await this.userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return null;
+            }
+
+            var roles = await this.userManager.GetRolesAsync(user);
+            var data = new UserViewModel()
+            {
+                Id = user.Id.ToString(),
+                Username = user.UserName,
+                Roles = [..roles],
+            };
+
+            return data;
+        }
     }
 }

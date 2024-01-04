@@ -169,8 +169,39 @@ namespace Tests.Unit.Services
         {
             string username = "test";
 
-            UserManager.FindByNameAsync(username).ReturnsNull();
+            this.UserManager.FindByNameAsync(username).ReturnsNull();
             var user = await UserService.FindUserByUsername(username);
+            Assert.That(user, Is.Null);
+        }
+
+        [Test]
+        public async Task Test_FindUserByIdReturnsTheUser()
+        {
+            string id = Guid.NewGuid().ToString();
+            var appUser = new ApplicationUser()
+            {
+                Id = Guid.Parse(id),
+                UserName = "test",
+            };
+
+            this.UserManager.FindByIdAsync(id).Returns(appUser);
+            this.UserManager
+                .GetRolesAsync(Arg.Is<ApplicationUser>(au => au.UserName == appUser.UserName))
+                .Returns(new string[] { Roles.User });
+
+            var user = await this.UserService.FindUserById(id);
+            Assert.That(user?.Username, Is.EqualTo(appUser.UserName));
+        }
+
+        [Test]
+        public async Task Test_FindUserByIdReturnsNullIfUserDoesNotExist()
+        {
+            string id = Guid.NewGuid().ToString();
+
+            ApplicationUser? appUser = null;
+            this.UserManager.FindByIdAsync(id).Returns(appUser);
+
+            var user = await this.UserService.FindUserById(id);
             Assert.That(user, Is.Null);
         }
     }
