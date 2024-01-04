@@ -5,9 +5,11 @@ using Infrastructure.Postgres.Entities;
 using Infrastructure.Postgres.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
 using System.Text;
+using Web.Controllers.Areas.Authentication;
 using Web.Services.Authentication;
 
 namespace Chat.NET
@@ -19,6 +21,7 @@ namespace Chat.NET
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddSignalR();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddLogging();
 
@@ -75,6 +78,23 @@ namespace Chat.NET
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                 };
+
+                o.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (path.StartsWithSegments("/session-hub")))
+                        {
+                            Console.WriteLine("Does it print here");
+                            // Read the token out of the query string
+                            context.Token = accessToken;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             builder.Services.AddAuthorization();
@@ -86,6 +106,8 @@ namespace Chat.NET
 
             var app = builder.Build();
 
+            app.MapHub<SessionHub>("/session-hub");
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -93,7 +115,7 @@ namespace Chat.NET
                 app.UseSwaggerUI();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -104,6 +126,7 @@ namespace Chat.NET
                 options.WithOrigins(origin);
                 options.WithMethods("GET", "POST", "PUT", "DELETE", "PATCH");
                 options.AllowAnyHeader();
+                options.AllowCredentials();
             });
 
 
