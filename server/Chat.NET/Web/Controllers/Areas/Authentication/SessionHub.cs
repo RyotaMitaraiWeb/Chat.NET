@@ -15,7 +15,7 @@ namespace Web.Controllers.Areas.Authentication
     public class SessionHub : Hub<ISessionClient>
     {
         public async Task StartSession(
-            [FromServices] UserManager<ApplicationUser> userManager,
+            [FromServices] IUserService userService,
             [FromServices] IJwtService jwtService)
         {
             var context = this.Context.GetHttpContext();
@@ -30,19 +30,17 @@ namespace Web.Controllers.Areas.Authentication
             var claims = jwtService.ExtractUserFromJWT(token);
 
             string userId = claims.Id;
-            var user = await userManager.FindByIdAsync(userId);
+            var user = await userService.FindUserById(userId);
             if (user == null)
             {
                 return;
             }
 
-            var roles = await userManager.GetRolesAsync(user);
-
             var userData = new UserViewModel()
             {
-                Id = user.Id.ToString(),
-                Username = user.UserName,
-                Roles = [.. roles],
+                Id = user.Id,
+                Username = user.Username,
+                Roles = user.Roles,
             };
 
             await this.Clients.Caller.SendSessionData(userData);

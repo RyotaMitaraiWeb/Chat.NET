@@ -1,7 +1,9 @@
-﻿using Contracts;
+﻿using Common.Authentication;
+using Contracts;
 using Contracts.Hubs;
 using Infrastructure.Postgres.Entities;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using NSubstitute;
@@ -14,40 +16,46 @@ namespace Tests.Unit.Hubs
 {
     public class SessionHubTests
     {
-        [Test]
-        public async Task SampleSignalRTest()
+        public IJwtService JwtService { get; set; } = Substitute.For<IJwtService>();
+        public IUserService UserService { get; set; } = Substitute.For<IUserService>();
+        IHubCallerClients<ISessionClient> Clients = Substitute.For<IHubCallerClients<ISessionClient>>();
+        HubCallerContext HubCallerContext { get; set; } = Substitute.For<HubCallerContext>();
+        SessionHub Hub { get; set; }
+
+        [SetUp]
+        public void Setup()
         {
-            // Arrange
-            SessionHub hub = new SessionHub();
-            ISessionClient sessionClient = Substitute.For<ISessionClient>();
-            IHubCallerClients<ISessionClient> clients =
-                Substitute.For<IHubCallerClients<ISessionClient>>();
+            this.Hub = new SessionHub
+            {
+                Clients = this.Clients,
+                Context = this.HubCallerContext
+            };
+        }
 
-            var context = Substitute.For<HubCallerContext>();
-            
-            hub.Clients = clients;
-            hub.Context = context;
-
-            var mockUserManager = UserManagerMock.Create();
-            IJwtService mockJwt = Substitute.For<IJwtService>();
-
-            mockJwt.ExtractUserFromJWT("").Returns(new UserClaimsViewModel()
+        [Test]
+        public async Task Test_StartSessionCallsCorrectClientMethodWhenSuccessful()
+        {
+            var user = new UserViewModel()
             {
                 Id = "1",
-                Username = "ryota1",
-            });
+                Username = "test",
+                Roles = new string[] { Roles.User },
+            };
 
-            mockUserManager.FindByIdAsync("1").Returns(new ApplicationUser()
+            var claims = new UserClaimsViewModel()
             {
-                Id = Guid.NewGuid(),
-                UserName = "ryota1",
-            });
+                Id = user.Id,
+                Username = user.Username,
+            };
 
-            mockUserManager.GetRolesAsync(new ApplicationUser()).ReturnsForAnyArgs(new string[] { "User " });
+            this.JwtService.ExtractUserFromJWT("").Returns(claims);
+            this.UserService.FindUserById(claims.Id).Returns(user);
 
-
-            await hub.StartSession(mockUserManager, mockJwt);
-            await hub.Clients.Caller.ReceivedWithAnyArgs(1).SendSessionData(new UserViewModel());
+            await this.Hub.StartSession(this.UserService, this.JwtService);
+            await this.Hub.Clients.Caller
+                .Received()
+                .SendSessionData(Arg.Is<UserViewModel>(u => 
+                    u.Id == user.Id && u.Username == user.Username));
         }
     }
 }
