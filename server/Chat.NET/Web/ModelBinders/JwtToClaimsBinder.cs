@@ -10,10 +10,18 @@ namespace Web.ModelBinders
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
            
-            string? jwt = bindingContext.HttpContext?.Request.Headers.Authorization.First();
-            jwt ??= string.Empty;
-            var user = this.jwtService.ExtractUserFromJWT(jwt);
-            bindingContext.Result = ModelBindingResult.Success(user);
+           try
+            {
+                string? jwt = bindingContext.HttpContext?.Request.Headers.Authorization.First();
+                jwt ??= string.Empty;
+                var user = this.jwtService.ExtractUserFromJWT(jwt);
+                bindingContext.Result = ModelBindingResult.Success(user);
+            }
+            catch
+            {
+                bindingContext.Result = ModelBindingResult.Success(null);
+            }
+
             return Task.CompletedTask;
         }
     }
