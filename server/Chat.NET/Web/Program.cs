@@ -5,8 +5,8 @@ using Infrastructure.Postgres.Entities;
 using Infrastructure.Postgres.Repository;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Npgsql;
 using System.Text;
 using Web.Controllers.Areas.Authentication;
@@ -37,8 +37,6 @@ namespace Chat.NET
 
             builder.Services.AddDbContext<ChatDbContext>(options =>
             {
-                
-
                 options.UseNpgsql(connString);
             });
 
@@ -88,13 +86,41 @@ namespace Chat.NET
                         if (!string.IsNullOrEmpty(accessToken) &&
                             (path.StartsWithSegments("/session-hub")))
                         {
-                            Console.WriteLine("Does it print here");
                             // Read the token out of the query string
                             context.Token = accessToken;
                         }
                         return Task.CompletedTask;
                     }
                 };
+            });
+
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.ResolveConflictingActions(api => api.First());
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Quiz World", Version = "v1" });
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a valid token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
             });
 
             builder.Services.AddAuthorization();
