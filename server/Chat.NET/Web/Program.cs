@@ -3,11 +3,14 @@ using Contracts;
 using Infrastructure.Postgres;
 using Infrastructure.Postgres.Entities;
 using Infrastructure.Postgres.Repository;
+using Infrastructure.Redis.CreationServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Npgsql;
+using Redis.OM;
+using StackExchange.Redis;
 using System.Text;
 using Web.Controllers.Areas.Authentication;
 using Web.Services.Authentication;
@@ -42,6 +45,15 @@ namespace Chat.NET
                 options.UseNpgsql(connString);
             });
 
+            ConfigurationOptions options = new()
+            {
+                EndPoints = { builder.Configuration["REDIS_HOST"] },
+                ConnectTimeout = 15000,
+                SyncTimeout = 15000,
+                AbortOnConnectFail = false,
+            };
+            builder.Services.AddSingleton(new RedisConnectionProvider(options));
+            builder.Services.AddHostedService<UserSessionCreationService>();
             builder.Services.AddScoped<IRepository, Repository>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddSingleton<IJwtService, JwtService>();
@@ -88,8 +100,6 @@ namespace Chat.NET
                         if (!string.IsNullOrEmpty(accessToken) &&
                             (path.StartsWithSegments("/session-hub")))
                         {
-                            Console.WriteLine("Does it print here");
-                            // Read the token out of the query string
                             context.Token = accessToken;
                         }
                         return Task.CompletedTask;

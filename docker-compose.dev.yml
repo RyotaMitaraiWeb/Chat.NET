@@ -41,6 +41,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - REDIS_CONNECTION_STRING=redis
       - ALLOWED_ORIGINS=http://localhost:3000
+      - REDIS_HOST=redis
     env_file:
       - .env
     ports:
