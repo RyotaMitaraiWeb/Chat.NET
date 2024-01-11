@@ -14,6 +14,7 @@ using StackExchange.Redis;
 using System.Text;
 using Web.Controllers.Areas.Authentication;
 using Web.Services.Authentication;
+using Web.Services.Session;
 
 namespace Chat.NET
 {
@@ -54,6 +55,7 @@ namespace Chat.NET
             };
             builder.Services.AddSingleton(new RedisConnectionProvider(options));
             builder.Services.AddHostedService<UserSessionCreationService>();
+            builder.Services.AddSingleton<IUserSessionStore, UserSessionStore>();
             builder.Services.AddScoped<IRepository, Repository>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddSingleton<IJwtService, JwtService>();

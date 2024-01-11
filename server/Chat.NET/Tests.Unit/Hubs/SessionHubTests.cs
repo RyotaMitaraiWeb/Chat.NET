@@ -1,10 +1,6 @@
 ﻿using Common.Authentication;
 using Contracts;
 using Contracts.Hubs;
-using Infrastructure.Postgres.Entities;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Hubs;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using NSubstitute;
 using Web.Controllers.Areas.Authentication;
@@ -18,9 +14,10 @@ namespace Tests.Unit.Hubs
     {
         public IJwtService JwtService { get; set; } = Substitute.For<IJwtService>();
         public IUserService UserService { get; set; } = Substitute.For<IUserService>();
+        public IUserSessionStore UserSessionStore { get; set; } = Substitute.For<IUserSessionStore>();
         IHubCallerClients<ISessionClient> Clients = Substitute.For<IHubCallerClients<ISessionClient>>();
-        HubCallerContext HubCallerContext { get; set; } = Substitute.For<HubCallerContext>();
-        SessionHub Hub { get; set; }
+        public HubCallerContext HubCallerContext { get; set; } = Substitute.For<HubCallerContext>();
+        public SessionHub Hub { get; set; }
 
         [SetUp]
         public void Setup()
@@ -39,7 +36,7 @@ namespace Tests.Unit.Hubs
             {
                 Id = "1",
                 Username = "test",
-                Roles = new string[] { Roles.User },
+                Roles = [Roles.User],
             };
 
             var claims = new UserClaimsViewModel()
@@ -50,8 +47,11 @@ namespace Tests.Unit.Hubs
 
             this.JwtService.ExtractUserFromJWT("").Returns(claims);
             this.UserService.FindUserById(claims.Id).Returns(user);
+            this.UserSessionStore.AddUser(Arg.Is<UserViewModel>(u => u.Id == claims.Id)).Returns(user);
 
-            await this.Hub.StartSession(this.UserService, this.JwtService);
+            await this.Hub.StartSession(this.UserService, this.JwtService, this.UserSessionStore);
+
+            await this.UserSessionStore.Received(1).AddUser(Arg.Is<UserViewModel>(u => u.Id == user.Id));
             await this.Hub.Clients.Caller
                 .Received()
                 .SendSessionData(Arg.Is<UserViewModel>(u => 

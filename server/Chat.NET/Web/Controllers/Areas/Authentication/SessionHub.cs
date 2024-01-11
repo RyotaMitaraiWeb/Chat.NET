@@ -1,9 +1,7 @@
 ﻿using Contracts;
 using Contracts.Hubs;
-using Infrastructure.Postgres.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Web.ViewModels.User;
@@ -16,7 +14,8 @@ namespace Web.Controllers.Areas.Authentication
     {
         public async Task StartSession(
             [FromServices] IUserService userService,
-            [FromServices] IJwtService jwtService)
+            [FromServices] IJwtService jwtService,
+            [FromServices] IUserSessionStore userSessionStore)
         {
             var context = this.Context.GetHttpContext();
             if (context  == null)
@@ -42,6 +41,8 @@ namespace Web.Controllers.Areas.Authentication
                 Username = user.Username,
                 Roles = user.Roles,
             };
+
+            await userSessionStore.AddUser(userData);
 
             await this.Clients.Caller.SendSessionData(userData);
         }
