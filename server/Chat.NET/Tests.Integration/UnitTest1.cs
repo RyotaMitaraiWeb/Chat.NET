@@ -19,13 +19,8 @@ namespace Tests.Integration
         [TearDown]
         public async Task TearDown()
         {
-            try
-            {
-                this.client.Dispose();
-                await this.factory.DisposeAsync();
-            }
-            catch { }
-            
+            this.client.Dispose();
+            await this.factory.DisposeAsync();
         }
 
         [Test]
