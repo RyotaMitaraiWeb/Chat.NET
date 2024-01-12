@@ -17,6 +17,7 @@ namespace Tests.Unit.Hubs
         public IUserSessionStore UserSessionStore { get; set; } = Substitute.For<IUserSessionStore>();
         IHubCallerClients<ISessionClient> Clients = Substitute.For<IHubCallerClients<ISessionClient>>();
         public HubCallerContext HubCallerContext { get; set; } = Substitute.For<HubCallerContext>();
+        public IGroupManager Groups { get; set; } = Substitute.For<IGroupManager>();
         public SessionHub Hub { get; set; }
 
         [SetUp]
@@ -25,7 +26,8 @@ namespace Tests.Unit.Hubs
             this.Hub = new SessionHub
             {
                 Clients = this.Clients,
-                Context = this.HubCallerContext
+                Context = this.HubCallerContext,
+                Groups = this.Groups,
             };
         }
 
@@ -45,6 +47,7 @@ namespace Tests.Unit.Hubs
                 Username = user.Username,
             };
 
+            this.HubCallerContext.ConnectionId.Returns("a");
             this.JwtService.ExtractUserFromJWT("").Returns(claims);
             this.UserService.FindUserById(claims.Id).Returns(user);
             this.UserSessionStore.AddUser(Arg.Is<UserViewModel>(u => u.Id == claims.Id)).Returns(user);
@@ -52,7 +55,7 @@ namespace Tests.Unit.Hubs
             await this.Hub.StartSession(this.UserService, this.JwtService, this.UserSessionStore);
 
             await this.UserSessionStore.Received(1).AddUser(Arg.Is<UserViewModel>(u => u.Id == user.Id));
-            await this.Hub.Clients.Caller
+            await this.Hub.Clients.Group(claims.Id)
                 .Received()
                 .SendSessionData(Arg.Is<UserViewModel>(u => 
                     u.Id == user.Id && u.Username == user.Username));

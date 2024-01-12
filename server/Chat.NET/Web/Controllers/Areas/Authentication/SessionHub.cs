@@ -41,7 +41,9 @@ namespace Web.Controllers.Areas.Authentication
 
             await userSessionStore.AddUser(userData);
 
-            await this.Clients.Caller.SendSessionData(userData);
+            await this.Groups.AddToGroupAsync(this.Context.ConnectionId, userId);
+
+            await this.Clients.Group(userId).SendSessionData(userData);
         }
 
         public async Task EndSession(
