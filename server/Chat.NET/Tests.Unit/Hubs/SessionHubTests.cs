@@ -83,7 +83,7 @@ namespace Tests.Unit.Hubs
             await this.Hub.EndSession(this.JwtService, this.UserSessionStore);
 
             await this.UserSessionStore.Received(1).RemoveUser(Arg.Is<UserClaimsViewModel>(u => u.Id == user.Id));
-            await this.Hub.Clients.Caller
+            await this.Hub.Clients.Group(claims.Id)
                 .Received()
                 .EndSession();
         }

@@ -62,7 +62,7 @@ namespace Web.Controllers.Areas.Authentication
                 return;
             }
 
-            await Clients.Caller.EndSession();
+            await Clients.Group(claims.Id).EndSession();
         }
 
         private UserClaimsViewModel? ExtractClaims(IJwtService jwtService)
