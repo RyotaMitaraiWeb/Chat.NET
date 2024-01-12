@@ -23,7 +23,7 @@
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="Testcontainers.MongoDb" Version="3.6.0" />
     <PackageReference Include="Testcontainers.PostgreSql" Version="3.6.0" />
-    <PackageReference Include="Testcontainers.Redis" Version="3.6.0" />
+    <PackageReference Include="Testcontainers.Redis" Version="3.7.0" />
   </ItemGroup>
 
   <ItemGroup>
