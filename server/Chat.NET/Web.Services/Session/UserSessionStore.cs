@@ -91,7 +91,7 @@ namespace Web.Services.Session
                 Roles = user.Roles,
             };
 
-            await this.userSessions.InsertAsync(session);
+            await this.userSessions.InsertAsync(session, new TimeSpan(48, 0, 0));
             await this.userSessions.SaveAsync();
 
             return session;
