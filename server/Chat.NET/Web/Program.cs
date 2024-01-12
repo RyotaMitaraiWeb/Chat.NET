@@ -51,6 +51,7 @@ namespace Chat.NET
                 SyncTimeout = 15000,
                 AbortOnConnectFail = false,
             };
+
             builder.Services.AddSingleton(new RedisConnectionProvider(options));
             builder.Services.AddHostedService<UserSessionCreationService>();
             builder.Services.AddSingleton<IUserSessionStore, UserSessionStore>();
