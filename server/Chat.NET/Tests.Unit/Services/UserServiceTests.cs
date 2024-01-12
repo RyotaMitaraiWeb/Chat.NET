@@ -3,11 +3,6 @@ using Infrastructure.Postgres.Entities;
 using Microsoft.AspNetCore.Identity;
 using NSubstitute;
 using NSubstitute.ReturnsExtensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Web.Services.Authentication;
 using Web.ViewModels.Authentication;
 

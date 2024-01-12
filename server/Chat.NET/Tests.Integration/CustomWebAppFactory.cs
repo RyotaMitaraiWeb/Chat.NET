@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using Testcontainers.PostgreSql;
+using Testcontainers.Redis;
 
 namespace Tests.Integration
 {
@@ -16,33 +16,35 @@ namespace Tests.Integration
     {
         private readonly PostgreSqlContainer postgreSqlContainer = new PostgreSqlBuilder()
             .WithCleanUp(true)
-            .WithPortBinding(5434, true)
+            .WithPortBinding(4000, true)
+            .Build();
+
+        private readonly RedisContainer redisContainer = new RedisBuilder()
+            .WithImage("redis/redis-stack")
+            .WithCleanUp(true)
+            .WithPortBinding(6000, true)
             .Build();
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
+            this.InitializeAsync().Wait();
             builder.UseEnvironment("Test");
-            builder.ConfigureAppConfiguration(b =>
+            
+            var configurations = new Dictionary<string, string?>()
             {
-                b.AddInMemoryCollection(new Dictionary<string, string?>()
-                {
-                    ["JWT_SECRET"] = "weoknwehnwlkehnklwenhlkwenhklwenklhnweklhnwlkehnlwke",
-                });
-            });
+                { "JWT_SECRET", "WEHMKWEHMLWEHLWKEMHLKWEMHLKWEHW" },
+                { "REDIS_HOST", redisContainer.GetConnectionString() }
+            };
 
-            builder.ConfigureAppConfiguration(config =>
-            {
-                var testConfig = new ConfigurationBuilder()
-                    .AddEnvironmentVariables()
-                    .Build();
+            var c = new ConfigurationManager();
+            c.AddInMemoryCollection(configurations);
+            builder.UseConfiguration(c);
 
-                config.AddConfiguration(testConfig);
-            });
+            
             builder.ConfigureTestServices(services =>
             {
                 var descriptorType =
                     typeof(DbContextOptions<ChatDbContext>);
-
                 var descriptor = services
                     .SingleOrDefault(s => s.ServiceType == descriptorType);
 
@@ -50,8 +52,6 @@ namespace Tests.Integration
                 {
                     services.Remove(descriptor);
                 }
-
-                this.InitializeAsync().Wait();
 
                 services.AddDbContext<ChatDbContext>(options =>
                 {
@@ -72,12 +72,14 @@ namespace Tests.Integration
         public async Task InitializeAsync()
         {
             await postgreSqlContainer.StartAsync();
+            await redisContainer.StartAsync();
         }
 
-        public async Task DisposeAsync()
+        public override async ValueTask DisposeAsync()
         {
             await this.Context.DisposeAsync();
             await postgreSqlContainer.DisposeAsync();
+            await redisContainer.DisposeAsync();
         }
 
         private ChatDbContext Context { get; set; } = null!;
