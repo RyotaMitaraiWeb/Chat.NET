@@ -62,7 +62,7 @@ function Snackbar(props: SnackbarProps): JSX.Element {
     close();
   }
 
-  const closebByEscape = useCallback(() => {
+  const closeByEscape = useCallback(() => {
     if (onClose && timeoutFn.current) {
       setDisappear('disappear');
       setTimeout(() => {
@@ -72,7 +72,7 @@ function Snackbar(props: SnackbarProps): JSX.Element {
       }, 500);
     }
 
-    window.removeEventListener('keydown', closebByEscape);
+    window.removeEventListener('keydown', closeByEscape);
   }, [onClose]);
 
   const close = useCallback(() => {
@@ -85,8 +85,8 @@ function Snackbar(props: SnackbarProps): JSX.Element {
       }, 500);
     }
 
-    window.removeEventListener('keydown', closebByEscape);
-  }, [onClose, timeoutFn, closebByEscape]);
+    window.removeEventListener('keydown', closeByEscape);
+  }, [onClose, timeoutFn, closeByEscape]);
 
   useEffect(() => {
     if (open && !disappear) {
@@ -100,13 +100,13 @@ function Snackbar(props: SnackbarProps): JSX.Element {
       } else {
         timeoutFn.current = setTimeout(() => {}, 0);
       }
-      window.addEventListener('keydown', closebByEscape);
+      window.addEventListener('keydown', closeByEscape);
     }
 
     return () => {
       timeoutFn.current = undefined;
     };
-  }, [open, close, duration, disappear, closebByEscape]);
+  }, [open, close, duration, disappear, closeByEscape]);
 
   if (!open) {
     return <></>;
