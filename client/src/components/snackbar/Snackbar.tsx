@@ -55,7 +55,7 @@ function Snackbar(props: SnackbarProps): JSX.Element {
 
   const timeoutFn = useRef<unknown>(undefined);
 
-  /**
+  /*
    * Used to trigger a closing animation before
    * the snackbar is unmounted from the DOM.
    */
@@ -95,10 +95,12 @@ function Snackbar(props: SnackbarProps): JSX.Element {
   useEffect(() => {
     if (open && !disappear) {
       if (duration) {
-        /**
+        /*
          * Track the current timeout so that it can be
          * cleared out later on, preventing memory leaks
-         * and unnecessary side effects
+         * and unnecessary side effects. Also extends
+         * the snackbar's lifespan if one of the core
+         * components change.
          */
         window.clearTimeout(timeoutFn.current as unknown as number);
         timeoutFn.current = window.setTimeout(close, duration);
