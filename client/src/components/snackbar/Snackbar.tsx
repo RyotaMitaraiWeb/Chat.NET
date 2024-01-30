@@ -26,6 +26,11 @@ const titles: Record<severity, string> = {
  * However, you should still avoid defining side effects outside
  * of ones involving the closing of the snackbar.
  *
+ * Changing the snackbar's title, severity, or its content while it is still up
+ * will restart the timeout. This effect can be used to effectively
+ * display a "different" snackbar if a second action that triggers it
+ * occurs before the "first" snackbar disappears.
+ *
  * Multiple snackbars can be displayed at the same time. In a list of snackbars,
  * the ones that were opened appear above the ones that were opened later.
  *
@@ -77,7 +82,6 @@ function Snackbar(props: SnackbarProps): JSX.Element {
   const close = useCallback(() => {
     if (onClose && timeoutFn.current) {
       setDisappear('disappear');
-      console.log('side effect');
       setTimeout(() => {
         setDisappear('');
         onClose();
@@ -98,7 +102,6 @@ function Snackbar(props: SnackbarProps): JSX.Element {
          */
         window.clearTimeout(timeoutFn.current as unknown as number);
         timeoutFn.current = window.setTimeout(close, duration);
-        console.log('change');
       } else {
         timeoutFn.current = undefined;
       }
