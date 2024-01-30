@@ -77,6 +77,7 @@ function Snackbar(props: SnackbarProps): JSX.Element {
   const close = useCallback(() => {
     if (onClose && timeoutFn.current) {
       setDisappear('disappear');
+      console.log('side effect');
       setTimeout(() => {
         setDisappear('');
         onClose();
@@ -95,17 +96,15 @@ function Snackbar(props: SnackbarProps): JSX.Element {
          * cleared out later on, preventing memory leaks
          * and unnecessary side effects
          */
-        timeoutFn.current = setTimeout(close, duration);
+        window.clearTimeout(timeoutFn.current as unknown as number);
+        timeoutFn.current = window.setTimeout(close, duration);
+        console.log('change');
       } else {
-        timeoutFn.current = setTimeout(() => {}, 0);
+        timeoutFn.current = undefined;
       }
       window.addEventListener('keydown', closeByEscape);
     }
-
-    return () => {
-      timeoutFn.current = undefined;
-    };
-  }, [open, close, duration, disappear, closeByEscape]);
+  }, [open, close, duration, disappear, closeByEscape, snackbarTitle, children, severity]);
 
   if (!open) {
     return <></>;
@@ -114,6 +113,7 @@ function Snackbar(props: SnackbarProps): JSX.Element {
   return createPortal(
     <div
       className={`component-snackbar ${open ? 'open' : 'closed'} ${disappear} ${className}`}
+      id={timeoutFn.current ? timeoutFn.current.toString() : undefined}
       {...others}
     >
       <Alert
