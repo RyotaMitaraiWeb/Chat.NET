@@ -5,10 +5,7 @@
 
 .component-snackbar {
   width: 500px;
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translate(-50%);
+  position: relative;
 
   .component-alert {
     @include zoom-in();

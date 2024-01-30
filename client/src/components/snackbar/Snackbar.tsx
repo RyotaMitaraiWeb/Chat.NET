@@ -26,11 +26,10 @@ const titles: Record<severity, string> = {
  * However, you should still avoid defining side effects outside
  * of ones involving the closing of the snackbar.
  *
- * The component currently does not support multiple snackbars being
- * displayed together; if two snackbars are active, one of them will appear
- * on top of another, effectively hiding it.
+ * Multiple snackbars can be displayed at the same time. In a list of snackbars,
+ * the ones that were opened appear above the ones that were opened later.
  *
- * The snackbar is added to the body of the document through a portal.
+ * The snackbar is added to a special div intended for snackbars via a portal.
  *
  * **Note:** if the user does not allow animations on their system,
  * the snackbar will be transparent for less than a second when closed.
@@ -129,7 +128,7 @@ function Snackbar(props: SnackbarProps): JSX.Element {
         {children}
       </Alert>
     </div>,
-    document.body,
+    document.querySelector('.snackbars') as Element,
   );
 }
 
