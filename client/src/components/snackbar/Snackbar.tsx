@@ -26,11 +26,15 @@ const titles: Record<severity, string> = {
  * However, you should still avoid defining side effects outside
  * of ones involving the closing of the snackbar.
  *
- * The component currently does not support multiple snackbars being
- * displayed together; if two snackbars are active, one of them will appear
- * on top of another, effectively hiding it.
+ * Changing the snackbar's title, severity, or its content while it is still up
+ * will restart the timeout. This effect can be used to effectively
+ * display a "different" snackbar if a second action that triggers it
+ * occurs before the "first" snackbar disappears.
  *
- * The snackbar is added to the body of the document through a portal.
+ * Multiple snackbars can be displayed at the same time. In a list of snackbars,
+ * the ones that were opened appear above the ones that were opened later.
+ *
+ * The snackbar is added to a special div intended for snackbars via a portal.
  *
  * **Note:** if the user does not allow animations on their system,
  * the snackbar will be transparent for less than a second when closed.
@@ -51,7 +55,7 @@ function Snackbar(props: SnackbarProps): JSX.Element {
 
   const timeoutFn = useRef<unknown>(undefined);
 
-  /**
+  /*
    * Used to trigger a closing animation before
    * the snackbar is unmounted from the DOM.
    */
@@ -62,7 +66,7 @@ function Snackbar(props: SnackbarProps): JSX.Element {
     close();
   }
 
-  const closebByEscape = useCallback(() => {
+  const closeByEscape = useCallback(() => {
     if (onClose && timeoutFn.current) {
       setDisappear('disappear');
       setTimeout(() => {
@@ -72,7 +76,7 @@ function Snackbar(props: SnackbarProps): JSX.Element {
       }, 500);
     }
 
-    window.removeEventListener('keydown', closebByEscape);
+    window.removeEventListener('keydown', closeByEscape);
   }, [onClose]);
 
   const close = useCallback(() => {
@@ -85,28 +89,27 @@ function Snackbar(props: SnackbarProps): JSX.Element {
       }, 500);
     }
 
-    window.removeEventListener('keydown', closebByEscape);
-  }, [onClose, timeoutFn, closebByEscape]);
+    window.removeEventListener('keydown', closeByEscape);
+  }, [onClose, timeoutFn, closeByEscape]);
 
   useEffect(() => {
     if (open && !disappear) {
       if (duration) {
-        /**
+        /*
          * Track the current timeout so that it can be
          * cleared out later on, preventing memory leaks
-         * and unnecessary side effects
+         * and unnecessary side effects. Also extends
+         * the snackbar's lifespan if one of the core
+         * components change.
          */
-        timeoutFn.current = setTimeout(close, duration);
+        window.clearTimeout(timeoutFn.current as unknown as number);
+        timeoutFn.current = window.setTimeout(close, duration);
       } else {
-        timeoutFn.current = setTimeout(() => {}, 0);
+        timeoutFn.current = undefined;
       }
-      window.addEventListener('keydown', closebByEscape);
+      window.addEventListener('keydown', closeByEscape);
     }
-
-    return () => {
-      timeoutFn.current = undefined;
-    };
-  }, [open, close, duration, disappear, closebByEscape]);
+  }, [open, close, duration, disappear, closeByEscape, snackbarTitle, children, severity]);
 
   if (!open) {
     return <></>;
@@ -115,6 +118,7 @@ function Snackbar(props: SnackbarProps): JSX.Element {
   return createPortal(
     <div
       className={`component-snackbar ${open ? 'open' : 'closed'} ${disappear} ${className}`}
+      id={timeoutFn.current ? timeoutFn.current.toString() : undefined}
       {...others}
     >
       <Alert
@@ -129,7 +133,7 @@ function Snackbar(props: SnackbarProps): JSX.Element {
         {children}
       </Alert>
     </div>,
-    document.body,
+    document.querySelector('.snackbars') as Element,
   );
 }
 
