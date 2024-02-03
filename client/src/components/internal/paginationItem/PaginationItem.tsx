@@ -2,6 +2,13 @@ import { cloneElement } from 'react';
 import { PaginationItemProps } from './types';
 import BaseButton from '../baseButton/BaseButton';
 
+/**
+ * A button that triggers a page change when clicked.
+ *
+ * If ``component`` is defined, this component will render that
+ * instead and attach necessary classes, click handlers, and other
+ * necessary attributes.
+ */
 function PaginationItem(props: PaginationItemProps): React.JSX.Element {
   const { isSelected, page, disabled, onClick, component } = props;
   if (component) {

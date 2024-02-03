@@ -11,11 +11,13 @@ import PaginationItem from '../internal/paginationItem/PaginationItem';
 /**
  * A component that renders page buttons per the specified requirements.
  * Can be turned into a controlled one by passing ``page`` and ``onChangePage``
- * props. You can also pass an array of URLs which will turn the page buttons
- * into hyperlinks.
+ * props.
  *
  * All pages are rendered as buttons by default. The ``renderItem`` prop
- * can be used to configure how the page buttons are rendered.
+ * can be used to configure how the page buttons are rendered. The custom
+ * "buttons" are implemented as closely to native buttons as possible
+ * (they have styling for a disabled button, have a tab index of -1
+ * when disabled, and do not trigger click handlers).
  */
 function Pagination(props: PaginationProps): React.JSX.Element {
   const {
