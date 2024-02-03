@@ -1,5 +1,6 @@
 @import '../../styles/colors.scss';
 @import '../../styles/util.scss';
+@import '../../styles/effects.scss';
 
 .component-pagination {
   display: flex;
@@ -24,9 +25,10 @@
     @include apply-values-for-modes(color, white, black);
     @include apply-transition(background-color 0.2s, color 0.2s);
     cursor: pointer;
+    @extend .ripple;
 
-    &:hover:not(:disabled),
-    &:focus-visible {
+    &:hover:not(:disabled, .disabled),
+    &:focus-visible:not(.disabled) {
       @include apply-values-for-modes(
         background-color,
         rgba(255, 255, 255, 0.08),
@@ -34,7 +36,7 @@
       );
     }
 
-    &.selected {
+    &.selected:not(.disabled) {
       @include apply-values-for-modes(
         background-color,
         rgba(255, 255, 255, 0.16),
@@ -42,9 +44,10 @@
       );
     }
 
-    &:disabled {
+    &:disabled, &.disabled {
       opacity: 0.8;
       color: gray;
+      cursor: not-allowed;
     }
 
     &.invisible {

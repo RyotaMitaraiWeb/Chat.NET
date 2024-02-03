@@ -126,5 +126,22 @@ describe('Pagination component', () => {
       expect(page3.classList.contains('component-page-item')).toBe(true);
       expect(page3.classList.contains('custom-page')).toBe(true);
     });
+
+    it(`Does not change page if disabled and the 
+    rendered element is not a disableable element`, () => {
+      render(
+        <Pagination
+          disabled
+          count={9}
+          renderItem={(p) => <strong className="custom-page">{p}</strong>}
+        />,
+      );
+
+      const pages = document.querySelectorAll('strong.custom-page');
+      const page3 = pages[2] as HTMLButtonElement;
+      act(() => page3.click());
+
+      expect(page3.classList.contains('selected')).toBe(false);
+    });
   });
 });

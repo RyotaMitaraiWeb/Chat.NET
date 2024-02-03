@@ -1,11 +1,12 @@
 import { usePagination } from '@/hooks/usePagination/usePagination';
 import { PaginationProps } from './types';
 import './Pagination.scss';
-import { cloneElement, useEffect } from 'react';
+import { useEffect } from 'react';
 import BaseButton from '../internal/baseButton/BaseButton';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import Icon from '../icon/Icon';
 import React from 'react';
+import PaginationItem from '../internal/paginationItem/PaginationItem';
 
 /**
  * A component that renders page buttons per the specified requirements.
@@ -60,33 +61,16 @@ function Pagination(props: PaginationProps): React.JSX.Element {
       </BaseButton>
       <div className="pages">
         {pagination.pages.map((p) => {
-          if (renderItem) {
-            const Page = renderItem(p.page);
-            const PureElement = cloneElement(Page);
-            const CustomPageButton = cloneElement(PureElement, {
-              className: `${PureElement.props.className} component-page-item ${
-                p.isSelected ? 'selected' : ''
-              }`,
-              'data-page': p.page,
-              onClick: () => handleChangePage(p.page),
-              key: p.page,
-              'aria-label': `Go to page ${p.page}`,
-              disabled,
-            });
-
-            return CustomPageButton;
-          }
+          const component = renderItem ? renderItem(p.page) : undefined;
           return (
-            <BaseButton
+            <PaginationItem
+              component={component}
+              page={p.page}
+              onClick={handleChangePage}
+              isSelected={p.isSelected}
               key={p.page}
-              data-page={p.page}
               disabled={disabled}
-              className={`component-page-item ${p.isSelected ? 'selected' : ''}`}
-              onClick={() => handleChangePage(p.page)}
-              aria-label={`Go to page ${p.page}`}
-            >
-              {p.page}
-            </BaseButton>
+            />
           );
         })}
       </div>
