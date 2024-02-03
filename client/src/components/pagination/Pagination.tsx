@@ -5,18 +5,19 @@ import { useEffect } from 'react';
 import BaseButton from '../internal/baseButton/BaseButton';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import Icon from '../icon/Icon';
+import React from 'react';
+import PaginationItem from '../internal/paginationItem/PaginationItem';
 
 /**
  * A component that renders page buttons per the specified requirements.
  * Can be turned into a controlled one by passing ``page`` and ``onChangePage``
- * props. You can also pass an array of URLs which will turn the page buttons
- * into hyperlinks.
+ * props.
  *
- * When using URLs, you need to pass a state to ``page``, which will typically
- * be the current ``page`` query string (or whatever parameter you are using),
- * as the component will not be able to update the selected page otherwise.
- * Passing ``count`` is also unnecessary in this case, as the component will
- * resort to calculating the amount of pages using the array length itself.
+ * All pages are rendered as buttons by default. The ``renderItem`` prop
+ * can be used to configure how the page buttons are rendered. The custom
+ * "buttons" are implemented as closely to native buttons as possible
+ * (they have styling for a disabled button, have a tab index of -1
+ * when disabled, and do not trigger click handlers).
  */
 function Pagination(props: PaginationProps): React.JSX.Element {
   const {
@@ -27,10 +28,10 @@ function Pagination(props: PaginationProps): React.JSX.Element {
     showPrev,
     count,
     disabled,
-    urls,
+    renderItem,
     ...others
   } = props;
-  const pagination = usePagination(urls?.length || count || 1, page);
+  const pagination = usePagination(count || 1, page);
 
   function handleChangePage(value: number) {
     if (page === undefined) {
@@ -43,10 +44,10 @@ function Pagination(props: PaginationProps): React.JSX.Element {
   }
 
   useEffect(() => {
-    if (page && (onChangePage || urls)) {
+    if (page && onChangePage) {
       pagination.setPage(page);
     }
-  }, [page, urls, onChangePage, pagination]);
+  }, [page, onChangePage, pagination]);
 
   return (
     <div className={`component-pagination ${className}`} {...others}>
@@ -55,33 +56,31 @@ function Pagination(props: PaginationProps): React.JSX.Element {
         aria-label="Go to previous page"
         onClick={() => handleChangePage(pagination.page - 1)}
         className={`component-page-item previous-page-button ${showPrev ? 'visible' : 'invisible'}`}
-        href={urls ? urls[pagination.page - 2] : undefined}
       >
         <Icon>
           <MdKeyboardArrowLeft />
         </Icon>
       </BaseButton>
       <div className="pages">
-        {pagination.pages.map((p) => (
-          <BaseButton
-            key={p.page}
-            data-page={p.page}
-            disabled={disabled}
-            className={`component-page-item ${p.isSelected ? 'selected' : ''}`}
-            onClick={() => handleChangePage(p.page)}
-            href={urls ? urls[p.page - 1] : undefined}
-            aria-label={`Go to page ${p.page}`}
-          >
-            {p.page}
-          </BaseButton>
-        ))}
+        {pagination.pages.map((p) => {
+          const component = renderItem ? renderItem(p.page) : undefined;
+          return (
+            <PaginationItem
+              component={component}
+              page={p.page}
+              onClick={handleChangePage}
+              isSelected={p.isSelected}
+              key={p.page}
+              disabled={disabled}
+            />
+          );
+        })}
       </div>
       <BaseButton
         onClick={() => handleChangePage(pagination.page + 1)}
         aria-label="Go to next page"
         disabled={disabled || pagination.page === pagination.pages.length}
         className={`component-page-item next-page-button ${showNext ? 'visible' : 'invisible'}`}
-        href={urls ? urls[pagination.page] : undefined}
       >
         <Icon>
           <MdKeyboardArrowRight />
@@ -90,5 +89,4 @@ function Pagination(props: PaginationProps): React.JSX.Element {
     </div>
   );
 }
-
 export default Pagination;
