@@ -23,6 +23,7 @@
     border-radius: 4px;
     @include apply-values-for-modes(color, white, black);
     @include apply-transition(background-color 0.2s, color 0.2s);
+    cursor: pointer;
 
     &:hover:not(:disabled),
     &:focus-visible {
