@@ -1,10 +1,12 @@
+'use client';
 import { createPortal } from 'react-dom';
 import Alert from '../alert/Alert';
 import { severity } from '../types/options';
 import { SnackbarProps } from './types';
 import './Snackbar.scss';
 import '@/styles/colors.scss';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useDebounce } from '@/hooks/useDebounce/useDebounce';
 
 const titles: Record<severity, string> = {
   success: 'Success!',
@@ -53,72 +55,73 @@ function Snackbar(props: SnackbarProps): JSX.Element {
     ...others
   } = props;
 
-  const timeoutFn = useRef<unknown>(undefined);
-
   /*
    * Used to trigger a closing animation before
    * the snackbar is unmounted from the DOM.
    */
   const [disappear, setDisappear] = useState('');
+  const close = useCallback(() => {
+    if (onClose) {
+      setDisappear('disappear');
+      setTimeout(() => {
+        setDisappear('');
+        onClose();
+      }, 500);
+    }
+  }, [onClose]);
+
+  const closeWithTimeout = useDebounce(() => {
+    if (open) {
+      close();
+    }
+  }, duration);
 
   function handleClose(event: React.MouseEvent) {
     event.preventDefault();
     close();
   }
 
-  const closeByEscape = useCallback(() => {
-    if (onClose && timeoutFn.current) {
-      setDisappear('disappear');
-      setTimeout(() => {
-        setDisappear('');
-        onClose();
-        window.clearTimeout(timeoutFn.current as number | undefined);
-      }, 500);
+  const handleEscape = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        close();
+      }
+    },
+    [close],
+  );
+
+  useEffect(() => {
+    if (open) {
+      window.addEventListener('keydown', handleEscape);
     }
 
-    window.removeEventListener('keydown', closeByEscape);
-  }, [onClose]);
-
-  const close = useCallback(() => {
-    if (onClose && timeoutFn.current) {
-      setDisappear('disappear');
-      setTimeout(() => {
-        setDisappear('');
-        onClose();
-        window.clearTimeout(timeoutFn.current as number | undefined);
-      }, 500);
-    }
-
-    window.removeEventListener('keydown', closeByEscape);
-  }, [onClose, timeoutFn, closeByEscape]);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [handleEscape, open, close]);
 
   useEffect(() => {
     if (open && !disappear) {
       if (duration) {
-        /*
-         * Track the current timeout so that it can be
-         * cleared out later on, preventing memory leaks
-         * and unnecessary side effects. Also extends
-         * the snackbar's lifespan if one of the core
-         * components change.
-         */
-        window.clearTimeout(timeoutFn.current as unknown as number);
-        timeoutFn.current = window.setTimeout(close, duration);
-      } else {
-        timeoutFn.current = undefined;
+        closeWithTimeout();
       }
-      window.addEventListener('keydown', closeByEscape);
     }
-  }, [open, close, duration, disappear, closeByEscape, snackbarTitle, children, severity]);
+  }, [
+    duration,
+    disappear,
+    closeWithTimeout,
+    open,
+    handleEscape,
+    snackbarTitle,
+    children,
+    severity,
+  ]);
 
-  if (!open) {
+  if (!open || !document) {
     return <></>;
   }
 
   return createPortal(
     <div
       className={`component-snackbar ${open ? 'open' : 'closed'} ${disappear} ${className}`}
-      id={timeoutFn.current ? timeoutFn.current.toString() : undefined}
       {...others}
     >
       <Alert
