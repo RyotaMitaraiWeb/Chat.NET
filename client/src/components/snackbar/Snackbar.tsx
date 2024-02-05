@@ -136,7 +136,7 @@ function Snackbar(props: SnackbarProps): JSX.Element {
         {children}
       </Alert>
     </div>,
-    document.body,
+    document.querySelector('.snackbars') as Element,
   );
 }
 
