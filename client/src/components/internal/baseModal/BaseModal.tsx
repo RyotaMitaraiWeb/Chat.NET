@@ -35,28 +35,8 @@ function BaseModal(props: BaseModalProps): React.JSX.Element {
   const [isOpen, setOpen] = useState(open);
   const [overlayIsOpen, setOverlayOpen] = useState(true);
 
-  const handleEscape = useCallback(
-    (event: KeyboardEvent) => {
-      if (event.code === 'Escape') {
-        setOverlayOpen(false);
-        setTimeout(() => {
-          if (onClose) {
-            onClose();
-          }
-
-          document.body.classList.remove('locked');
-          window.removeEventListener('keydown', handleEscape);
-          setOpen(false);
-          setOverlayOpen(true);
-        }, 200);
-      }
-    },
-    [onClose],
-  );
-
-  const handleClose = useCallback(() => {
+  const close = useCallback(() => {
     document.body.classList.remove('locked');
-    window.removeEventListener('keydown', handleEscape);
     setOverlayOpen(false);
     setTimeout(() => {
       if (onClose) {
@@ -65,7 +45,22 @@ function BaseModal(props: BaseModalProps): React.JSX.Element {
       setOpen(false);
       setOverlayOpen(true);
     }, 200);
-  }, [handleEscape, onClose]);
+  }, [onClose]);
+
+  const handleEscape = useCallback(
+    (event: KeyboardEvent) => {
+      if (event.code === 'Escape') {
+        window.removeEventListener('keydown', handleEscape);
+        close();
+      }
+    },
+    [close],
+  );
+
+  const handleClose = useCallback(() => {
+    window.removeEventListener('keydown', handleEscape);
+    close();
+  }, [handleEscape, close]);
 
   useEffect(() => {
     if (!document.body.classList.contains('locked') && open) {
