@@ -7,11 +7,10 @@ using Microsoft.AspNetCore.SignalR;
 using Web.ViewModels.Authentication;
 using Web.ViewModels.User;
 
-namespace Web.Controllers.Areas.Authentication
+namespace Web.Hubs
 {
-
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class SessionHub : Hub<ISessionClient>
+    public class ChatHub : Hub<IChatHubClient>
     {
         public async Task StartSession(
             [FromServices] IUserService userService,
@@ -79,4 +78,5 @@ namespace Web.Controllers.Areas.Authentication
             return claims;
         }
     }
+
 }
