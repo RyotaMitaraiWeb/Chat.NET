@@ -3,7 +3,7 @@ import React, { createContext, useCallback, useContext, useMemo, useState } from
 import { SnackbarContext, SnackbarState } from './types';
 import { severities } from '@/constants/severity';
 import { severity } from '@/components/types/options';
-import Snackbar from '@/components/snackbar/Snackbar';
+import GlobalSnackbar from './GlobalSnackbar';
 
 const SnackbarContext = createContext({} as SnackbarContext);
 
@@ -62,42 +62,6 @@ export function SnackbarContextProvider({ children }: { children: React.ReactNod
         severity={severity}
       />
     </SnackbarContext.Provider>
-  );
-}
-
-type GlobalSnackbarProps = {
-  snackbar: SnackbarState;
-  onClose: () => void;
-  open: boolean;
-  duration?: number;
-  severity?: severity;
-};
-
-function GlobalSnackbar(props: GlobalSnackbarProps): React.JSX.Element {
-  if (typeof props.snackbar === 'string') {
-    return (
-      <Snackbar
-        severity={props.severity}
-        onClose={props.onClose}
-        open={props.open}
-        duration={props.duration}
-      >
-        {props.snackbar}
-      </Snackbar>
-    );
-  }
-
-  return (
-    <Snackbar
-      snackbarTitle={props.snackbar.snackbarTitle}
-      severity={props.severity}
-      closeButtonText={props.snackbar.closeButtonText}
-      open={props.open}
-      onClose={props.onClose}
-      duration={props.duration}
-    >
-      {props.snackbar.snackbarContent}
-    </Snackbar>
   );
 }
 
