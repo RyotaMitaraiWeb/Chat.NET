@@ -1,11 +1,5 @@
 import * as signalr from '@microsoft/signalr';
-
-interface ISignalrConnection<TClientMethods, TServerMethods> {
-  start: () => Promise<void>;
-  stop: () => Promise<void>;
-  invoke: (event: TServerMethods, ...args: Array<unknown>) => Promise<void>;
-  off: (event: TClientMethods, method?: (...args: unknown[]) => void) => void;
-}
+import { ISignalrConnection } from './types';
 
 /**
  * Encapsulates the ``signalr`` connection and provides
