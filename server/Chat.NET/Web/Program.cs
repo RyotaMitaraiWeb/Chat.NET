@@ -13,6 +13,7 @@ using Redis.OM;
 using StackExchange.Redis;
 using System.Text;
 using Web.Controllers.Areas.Authentication;
+using Web.Hubs;
 using Web.Services.Authentication;
 using Web.Services.Session;
 
@@ -99,7 +100,7 @@ namespace Chat.NET
                         var accessToken = context.Request.Query["access_token"];
                         var path = context.HttpContext.Request.Path;
                         if (!string.IsNullOrEmpty(accessToken) &&
-                            (path.StartsWithSegments("/session-hub")))
+                            (path.StartsWithSegments("/chat")))
                         {
                             context.Token = accessToken;
                         }
@@ -146,7 +147,7 @@ namespace Chat.NET
 
             var app = builder.Build();
 
-            app.MapHub<SessionHub>("/session-hub");
+            app.MapHub<ChatHub>("/chat");
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
