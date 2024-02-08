@@ -115,7 +115,7 @@ function Snackbar(props: SnackbarProps): JSX.Element {
     severity,
   ]);
 
-  if (!open || !document) {
+  if (!open || !window) {
     return <></>;
   }
 
@@ -136,7 +136,7 @@ function Snackbar(props: SnackbarProps): JSX.Element {
         {children}
       </Alert>
     </div>,
-    document.querySelector('.snackbars') as Element,
+    document.body,
   );
 }
 
