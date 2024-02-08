@@ -23,20 +23,15 @@ const titles: Record<severity, string> = {
  * (assuming you have passed an ``onClose`` handler). ``duration``
  * is passed in miliseconds.
  *
+ * Although the snackbar can be used freely anywhere in the app,
+ * you should prefer using the ``useSnackbar`` hook
+ * to display snackbars whenever possible.
+ *
  * The snackbar component clears out any timeouts it creates, preventing
  * memory leaks and stopping side effects from occurring after it's unmounted.
- * However, you should still avoid defining side effects outside
- * of ones involving the closing of the snackbar.
  *
  * Changing the snackbar's title, severity, or its content while it is still up
- * will restart the timeout. This effect can be used to effectively
- * display a "different" snackbar if a second action that triggers it
- * occurs before the "first" snackbar disappears.
- *
- * Multiple snackbars can be displayed at the same time. In a list of snackbars,
- * the ones that were opened appear above the ones that were opened later.
- *
- * The snackbar is added to a special div intended for snackbars via a portal.
+ * will restart the timeout.
  *
  * **Note:** if the user does not allow animations on their system,
  * the snackbar will be transparent for less than a second when closed.

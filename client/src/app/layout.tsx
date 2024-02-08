@@ -15,10 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
   return (
     <html lang="en">
       <body className={inter.className + ' theme-text theme-background'}>
-        <SnackbarContextProvider>
-          {children}
-          <div className="snackbars"></div>
-        </SnackbarContextProvider>
+        <SnackbarContextProvider>{children}</SnackbarContextProvider>
       </body>
     </html>
   );
