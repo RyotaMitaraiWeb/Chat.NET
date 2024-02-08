@@ -1,0 +1,121 @@
+'use client';
+import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { SnackbarContext, SnackbarState } from './types';
+import { severities } from '@/constants/severity';
+import { severity } from '@/components/types/options';
+import Snackbar from '@/components/snackbar/Snackbar';
+
+const SnackbarContext = createContext({} as SnackbarContext);
+
+function isEmpty(snackbar: SnackbarState): boolean {
+  if (typeof snackbar === 'string') {
+    return snackbar === '';
+  }
+
+  return Object.keys(snackbar).length === 0;
+}
+
+export function SnackbarContextProvider({ children }: { children: React.ReactNode }) {
+  const [snackbar, setSnackbar] = useState<SnackbarState>('');
+  const [duration, setDuration] = useState<number | undefined>(0);
+  const [severity, setSeverity] = useState<severity | undefined>();
+
+  function closeSnackbar() {
+    setSnackbar('');
+  }
+
+  const displaySnackbar = useCallback(
+    (snackbarInput: SnackbarState, severity: severity, open: boolean, duration?: number) => {
+      if (open) {
+        closeSnackbar();
+        setTimeout(() => {
+          displaySnackbar(snackbarInput, severity, !open, duration);
+        }, 200);
+      } else {
+        setSnackbar(snackbarInput);
+        setDuration(duration);
+        setSeverity(severity);
+      }
+    },
+    [],
+  );
+
+  const methods = useMemo(
+    () =>
+      severities.reduce((methods, severity) => {
+        const copy = { ...methods };
+        copy[severity] = (snackbarInput: SnackbarState, duration?: number) =>
+          displaySnackbar(snackbarInput, severity, isEmpty(snackbar), duration);
+        return copy;
+      }, {} as SnackbarContext),
+    [displaySnackbar, snackbar],
+  );
+
+  return (
+    <SnackbarContext.Provider value={methods}>
+      {children}
+      <GlobalSnackbar
+        snackbar={snackbar}
+        onClose={closeSnackbar}
+        open={!isEmpty(snackbar)}
+        duration={duration}
+        severity={severity}
+      />
+    </SnackbarContext.Provider>
+  );
+}
+
+type GlobalSnackbarProps = {
+  snackbar: SnackbarState;
+  onClose: () => void;
+  open: boolean;
+  duration?: number;
+  severity?: severity;
+};
+
+function GlobalSnackbar(props: GlobalSnackbarProps): React.JSX.Element {
+  if (typeof props.snackbar === 'string') {
+    return (
+      <Snackbar
+        severity={props.severity}
+        onClose={props.onClose}
+        open={props.open}
+        duration={props.duration}
+      >
+        {props.snackbar}
+      </Snackbar>
+    );
+  }
+
+  return (
+    <Snackbar
+      snackbarTitle={props.snackbar.snackbarTitle}
+      severity={props.severity}
+      closeButtonText={props.snackbar.closeButtonText}
+      open={props.open}
+      onClose={props.onClose}
+      duration={props.duration}
+    >
+      {props.snackbar.snackbarContent}
+    </Snackbar>
+  );
+}
+
+/**
+ * A hook that allows you to display snackbars.
+ *
+ * Each method corresponds to one of the severities. You
+ * can pass either a string (which is injected as the content)
+ * or an object that specifies the content, title, and close button text.
+ * Additionally, you can pass a duration in miliseconds; not passing
+ * duration makes the snackbar persistent, remaining visible until the user
+ * explicitly closes it.
+ *
+ * If you attempt to open a snackbar while one is already displayed,
+ * the current one will be closed and the second one will be displayed instead.
+ * @returns an object with methods to display the snackbar
+ */
+export const useSnackbar = () => {
+  const context = useContext(SnackbarContext);
+  return context;
+};
