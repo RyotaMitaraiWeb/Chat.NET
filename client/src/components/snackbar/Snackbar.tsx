@@ -7,8 +7,6 @@ import './Snackbar.scss';
 import '@/styles/colors.scss';
 import { useCallback, useEffect, useState } from 'react';
 import { useDebounce } from '@/hooks/useDebounce/useDebounce';
-import { useCallback, useEffect, useState } from 'react';
-import { useDebounce } from '@/hooks/useDebounce/useDebounce';
 
 const titles: Record<severity, string> = {
   success: 'Success!',
@@ -59,8 +57,6 @@ function Snackbar(props: SnackbarProps): JSX.Element {
   const [disappear, setDisappear] = useState('');
   const close = useCallback(() => {
     if (onClose) {
-  const close = useCallback(() => {
-    if (onClose) {
       setDisappear('disappear');
       setTimeout(() => {
         setDisappear('');
@@ -96,50 +92,10 @@ function Snackbar(props: SnackbarProps): JSX.Element {
 
     return () => window.removeEventListener('keydown', handleEscape);
   }, [handleEscape, open, close]);
-  const closeWithTimeout = useDebounce(() => {
-    if (open) {
-      close();
-    }
-  }, duration);
-
-  function handleClose(event: React.MouseEvent) {
-    event.preventDefault();
-    close();
-  }
-
-  const handleEscape = useCallback(
-    (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        close();
-      }
-    },
-    [close],
-  );
-
-  useEffect(() => {
-    if (open) {
-      window.addEventListener('keydown', handleEscape);
-    }
-
-    return () => window.removeEventListener('keydown', handleEscape);
-  }, [handleEscape, open, close]);
 
   useEffect(() => {
     if (open && !disappear) {
       if (duration) {
-        closeWithTimeout();
-      }
-    }
-  }, [
-    duration,
-    disappear,
-    closeWithTimeout,
-    open,
-    handleEscape,
-    snackbarTitle,
-    children,
-    severity,
-  ]);
         closeWithTimeout();
       }
     }
