@@ -1,11 +1,5 @@
 import * as signalr from '@microsoft/signalr';
-
-interface ISignalrConnection<TClientMethods, TServerMethods> {
-  start: () => Promise<void>;
-  stop: () => Promise<void>;
-  invoke: (event: TServerMethods, ...args: Array<unknown>) => Promise<void>;
-  off: (event: TClientMethods, method?: (...args: unknown[]) => void) => void;
-}
+import { ISignalrConnection } from './types';
 
 /**
  * Encapsulates the ``signalr`` connection and provides
@@ -19,9 +13,14 @@ export abstract class SignalrConnection<TC extends string, TS extends string>
   private connectionIsActive = false;
 
   /**
-   * @param hub A relative path to the hub (e.g. ``/chat``).
+   * @param hub A relative path to the hub (e.g. ``chat``). If the path
+   * starts with ``/``, the slash will be removed.
    */
   constructor(hub: string) {
+    if (hub.startsWith('/')) {
+      hub = hub.slice(1);
+    }
+
     this.connection = new signalr.HubConnectionBuilder()
       .withUrl(`http://localhost:5000/${hub}`, {
         accessTokenFactory() {
