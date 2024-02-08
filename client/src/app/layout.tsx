@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.scss';
 import 'normalize.css';
+import { SnackbarContextProvider } from '@/hooks/useSnackbar/useSnackbar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -14,8 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
   return (
     <html lang="en">
       <body className={inter.className + ' theme-text theme-background'}>
-        {children}
-        <div className="snackbars"></div>
+        <SnackbarContextProvider>{children}</SnackbarContextProvider>
       </body>
     </html>
   );
