@@ -145,29 +145,24 @@ namespace Chat.NET
                 });
             });
 
-            builder.Services.AddAuthorization(options =>
-            {
-                options.AddPolicy(Policies.IsAuthenticated, policy => policy.Requirements.Add(
-                    new IsAuthenticatedRequirement()));
-
-                options.AddPolicy(Policies.IsModeratorSignalR, policy =>
+            builder.Services.AddAuthorizationBuilder()
+                .AddPolicy(Policies.IsAuthenticated, policy => policy.Requirements.Add(
+                    new IsAuthenticatedRequirement()))
+                .AddPolicy(Policies.IsModeratorSignalR, policy =>
                 {
                     policy.Requirements.Add(new IsAuthenticatedRequirement());
                     policy.Requirements.Add(new HasRoleSignalRRequirement(Roles.Moderator));
-                });
-
-                options.AddPolicy(Policies.IsAdminSignalR, policy =>
+                })
+                .AddPolicy(Policies.IsAdminSignalR, policy =>
                 {
                     policy.Requirements.Add(new IsAuthenticatedRequirement());
                     policy.Requirements.Add(new HasRoleSignalRRequirement(Roles.Admin));
-                });
-
-                options.AddPolicy(Policies.IsChatModeratorSignalR, policy =>
+                })
+                .AddPolicy(Policies.IsChatModeratorSignalR, policy =>
                 {
                     policy.Requirements.Add(new IsAuthenticatedRequirement());
                     policy.Requirements.Add(new HasRoleSignalRRequirement(Roles.ChatModerator));
                 });
-            });
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
