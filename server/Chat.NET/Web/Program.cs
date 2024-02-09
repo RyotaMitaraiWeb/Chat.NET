@@ -1,10 +1,12 @@
 
+using Common.Authentication;
 using Contracts;
 using Infrastructure.Postgres;
 using Infrastructure.Postgres.Entities;
 using Infrastructure.Postgres.Repository;
 using Infrastructure.Redis.CreationServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -14,6 +16,7 @@ using StackExchange.Redis;
 using System.Text;
 using Web.Controllers.Areas.Authentication;
 using Web.Hubs;
+using Web.Policy.IsAuthenticated;
 using Web.Services.Authentication;
 using Web.Services.Session;
 
@@ -59,6 +62,7 @@ namespace Chat.NET
             builder.Services.AddScoped<IRepository, Repository>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddSingleton<IJwtService, JwtService>();
+            builder.Services.AddScoped<IAuthorizationHandler, IsAuthenticatedHandler>();
 
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
@@ -138,7 +142,11 @@ namespace Chat.NET
                 });
             });
 
-            builder.Services.AddAuthorization();
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy(Policies.IsAuthenticated, policy => policy.Requirements.Add(
+                    new IsAuthenticatedRequirement()));
+            });
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

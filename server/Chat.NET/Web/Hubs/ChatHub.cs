@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using Common.Authentication;
+using Contracts;
 using Contracts.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -44,6 +45,7 @@ namespace Web.Hubs
             await this.Clients.Group(userId).SendSessionData(userData);
         }
 
+        [Authorize(Policy = Policies.IsAuthenticated)]
         public async Task EndSession(
             [FromServices] IJwtService jwtService,
             [FromServices] IUserSessionStore userSessionStore)
