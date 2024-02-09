@@ -1,4 +1,5 @@
 
+using Amazon.Auth.AccessControlPolicy;
 using Common.Authentication;
 using Contracts;
 using Infrastructure.Postgres;
@@ -16,6 +17,7 @@ using StackExchange.Redis;
 using System.Text;
 using Web.Controllers.Areas.Authentication;
 using Web.Hubs;
+using Web.Policy.HasRole;
 using Web.Policy.IsAuthenticated;
 using Web.Services.Authentication;
 using Web.Services.Session;
@@ -63,6 +65,7 @@ namespace Chat.NET
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddSingleton<IJwtService, JwtService>();
             builder.Services.AddScoped<IAuthorizationHandler, IsAuthenticatedHandler>();
+            builder.Services.AddScoped<IAuthorizationHandler, HasRoleSignalRHandler>();
 
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
@@ -146,6 +149,24 @@ namespace Chat.NET
             {
                 options.AddPolicy(Policies.IsAuthenticated, policy => policy.Requirements.Add(
                     new IsAuthenticatedRequirement()));
+
+                options.AddPolicy(Policies.IsModeratorSignalR, policy =>
+                {
+                    policy.Requirements.Add(new IsAuthenticatedRequirement());
+                    policy.Requirements.Add(new HasRoleSignalRRequirement(Roles.Moderator));
+                });
+
+                options.AddPolicy(Policies.IsAdminSignalR, policy =>
+                {
+                    policy.Requirements.Add(new IsAuthenticatedRequirement());
+                    policy.Requirements.Add(new HasRoleSignalRRequirement(Roles.Admin));
+                });
+
+                options.AddPolicy(Policies.IsChatModeratorSignalR, policy =>
+                {
+                    policy.Requirements.Add(new IsAuthenticatedRequirement());
+                    policy.Requirements.Add(new HasRoleSignalRRequirement(Roles.ChatModerator));
+                });
             });
 
             builder.Services.AddControllers();

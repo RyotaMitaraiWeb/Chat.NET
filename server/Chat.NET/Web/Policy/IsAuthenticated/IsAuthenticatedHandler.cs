@@ -28,7 +28,7 @@ namespace Web.Policy.IsAuthenticated
             bool tokenIsValid = this.jwtService.ValidateJwt(bearer);
             if (!tokenIsValid)
             {
-               context.Fail();
+                context.Fail();
                return;
             }
 

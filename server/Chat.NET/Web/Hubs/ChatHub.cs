@@ -45,7 +45,6 @@ namespace Web.Hubs
             await this.Clients.Group(userId).SendSessionData(userData);
         }
 
-        [Authorize(Policy = Policies.IsAuthenticated)]
         public async Task EndSession(
             [FromServices] IJwtService jwtService,
             [FromServices] IUserSessionStore userSessionStore)
