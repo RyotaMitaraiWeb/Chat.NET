@@ -12,7 +12,6 @@ using Npgsql;
 using Redis.OM;
 using StackExchange.Redis;
 using System.Text;
-using Web.Controllers.Areas.Authentication;
 using Web.Hubs;
 using Web.Services.Authentication;
 using Web.Services.Session;
