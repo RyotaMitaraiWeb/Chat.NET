@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using Common.Authentication;
+using Contracts;
 using Contracts.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
