@@ -13,6 +13,7 @@ using Redis.OM;
 using StackExchange.Redis;
 using System.Text;
 using Web.Hubs;
+using Web.Services.Admin;
 using Web.Services.Authentication;
 using Web.Services.Session;
 
@@ -57,6 +58,7 @@ namespace Chat.NET
             builder.Services.AddSingleton<IUserSessionStore, UserSessionStore>();
             builder.Services.AddScoped<IRepository, Repository>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IRoleService, RoleService>();
             builder.Services.AddSingleton<IJwtService, JwtService>();
 
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
