@@ -114,5 +114,87 @@ namespace Tests.Unit.Services
                 async () => await this.RoleService.AddRoleByUserId(roleData));
             Assert.That(ex.Message, Is.EqualTo(RoleErrorMessages.UpdateFailed.UserAlreadyHasRole(roleData.Role)));
         }
+
+        [Test]
+        public async Task Test_RemoveRoleByUserIdReturnsRoleDataWhenSuccessful()
+        {
+            Guid id = Guid.NewGuid();
+            var roleData = new UpdateRoleViewModel()
+            {
+                UserId = id.ToString(),
+                Role = Moderator,
+            };
+
+            var appUser = new ApplicationUser()
+            {
+                Id = id,
+                UserName = "Test",
+                UserRoles = Roles
+            };
+
+            this.UserManager.FindByIdAsync(roleData.UserId).Returns(appUser);
+            this.UserManager.RemoveFromRoleAsync(appUser, roleData.Role).Returns(IdentityResult.Success);
+
+            var result = await this.RoleService.RemoveRoleByUserId(roleData);
+            Assert.That(result?.UserId, Is.EqualTo(id.ToString()));
+        }
+
+        [Test]
+        public void Test_RemoveRoleByUserIdThrowsIfUserDoesNotExist()
+        {
+            Guid id = Guid.NewGuid();
+            var roleData = new UpdateRoleViewModel()
+            {
+                UserId = id.ToString(),
+                Role = Moderator,
+            };
+
+            ApplicationUser? appUser = null;
+            this.UserManager.FindByIdAsync(roleData.UserId).Returns(appUser);
+
+            var ex = Assert.ThrowsAsync<RoleUpdateFailedException>(
+                async () => await this.RoleService.RemoveRoleByUserId(roleData));
+            Assert.That(ex.Message, Is.EqualTo(RoleErrorMessages.UpdateFailed.UserDoesNotExist));
+        }
+
+        [Test]
+        [TestCase("Janitor")]
+        [TestCase(User)]
+        public void Test_RemoveRoleByUserIdThrowsIfRoleCannotBeGivenToUsers(string nonExistantRole)
+        {
+            Guid id = Guid.NewGuid();
+            var roleData = new UpdateRoleViewModel()
+            {
+                UserId = id.ToString(),
+                Role = nonExistantRole,
+            };
+
+            var ex = Assert.ThrowsAsync<RoleUpdateFailedException>(
+                async () => await this.RoleService.RemoveRoleByUserId(roleData));
+            Assert.That(ex.Message, Is.EqualTo(RoleErrorMessages.UpdateFailed.RoleNotAvailableForUpdate(roleData.Role)));
+        }
+
+        [Test]
+        public void Test_RemoveRoleByUserIdThrowsIfUserDoesNotHaveTheRole()
+        {
+            Guid id = Guid.NewGuid();
+            var roleData = new UpdateRoleViewModel()
+            {
+                UserId = id.ToString(),
+                Role = ChatModerator,
+            };
+
+            var appUser = new ApplicationUser()
+            {
+                Id = id,
+                UserName = "Test",
+                UserRoles = Roles
+            };
+
+            this.UserManager.FindByIdAsync(roleData.UserId).Returns(appUser);
+            var ex = Assert.ThrowsAsync<RoleUpdateFailedException>(
+                async () => await this.RoleService.RemoveRoleByUserId(roleData));
+            Assert.That(ex.Message, Is.EqualTo(RoleErrorMessages.UpdateFailed.UserDoesNotHaveRole(roleData.Role)));
+        }
     }
 }

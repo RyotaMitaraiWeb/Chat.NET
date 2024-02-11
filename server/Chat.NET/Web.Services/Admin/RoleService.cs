@@ -37,9 +37,27 @@ namespace Web.Services.Admin
             throw new Exception(String.Join(Environment.NewLine, result.Errors));
         }
 
-        public Task<UpdateRoleViewModel> RemoveRoleByUserId(UpdateRoleViewModel roleData)
+        public async Task<UpdateRoleViewModel> RemoveRoleByUserId(UpdateRoleViewModel roleData)
         {
-            throw new NotImplementedException();
+            ThrowIfRoleIsNotValid(roleData.Role);
+            string role = roleData.Role;
+
+            ApplicationUser user = await this.userManager.FindByIdAsync(roleData.UserId)
+                ?? throw new RoleUpdateFailedException(RoleErrorMessages.UpdateFailed.UserDoesNotExist);
+            var userRoles = user.UserRoles.Select(ur => ur.Role.Name ?? string.Empty);
+
+            if (!UserHasRole(userRoles, roleData.Role))
+            {
+                throw new RoleUpdateFailedException(RoleErrorMessages.UpdateFailed.UserDoesNotHaveRole(role));
+            }
+
+            var result = await this.userManager.RemoveFromRoleAsync(user, role);
+            if (result.Succeeded)
+            {
+                return roleData;
+            }
+
+            throw new Exception(String.Join(Environment.NewLine, result.Errors));
         }
 
         private static void ThrowIfRoleIsNotValid(string role)
