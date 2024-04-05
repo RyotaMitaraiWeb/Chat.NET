@@ -1,4 +1,4 @@
-import Snackbar from '@/components/snackbar/Snackbar';
+import Snackbar from '@/features/snackbar/Snackbar';
 import { severity } from '@/components/types/options';
 import { SnackbarState } from '@/hooks/useSnackbar/types';
 
