@@ -1,5 +1,5 @@
-import { ElementProps } from '../types/Element';
-import { severity } from '../types/options';
+import { ElementProps } from '../../components/types/Element';
+import { severity } from '../../components/types/options';
 
 export interface SnackbarProps extends ElementProps {
   snackbarTitle?: React.ReactNode;

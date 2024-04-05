@@ -1,7 +1,7 @@
 'use client';
 import { createPortal } from 'react-dom';
-import Alert from '../alert/Alert';
-import { severity } from '../types/options';
+import Alert from '../../components/alert/Alert';
+import { severity } from '../../components/types/options';
 import { SnackbarProps } from './types';
 import './Snackbar.scss';
 import '@/styles/colors.scss';
