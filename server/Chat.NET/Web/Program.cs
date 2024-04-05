@@ -1,10 +1,13 @@
 
+using Amazon.Auth.AccessControlPolicy;
+using Common.Authentication;
 using Contracts;
 using Infrastructure.Postgres;
 using Infrastructure.Postgres.Entities;
 using Infrastructure.Postgres.Repository;
 using Infrastructure.Redis.CreationServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -14,6 +17,8 @@ using StackExchange.Redis;
 using System.Text;
 using Web.Controllers.Areas.Authentication;
 using Web.Hubs;
+using Web.Policy.HasRole;
+using Web.Policy.IsAuthenticated;
 using Web.Services.Authentication;
 using Web.Services.Session;
 
@@ -59,6 +64,8 @@ namespace Chat.NET
             builder.Services.AddScoped<IRepository, Repository>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddSingleton<IJwtService, JwtService>();
+            builder.Services.AddScoped<IAuthorizationHandler, IsAuthenticatedHandler>();
+            builder.Services.AddScoped<IAuthorizationHandler, HasRoleSignalRHandler>();
 
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
@@ -138,7 +145,24 @@ namespace Chat.NET
                 });
             });
 
-            builder.Services.AddAuthorization();
+            builder.Services.AddAuthorizationBuilder()
+                .AddPolicy(Policies.IsAuthenticated, policy => policy.Requirements.Add(
+                    new IsAuthenticatedRequirement()))
+                .AddPolicy(Policies.IsModeratorSignalR, policy =>
+                {
+                    policy.Requirements.Add(new IsAuthenticatedRequirement());
+                    policy.Requirements.Add(new HasRoleSignalRRequirement(Roles.Moderator));
+                })
+                .AddPolicy(Policies.IsAdminSignalR, policy =>
+                {
+                    policy.Requirements.Add(new IsAuthenticatedRequirement());
+                    policy.Requirements.Add(new HasRoleSignalRRequirement(Roles.Admin));
+                })
+                .AddPolicy(Policies.IsChatModeratorSignalR, policy =>
+                {
+                    policy.Requirements.Add(new IsAuthenticatedRequirement());
+                    policy.Requirements.Add(new HasRoleSignalRRequirement(Roles.ChatModerator));
+                });
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

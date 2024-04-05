@@ -4,6 +4,7 @@ import FocusTrap from 'focus-trap-react';
 import Overlay from '../overlay/Overlay';
 import { createPortal } from 'react-dom';
 import { useCallback, useEffect, useState } from 'react';
+import { isBrowser } from '@/util/isBrowser/isBrowser';
 
 /**
  * A base component for implementing modal components. Each modal:
@@ -78,7 +79,7 @@ function BaseModal(props: BaseModalProps): React.JSX.Element {
     setOverlayOpen(open || false);
   }, [open, handleEscape, handleClose]);
 
-  if (!isOpen) {
+  if (!isOpen || !isBrowser()) {
     return <></>;
   }
 

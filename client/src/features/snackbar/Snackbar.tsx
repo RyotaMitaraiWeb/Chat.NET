@@ -7,6 +7,7 @@ import './Snackbar.scss';
 import '@/styles/colors.scss';
 import { useCallback, useEffect, useState } from 'react';
 import { useDebounce } from '@/hooks/useDebounce/useDebounce';
+import { isBrowser } from '@/util/isBrowser/isBrowser';
 
 const titles: Record<severity, string> = {
   success: 'Success!',
@@ -108,7 +109,7 @@ function Snackbar(props: SnackbarProps): JSX.Element {
     severity,
   ]);
 
-  if (!open || !window) {
+  if (!open || !isBrowser()) {
     return <></>;
   }
 
