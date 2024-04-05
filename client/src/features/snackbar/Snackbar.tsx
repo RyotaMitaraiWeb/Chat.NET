@@ -23,9 +23,7 @@ const titles: Record<severity, string> = {
  * (assuming you have passed an ``onClose`` handler). ``duration``
  * is passed in miliseconds.
  *
- * Although the snackbar can be used freely anywhere in the app,
- * you should prefer using the ``useSnackbar`` hook
- * to display snackbars whenever possible.
+ * To display a snackbar, it is best to use the ``useSnackbar`` hook.
  *
  * The snackbar component clears out any timeouts it creates, preventing
  * memory leaks and stopping side effects from occurring after it's unmounted.
