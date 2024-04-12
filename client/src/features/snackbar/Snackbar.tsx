@@ -1,12 +1,13 @@
 'use client';
 import { createPortal } from 'react-dom';
-import Alert from '../alert/Alert';
-import { severity } from '../types/options';
+import Alert from '../../components/alert/Alert';
+import { severity } from '../../components/types/options';
 import { SnackbarProps } from './types';
 import './Snackbar.scss';
 import '@/styles/colors.scss';
 import { useCallback, useEffect, useState } from 'react';
 import { useDebounce } from '@/hooks/useDebounce/useDebounce';
+import { isBrowser } from '@/util/isBrowser/isBrowser';
 
 const titles: Record<severity, string> = {
   success: 'Success!',
@@ -23,9 +24,7 @@ const titles: Record<severity, string> = {
  * (assuming you have passed an ``onClose`` handler). ``duration``
  * is passed in miliseconds.
  *
- * Although the snackbar can be used freely anywhere in the app,
- * you should prefer using the ``useSnackbar`` hook
- * to display snackbars whenever possible.
+ * To display a snackbar, it is best to use the ``useSnackbar`` hook.
  *
  * The snackbar component clears out any timeouts it creates, preventing
  * memory leaks and stopping side effects from occurring after it's unmounted.
@@ -110,7 +109,7 @@ function Snackbar(props: SnackbarProps): JSX.Element {
     severity,
   ]);
 
-  if (!open || !window) {
+  if (!open || !isBrowser()) {
     return <></>;
   }
 
