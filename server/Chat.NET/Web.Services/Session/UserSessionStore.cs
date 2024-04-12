@@ -66,9 +66,9 @@ namespace Web.Services.Session
             };
         }
 
-        public async Task<UserViewModel?> UpdateRoles(UserClaimsViewModel claims, string[] roles)
+        public async Task<UserViewModel?> UpdateRoles(string userId, string[] roles)
         {
-            var session = await this.userSessions.FindByIdAsync(claims.Id);
+            var session = await this.userSessions.FindByIdAsync(userId);
             if (session == null)
             {
                 return null;
@@ -86,6 +86,11 @@ namespace Web.Services.Session
             await this.userSessions.SaveAsync();
 
             return user;
+        }
+
+        public async Task<UserViewModel?> UpdateRoles(UserClaimsViewModel claims, string[] roles)
+        {
+            return await this.UpdateRoles(claims.Id, roles);
         }
 
         private async Task<UserSession?> CreateSession(UserViewModel user)
