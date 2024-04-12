@@ -2,8 +2,7 @@
 using Contracts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using MongoDB.Bson.IO;
-using System.IdentityModel.Tokens.Jwt;
+using Microsoft.IdentityModel.JsonWebTokens;
 using System.Security.Claims;
 using System.Text;
 using Web.ViewModels.Authentication;
@@ -16,9 +15,8 @@ namespace Web.Services.Authentication
 
         public UserClaimsViewModel ExtractUserFromJWT(string jwt)
         {
-            var handler = new JwtSecurityTokenHandler();
-            var token = handler.ReadJwtToken(
-                RemoveBearer(jwt));
+            var handler = new JsonWebTokenHandler();
+            var token = handler.ReadJsonWebToken(jwt);
 
             var user = new UserClaimsViewModel()
             {
@@ -31,53 +29,57 @@ namespace Web.Services.Authentication
 
         public string GenerateJWT(UserClaimsViewModel user)
         {
-            string? secret = this.config["JWT_SECRET"];
-            secret ??= string.Empty;
-            var issuer = this.config["JWT_VALID_ISSUER"];
-            var audience = this.config["JWT_VALID_AUDIENCE"];
+            string? secret = this.config["JWT_SECRET"] ?? string.Empty;
+            string? issuer = this.config["JWT_VALID_ISSUER"];
+            string? audience = this.config["JWT_VALID_AUDIENCE"];
 
-            var claims = new List<Claim>
+            IDictionary<string, object> claims = new Dictionary<string, object>
             {
-                new(JwtClaims.Id, user.Id),
-                new(JwtClaims.Username, user.Username),
+                { JwtClaims.Id, user.Id },
+                { JwtClaims.Username, user.Username }
             };
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
-            var token = new JwtSecurityToken(
-                issuer: issuer,
-                audience: audience,
-                claims: claims,
-                expires: DateTime.Now.AddDays(2),
-                signingCredentials:
-                    new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512)
-                );
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            var handler = new JsonWebTokenHandler();
+            var token = handler.CreateToken(new SecurityTokenDescriptor()
+            {
+                Audience = audience,
+                Issuer = issuer,
+                Expires = DateTime.Now.AddDays(2),
+                SigningCredentials = credentials,
+                Claims = claims,
+                
+            });
+
+            return token;
         }
 
-        public bool ValidateJwt(string jwt)
+        public async Task<bool> ValidateJwt(string jwt)
         {
-            var handler = new JwtSecurityTokenHandler();
+            var handler = new JsonWebTokenHandler();
             string? secret = this.config["JWT_SECRET"];
             secret ??= string.Empty;
 
             var issuer = this.config["JWT_VALID_ISSUER"];
             var audience = this.config["JWT_VALID_AUDIENCE"];
 
+            string token = RemoveBearer(jwt);
+
             try
             {
-                handler.ValidateToken(RemoveBearer(jwt), new TokenValidationParameters
+                var result = await handler.ValidateTokenAsync(token, new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateIssuerSigningKey = true,
-                    ClockSkew = TimeSpan.Zero,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret)),
                     ValidIssuer = issuer,
                     ValidAudience = audience,
-                }, out SecurityToken validatedToken);
+                });
 
-                return true;
+                return result?.IsValid == true;
             }
             catch
             {

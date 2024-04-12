@@ -25,7 +25,7 @@ namespace Web.Policy.IsAuthenticated
             string bearer = hubContext.Context.GetHttpContext()?.Request.Query["access_token"].ToString()
                 ?? string.Empty;
 
-            bool tokenIsValid = this.jwtService.ValidateJwt(bearer);
+            bool tokenIsValid = await this.jwtService.ValidateJwt(bearer);
             if (!tokenIsValid)
             {
                 context.Fail();
