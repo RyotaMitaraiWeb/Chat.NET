@@ -9,5 +9,7 @@
             public static string UserAlreadyHasRole(string role) => $"This user already has role \"{role}\"";
             public static string UserDoesNotHaveRole(string role) => $"This user does not have role \"{role}\"";
         }
+
+        public static string RoleDoesNotExist(string role) => $"Role \"{role}\" does not exist!";
     }
 }

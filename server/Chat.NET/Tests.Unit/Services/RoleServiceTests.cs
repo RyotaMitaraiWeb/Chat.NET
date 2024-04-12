@@ -7,6 +7,7 @@ using Web.Services.Admin;
 using Web.ViewModels.Role;
 using Common.Exceptions;
 using Common.Authentication;
+using MockQueryable.NSubstitute;
 
 namespace Tests.Unit.Services
 {
@@ -195,6 +196,45 @@ namespace Tests.Unit.Services
             var ex = Assert.ThrowsAsync<RoleUpdateFailedException>(
                 async () => await this.RoleService.RemoveRoleByUserId(roleData));
             Assert.That(ex.Message, Is.EqualTo(RoleErrorMessages.UpdateFailed.UserDoesNotHaveRole(roleData.Role)));
+        }
+
+        [Test]
+        public async Task Test_GetUsersOfRolesReturnsAListOfUsersWhenSuccessful()
+        {
+            var users = new List<ApplicationUser>()
+            {
+                new()
+                {
+                    UserRoles = Roles,
+                },
+                new()
+                {
+                    UserRoles = new List<ApplicationUserRole>()
+                    {
+                        new()
+                        {
+                            Role = new ApplicationRole()
+                            {
+                                Name = User,
+                            },
+                        },
+                    },
+                }
+            }.BuildMock();
+
+            this.UserManager.Users.Returns(users);
+
+            var result = await this.RoleService.GetUsersOfRoles(new List<string>() { Moderator, User });
+            Assert.That(result.Count(), Is.EqualTo(1));
+        }
+
+        [Test]
+        public void Test_GetUsersOfRoleThrowsIfARoleIsInvalid()
+        {
+            var ex = Assert.ThrowsAsync<RoleDoesNotExistException>(
+                async () => await this.RoleService.GetUsersOfRoles(new List<string>() { Moderator, "Janitor" }));
+
+            Assert.That(ex, Is.TypeOf<RoleDoesNotExistException>());
         }
     }
 }

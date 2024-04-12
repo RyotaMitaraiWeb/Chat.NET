@@ -1,10 +1,6 @@
 ﻿namespace Common.Exceptions
 {
-    public class RoleUpdateFailedException : Exception
+    public class RoleUpdateFailedException(string message) : Exception(message)
     {
-        public RoleUpdateFailedException(string message) : base(message)
-        {
-            
-        }
     }
 }

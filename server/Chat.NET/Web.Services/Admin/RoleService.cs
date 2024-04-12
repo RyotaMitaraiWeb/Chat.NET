@@ -5,8 +5,9 @@ using Common.ErrorMessages;
 using Common.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Web.ViewModels.Role;
-using StackExchange.Redis;
 using System.Data;
+using Web.ViewModels.User;
+using Microsoft.EntityFrameworkCore;
 
 namespace Web.Services.Admin
 {
@@ -60,11 +61,41 @@ namespace Web.Services.Admin
             throw new Exception(String.Join(Environment.NewLine, result.Errors));
         }
 
+        public async Task<IEnumerable<UserViewModel>> GetUsersOfRoles(IEnumerable<string> roles)
+        {
+            foreach (string role in roles)
+            {
+                ThrowIfRoleDoesNotExist(role);
+            }
+
+            var users = await this.userManager
+                .Users
+                .Where(u => roles.All(role => u.UserRoles.Select(ur => ur.Role.Name).Contains(role)))
+                .Select(u => new UserViewModel()
+                {
+                    Id = u.Id.ToString(),
+                    Username = u.UserName!,
+                    Roles = u.UserRoles.Select(ur => ur.Role.Name).ToArray()!,
+                })
+                .ToListAsync();
+
+            return users;
+                
+        }
+
         private static void ThrowIfRoleIsNotValid(string role)
         {
             if (!Roles.RoleCanBeGivenOrRemoved(role))
             {
                 throw new RoleUpdateFailedException(RoleErrorMessages.UpdateFailed.RoleNotAvailableForUpdate(role));
+            }
+        }
+
+        private static void ThrowIfRoleDoesNotExist(string role)
+        {
+            if (!Roles.RoleExists(role))
+            {
+                throw new RoleDoesNotExistException(RoleErrorMessages.RoleDoesNotExist(role));
             }
         }
 
