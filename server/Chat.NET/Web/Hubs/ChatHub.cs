@@ -89,6 +89,7 @@ namespace Web.Hubs
 
         }
 
+        [Authorize(Policy = Policies.IsAdminSignalR)]
         public async Task RemoveRoleFromUser(UpdateRoleViewModel updateRole, [FromServices] IRoleService roleService, [FromServices] IUserSessionStore userSessionStore)
         {
             try
