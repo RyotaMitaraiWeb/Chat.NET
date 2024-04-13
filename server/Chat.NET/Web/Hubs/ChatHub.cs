@@ -89,6 +89,29 @@ namespace Web.Hubs
 
         }
 
+        public async Task RemoveRoleFromUser(UpdateRoleViewModel updateRole, [FromServices] IRoleService roleService, [FromServices] IUserSessionStore userSessionStore)
+        {
+            try
+            {
+                var role = await roleService.RemoveRoleByUserId(updateRole);
+                var user = await userSessionStore.GetUser(role.UserId);
+                if (user != null)
+                {
+                    var roles = user.Roles.ToList();
+                    roles.Remove(role.Role);
+                    await userSessionStore.UpdateRoles(user.Id, [..roles]);
+                    await Clients.Groups(user.Id).UpdateUser(user);
+                }
+
+                await Clients.Caller.RoleUpdateSucceeded(role);
+
+            }
+            catch (RoleUpdateFailedException ex)
+            {
+                await Clients.Caller.RoleUpdateFailed(ex.Message);
+            }
+        }
+
         private UserClaimsViewModel? ExtractClaims(IJwtService jwtService)
         {
             var context = this.Context.GetHttpContext();
