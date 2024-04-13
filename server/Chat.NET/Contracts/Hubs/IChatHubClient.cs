@@ -9,5 +9,8 @@ namespace Contracts.Hubs
         Task EndSession();
 
         Task UpdateUser(UserViewModel user);
+
+        Task RoleUpdateSucceeded(UpdateRoleViewModel role);
+        Task RoleUpdateFailed(string error);
     }
 }
