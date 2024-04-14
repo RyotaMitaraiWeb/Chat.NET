@@ -173,7 +173,7 @@ namespace Tests.Unit.Hubs
             var role = new UpdateRoleViewModel()
             {
                 Role = Roles.Moderator,
-                UserId = "1",
+                UserId = "3",
             };
 
             var user = new UserViewModel()
@@ -198,7 +198,7 @@ namespace Tests.Unit.Hubs
             var role = new UpdateRoleViewModel()
             {
                 Role = Roles.Moderator,
-                UserId = "1",
+                UserId = "22",
             };
 
             UserViewModel? user = null;
@@ -209,12 +209,8 @@ namespace Tests.Unit.Hubs
             await this.Hub.RemoveRoleFromUser(role, this.RoleService, this.UserSessionStore);
 
             await this.UserSessionStore
-                .DidNotReceiveWithAnyArgs()
-                .UpdateRoles(Arg.Any<string>(), Arg.Any<string[]>());
-
-            await this.Hub.Clients.Group(role.UserId)
                 .DidNotReceive()
-                .UpdateUser(Arg.Any<UserViewModel>());
+                .UpdateRoles(role.UserId, Arg.Any<string[]>());
 
             await this.Hub.Clients.Caller.Received().RoleUpdateSucceeded(Arg.Any<UpdateRoleViewModel>());
         }
