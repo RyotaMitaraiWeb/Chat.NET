@@ -8,7 +8,9 @@ namespace Contracts
         public Task<UserViewModel?> AddUser(UserViewModel claims);
         public Task<UserViewModel?> RemoveUser(UserClaimsViewModel claims);
         public Task<UserViewModel?> GetUser(UserClaimsViewModel claims);
-        public Task<UserViewModel?> UpdateRoles(UserClaimsViewModel claims, string[] roles); 
+        public Task<UserViewModel?> GetUser(string userId);
+        public Task<UserViewModel?> UpdateRoles(UserClaimsViewModel claims, string[] roles);
+        public Task<UserViewModel?> UpdateRoles(string userId, string[] roles);
 
     }
 }

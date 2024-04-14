@@ -2,13 +2,20 @@
 {
     public static class Roles
     {
-        private static readonly HashSet<string> AvailableRoles = new HashSet<string>()
-        {
+        private static readonly HashSet<string> AvailableRoles =
+        [
             User,
             Moderator,
             ChatModerator,
             Admin,
-        };
+        ];
+
+        private static readonly HashSet<string> RolesThatCanBeGivenOrRemoved = [
+            Moderator,
+            ChatModerator,
+            Admin,
+        ];
+
         /// <summary>
         /// An administrator can give and remove non-administrator roles to/from other users.
         /// </summary>
@@ -33,6 +40,11 @@
         public static bool RoleExists(string role)
         {
             return AvailableRoles.Contains(role);
+        }
+
+        public static bool RoleCanBeGivenOrRemoved(string role)
+        {
+            return RolesThatCanBeGivenOrRemoved.Contains(role);
         }
     }
 }

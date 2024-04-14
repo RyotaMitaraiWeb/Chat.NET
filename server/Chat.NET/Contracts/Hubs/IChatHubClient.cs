@@ -1,4 +1,5 @@
-﻿using Web.ViewModels.User;
+﻿using Web.ViewModels.Role;
+using Web.ViewModels.User;
 
 namespace Contracts.Hubs
 {
@@ -6,5 +7,10 @@ namespace Contracts.Hubs
     {
         Task SendSessionData(UserViewModel user);
         Task EndSession();
+
+        Task UpdateUser(UserViewModel user);
+
+        Task RoleUpdateSucceeded(UpdateRoleViewModel role);
+        Task RoleUpdateFailed(string error);
     }
 }

@@ -7,6 +7,9 @@ using Web.Hubs;
 using Common.Authentication;
 using Web.ViewModels.Authentication;
 using Web.ViewModels.User;
+using Web.ViewModels.Role;
+using NSubstitute.ExceptionExtensions;
+using Common.Exceptions;
 
 namespace Tests.Unit.Hubs
 {
@@ -16,6 +19,7 @@ namespace Tests.Unit.Hubs
         public IUserService UserService { get; set; } = Substitute.For<IUserService>();
         public IUserSessionStore UserSessionStore { get; set; } = Substitute.For<IUserSessionStore>();
         IHubCallerClients<IChatHubClient> Clients = Substitute.For<IHubCallerClients<IChatHubClient>>();
+        public IRoleService RoleService { get; set; } = Substitute.For<IRoleService>();
         public HubCallerContext HubCallerContext { get; set; } = Substitute.For<HubCallerContext>();
         public IGroupManager Groups { get; set; } = Substitute.For<IGroupManager>();
         public ChatHub Hub { get; set; }
@@ -86,6 +90,152 @@ namespace Tests.Unit.Hubs
             await this.Hub.Clients.Group(claims.Id)
                 .Received()
                 .EndSession();
+        }
+
+        [Test]
+        public async Task Test_AddRoleToUserWorksWhenRoleIsAddedAndTheUserIsOnline()
+        {
+            var role = new UpdateRoleViewModel()
+            {
+                Role = Roles.Moderator,
+                UserId = "1",
+            };
+
+            var user = new UserViewModel()
+            {
+                Id = role.UserId,
+                Username = "a",
+                Roles = [Roles.User, Roles.Moderator],
+            };
+
+            this.RoleService.AddRoleByUserId(role).Returns(role);
+            this.UserSessionStore.GetUser(role.UserId).Returns(user);
+
+            await this.Hub.AddRoleToUser(role, this.RoleService, this.UserSessionStore);
+
+            await this.UserSessionStore.Received(1).UpdateRoles(user.Id, Arg.Any<string[]>());
+            await this.Hub.Clients.Caller.Received().RoleUpdateSucceeded(Arg.Any<UpdateRoleViewModel>());
+        }
+
+        [Test]
+        public async Task Test_AddRoleToUserWorksWhenRoleIsAddedAndTheUserIsOffline()
+        {
+            var role = new UpdateRoleViewModel()
+            {
+                Role = Roles.Moderator,
+                UserId = "1",
+            };
+
+            UserViewModel? user = null;
+
+            this.RoleService.AddRoleByUserId(role).Returns(role);
+            this.UserSessionStore.GetUser(role.UserId).Returns(user);
+
+            await this.Hub.AddRoleToUser(role, this.RoleService, this.UserSessionStore);
+
+            await this.UserSessionStore
+                .DidNotReceiveWithAnyArgs()
+                .UpdateRoles(Arg.Any<string>(), Arg.Any<string[]>());
+
+            await this.Hub.Clients.Group(role.UserId)
+                .DidNotReceive()
+                .UpdateUser(Arg.Any<UserViewModel>());
+
+            await this.Hub.Clients.Caller.Received().RoleUpdateSucceeded(Arg.Any<UpdateRoleViewModel>());
+        }
+
+        [Test]
+        public async Task Test_AddRoleToUserSendsAnErrorIfRoleUpdateFails()
+        {
+            var role = new UpdateRoleViewModel()
+            {
+                Role = "Janitor",
+                UserId = "1",
+            };
+
+            var user = new UserViewModel()
+            {
+                Id = role.UserId,
+                Username = "a",
+                Roles = [Roles.User, Roles.Moderator],
+            };
+
+            this.RoleService.AddRoleByUserId(role).ThrowsAsync(new RoleUpdateFailedException("a"));
+
+            await this.Hub.AddRoleToUser(role, this.RoleService, this.UserSessionStore);
+
+            await this.Hub.Clients.Caller.Received().RoleUpdateFailed(Arg.Any<string>());
+        }
+
+        [Test]
+        public async Task Test_RemoveRoleToUserWorksWhenRoleIsRemovedAndTheUserIsOnline()
+        {
+            var role = new UpdateRoleViewModel()
+            {
+                Role = Roles.Moderator,
+                UserId = "3",
+            };
+
+            var user = new UserViewModel()
+            {
+                Id = role.UserId,
+                Username = "a",
+                Roles = [Roles.User, Roles.Moderator],
+            };
+
+            this.RoleService.RemoveRoleByUserId(role).Returns(role);
+            this.UserSessionStore.GetUser(role.UserId).Returns(user);
+
+            await this.Hub.RemoveRoleFromUser(role, this.RoleService, this.UserSessionStore);
+
+            await this.UserSessionStore.Received(1).UpdateRoles(user.Id, Arg.Any<string[]>());
+            await this.Hub.Clients.Caller.Received().RoleUpdateSucceeded(Arg.Any<UpdateRoleViewModel>());
+        }
+
+        [Test]
+        public async Task Test_RemoveRoleFromUserWorksWhenRoleIsRemovedAndTheUserIsOffline()
+        {
+            var role = new UpdateRoleViewModel()
+            {
+                Role = Roles.Moderator,
+                UserId = "22",
+            };
+
+            UserViewModel? user = null;
+
+            this.RoleService.RemoveRoleByUserId(role).Returns(role);
+            this.UserSessionStore.GetUser(role.UserId).Returns(user);
+
+            await this.Hub.RemoveRoleFromUser(role, this.RoleService, this.UserSessionStore);
+
+            await this.UserSessionStore
+                .DidNotReceive()
+                .UpdateRoles(role.UserId, Arg.Any<string[]>());
+
+            await this.Hub.Clients.Caller.Received().RoleUpdateSucceeded(Arg.Any<UpdateRoleViewModel>());
+        }
+
+        [Test]
+        public async Task Test_RemoveRoleFromUserSendsAnErrorIfRoleUpdateFails()
+        {
+            var role = new UpdateRoleViewModel()
+            {
+                Role = "Janitor",
+                UserId = "1",
+            };
+
+            var user = new UserViewModel()
+            {
+                Id = role.UserId,
+                Username = "a",
+                Roles = [Roles.User, Roles.Moderator],
+            };
+
+            this.RoleService.RemoveRoleByUserId(role).ThrowsAsync(new RoleUpdateFailedException("a"));
+
+            await this.Hub.RemoveRoleFromUser(role, this.RoleService, this.UserSessionStore);
+
+            await this.Hub.Clients.Caller.Received().RoleUpdateFailed(Arg.Any<string>());
         }
     }
 }

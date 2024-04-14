@@ -2,6 +2,7 @@
 using Infrastructure.Redis.Models;
 using Redis.OM;
 using Redis.OM.Searching;
+using System.Security.Claims;
 using Web.ViewModels.Authentication;
 using Web.ViewModels.User;
 
@@ -25,9 +26,9 @@ namespace Web.Services.Session
             return user;
         }
 
-        public async Task<UserViewModel?> GetUser(UserClaimsViewModel claims)
+        public async Task<UserViewModel?> GetUser(string userId)
         {
-            var session = await this.userSessions.FindByIdAsync(claims.Id);
+            var session = await this.userSessions.FindByIdAsync(userId);
             if (session == null)
             {
                 return null;
@@ -39,6 +40,11 @@ namespace Web.Services.Session
                 Username = session.Username,
                 Roles = session.Roles,
             };
+        }
+
+        public async Task<UserViewModel?> GetUser(UserClaimsViewModel claims)
+        {
+            return await this.GetUser(claims.Id);
         }
 
         public async Task<UserViewModel?> RemoveUser(UserClaimsViewModel claims)
@@ -60,9 +66,9 @@ namespace Web.Services.Session
             };
         }
 
-        public async Task<UserViewModel?> UpdateRoles(UserClaimsViewModel claims, string[] roles)
+        public async Task<UserViewModel?> UpdateRoles(string userId, string[] roles)
         {
-            var session = await this.userSessions.FindByIdAsync(claims.Id);
+            var session = await this.userSessions.FindByIdAsync(userId);
             if (session == null)
             {
                 return null;
@@ -80,6 +86,11 @@ namespace Web.Services.Session
             await this.userSessions.SaveAsync();
 
             return user;
+        }
+
+        public async Task<UserViewModel?> UpdateRoles(UserClaimsViewModel claims, string[] roles)
+        {
+            return await this.UpdateRoles(claims.Id, roles);
         }
 
         private async Task<UserSession?> CreateSession(UserViewModel user)
