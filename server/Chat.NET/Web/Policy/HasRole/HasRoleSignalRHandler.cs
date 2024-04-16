@@ -46,12 +46,9 @@ namespace Web.Policy.HasRole
         {
             foreach (string role in requiredRoles)
             {
-                foreach (string userRole in userRoles)
+                if (!userRoles.Contains(role))
                 {
-                    if (role != userRole)
-                    {
-                        return false;
-                    }
+                    return false;
                 }
             }
 
