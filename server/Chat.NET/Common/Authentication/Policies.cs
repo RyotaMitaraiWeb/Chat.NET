@@ -6,5 +6,8 @@
         public const string IsChatModeratorSignalR = "IsChatModeratorSignalR";
         public const string IsModeratorSignalR = "IsModeratorSignalR";
         public const string IsAdminSignalR = "IsAdminSignalR";
+        public const string IsAdmin = "IsAdmin";
+        public const string IsChatModerator = "IsChatModerator";
+        public const string IsModerator = "IsModerator";
     }
 }

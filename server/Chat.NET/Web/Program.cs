@@ -66,6 +66,7 @@ namespace Chat.NET
             builder.Services.AddScoped<IRoleService, RoleService>();
             builder.Services.AddSingleton<IJwtService, JwtService>();
             builder.Services.AddScoped<IAuthorizationHandler, IsAuthenticatedHandler>();
+            builder.Services.AddScoped<IAuthorizationHandler, HasRoleHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, HasRoleSignalRHandler>();
 
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
@@ -163,6 +164,20 @@ namespace Chat.NET
                 {
                     policy.Requirements.Add(new IsAuthenticatedRequirement());
                     policy.Requirements.Add(new HasRoleSignalRRequirement(Roles.ChatModerator));
+                })
+                .AddPolicy(Policies.IsChatModerator, policy =>
+                {
+                    policy.Requirements.Add(new IsAuthenticatedRequirement());
+                    policy.Requirements.Add(new HasRoleRequirement(Roles.ChatModerator));
+                })
+                .AddPolicy(Policies.IsModerator, policy =>
+                {
+                    policy.Requirements.Add(new IsAuthenticatedRequirement());
+                    policy.Requirements.Add(new HasRoleRequirement(Roles.Moderator));
+                }).AddPolicy(Policies.IsAdmin, policy =>
+                {
+                    policy.Requirements.Add(new IsAuthenticatedRequirement());
+                    policy.Requirements.Add(new HasRoleRequirement(Roles.Admin));
                 });
 
             builder.Services.AddControllers();

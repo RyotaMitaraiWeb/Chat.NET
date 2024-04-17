@@ -24,12 +24,25 @@ namespace Web.Policy.IsAuthenticated
         {
             string bearer = hubContext.Context.GetHttpContext()?.Request.Query["access_token"].ToString()
                 ?? string.Empty;
+            await this.Authorize(context, requirement, bearer);
+        }
 
+        /// <summary>
+        /// This method is exposed publicly for testing purposes
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="requirement"></param>
+        /// <param name="bearer"></param>
+        /// <returns></returns>
+        public async Task Authorize(AuthorizationHandlerContext context, IsAuthenticatedRequirement requirement,
+            string bearer)
+        {
+            
             bool tokenIsValid = await this.jwtService.ValidateJwt(bearer);
             if (!tokenIsValid)
             {
                 context.Fail();
-               return;
+                return;
             }
 
             var claims = this.jwtService.ExtractUserFromJWT(bearer);
