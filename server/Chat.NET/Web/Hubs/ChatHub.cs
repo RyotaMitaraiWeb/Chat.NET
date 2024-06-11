@@ -1,5 +1,6 @@
 ﻿using Common.Authentication;
 using Common.Exceptions;
+using Common.Hubs;
 using Contracts;
 using Contracts.Hubs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -42,9 +43,9 @@ namespace Web.Hubs
 
             await userSessionStore.AddUser(userData);
 
-            await this.Groups.AddToGroupAsync(this.Context.ConnectionId, userId);
+            await this.Groups.AddToGroupAsync(this.Context.ConnectionId, HubPrefixes.UserGroupPrefix(user.Id));
 
-            await this.Clients.Group(userId).SendSessionData(userData);
+            await this.Clients.Group(HubPrefixes.UserGroupPrefix(user.Id)).SendSessionData(userData);
         }
 
         public async Task EndSession(
@@ -63,7 +64,7 @@ namespace Web.Hubs
                 return;
             }
 
-            await Clients.Group(claims.Id).EndSession();
+            await Clients.Group(HubPrefixes.UserGroupPrefix(claims.Id)).EndSession();
         }
 
         [Authorize(Policy = Policies.IsAdminSignalR)]
@@ -76,7 +77,7 @@ namespace Web.Hubs
                 if (user != null)
                 {
                     await userSessionStore.UpdateRoles(user.Id, [..user.Roles, updateRole.Role]);
-                    await Clients.Groups(user.Id).UpdateUser(user);
+                    await Clients.Group(HubPrefixes.UserGroupPrefix(user.Id)).UpdateUser(user);
                 }
 
                 await Clients.Caller.RoleUpdateSucceeded(role);
@@ -101,7 +102,7 @@ namespace Web.Hubs
                     var roles = user.Roles.ToList();
                     roles.Remove(role.Role);
                     await userSessionStore.UpdateRoles(user.Id, [..roles]);
-                    await Clients.Groups(user.Id).UpdateUser(user);
+                    await Clients.Group(HubPrefixes.UserGroupPrefix(user.Id)).UpdateUser(user);
                 }
 
                 await Clients.Caller.RoleUpdateSucceeded(role);
