@@ -13,7 +13,6 @@
         private static readonly HashSet<string> RolesThatCanBeGivenOrRemoved = [
             Moderator,
             ChatModerator,
-            Admin,
         ];
 
         /// <summary>
