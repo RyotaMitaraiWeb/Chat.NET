@@ -8,6 +8,7 @@ using Web.ViewModels.Role;
 using System.Data;
 using Web.ViewModels.User;
 using Microsoft.EntityFrameworkCore;
+using Common.Enums;
 
 namespace Web.Services.Admin
 {
@@ -15,50 +16,65 @@ namespace Web.Services.Admin
     {
         private readonly UserManager<ApplicationUser> userManager = userManager;
 
-        public async Task<UpdateRoleViewModel> AddRoleByUserId(UpdateRoleViewModel roleData)
+        public async Task<RoleUpdateResult> AddRoleByUserId(UpdateRoleViewModel roleData)
         {
-            ThrowIfRoleIsNotValid(roleData.Role);
+            if (!RoleIsValid(roleData.Role))
+            {
+                return RoleUpdateResult.RoleNotAvailableForUpdate;
+            }
             string role = roleData.Role;
 
-            ApplicationUser user = await this.userManager.FindByIdAsync(roleData.UserId)
-                ?? throw new RoleUpdateFailedException(RoleErrorMessages.UpdateFailed.UserDoesNotExist);
+            ApplicationUser? user = await this.userManager.FindByIdAsync(roleData.UserId);
+            if (user == null)
+            {
+                return RoleUpdateResult.UserDoesNotExist;
+            }
+
             var userRoles = user.UserRoles.Select(ur => ur.Role.Name ?? string.Empty);
 
             if (UserHasRole(userRoles, roleData.Role))
             {
-                throw new RoleUpdateFailedException(RoleErrorMessages.UpdateFailed.UserAlreadyHasRole(role));
+                return RoleUpdateResult.RoleAlreadyGiven;
             }
 
             var result = await this.userManager.AddToRoleAsync(user, role);
             if (result.Succeeded)
             {
-                return roleData;
+                return RoleUpdateResult.Success;
             }
 
-            throw new Exception(String.Join(Environment.NewLine, result.Errors));
+            return RoleUpdateResult.GeneralFail;
         }
 
-        public async Task<UpdateRoleViewModel> RemoveRoleByUserId(UpdateRoleViewModel roleData)
+        public async Task<RoleUpdateResult> RemoveRoleByUserId(UpdateRoleViewModel roleData)
         {
-            ThrowIfRoleIsNotValid(roleData.Role);
+            if (!RoleIsValid(roleData.Role))
+            {
+                return RoleUpdateResult.RoleNotAvailableForUpdate;
+            }
+
             string role = roleData.Role;
 
-            ApplicationUser user = await this.userManager.FindByIdAsync(roleData.UserId)
-                ?? throw new RoleUpdateFailedException(RoleErrorMessages.UpdateFailed.UserDoesNotExist);
+            ApplicationUser? user = await this.userManager.FindByIdAsync(roleData.UserId);
+            if (user == null)
+            {
+                return RoleUpdateResult.UserDoesNotExist;
+            }
+
             var userRoles = user.UserRoles.Select(ur => ur.Role.Name ?? string.Empty);
 
             if (!UserHasRole(userRoles, roleData.Role))
             {
-                throw new RoleUpdateFailedException(RoleErrorMessages.UpdateFailed.UserDoesNotHaveRole(role));
+                return RoleUpdateResult.RoleNotGiven;
             }
 
             var result = await this.userManager.RemoveFromRoleAsync(user, role);
             if (result.Succeeded)
             {
-                return roleData;
+                return RoleUpdateResult.Success;
             }
 
-            throw new Exception(String.Join(Environment.NewLine, result.Errors));
+            return RoleUpdateResult.GeneralFail;
         }
 
         public async Task<IEnumerable<UserViewModel>> GetUsersOfRoles(IEnumerable<string> roles)
@@ -83,12 +99,9 @@ namespace Web.Services.Admin
                 
         }
 
-        private static void ThrowIfRoleIsNotValid(string role)
+        private static bool RoleIsValid(string role)
         {
-            if (!Roles.RoleCanBeGivenOrRemoved(role))
-            {
-                throw new RoleUpdateFailedException(RoleErrorMessages.UpdateFailed.RoleNotAvailableForUpdate(role));
-            }
+            return Roles.RoleCanBeGivenOrRemoved(role);
         }
 
         private static void ThrowIfRoleDoesNotExist(string role)

@@ -4,7 +4,7 @@ namespace Common.ErrorMessages
 {
     public static class RoleErrorMessages
     {
-        public static class UpdateFailed
+        internal static class UpdateFailed
         {
             public const string UserDoesNotExist = "This user does not exist";
             public const string GeneralFail = "Could not update the user's roles, please try again later!";

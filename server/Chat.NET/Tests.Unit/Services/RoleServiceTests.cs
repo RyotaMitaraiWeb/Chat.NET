@@ -8,6 +8,7 @@ using Web.ViewModels.Role;
 using Common.Exceptions;
 using Common.Authentication;
 using MockQueryable.NSubstitute;
+using Common.Enums;
 
 namespace Tests.Unit.Services
 {
@@ -55,11 +56,11 @@ namespace Tests.Unit.Services
             this.UserManager.AddToRoleAsync(appUser, roleData.Role).Returns(IdentityResult.Success);
 
             var result = await this.RoleService.AddRoleByUserId(roleData);
-            Assert.That(result?.UserId, Is.EqualTo(id.ToString()));
+            Assert.That(result, Is.EqualTo(RoleUpdateResult.Success));
         }
 
         [Test]
-        public void Test_AddRoleByUserIdThrowsIfUserDoesNotExist()
+        public async Task Test_AddRoleByUserIdThrowsIfUserDoesNotExist()
         {
             Guid id = Guid.NewGuid();
             var roleData = new UpdateRoleViewModel()
@@ -71,15 +72,15 @@ namespace Tests.Unit.Services
             ApplicationUser? appUser = null;
             this.UserManager.FindByIdAsync(roleData.UserId).Returns(appUser);
 
-            var ex = Assert.ThrowsAsync<RoleUpdateFailedException>(
-                async () => await this.RoleService.AddRoleByUserId(roleData));
-            Assert.That(ex.Message, Is.EqualTo(RoleErrorMessages.UpdateFailed.UserDoesNotExist));
+            var result = await this.RoleService.AddRoleByUserId(roleData);
+
+            Assert.That(result, Is.EqualTo(RoleUpdateResult.UserDoesNotExist));
         }
 
         [Test]
         [TestCase("Janitor")]
         [TestCase(User)]
-        public void Test_AddRoleByUserIdThrowsIfRoleCannotBeGivenToUsers(string nonExistantRole)
+        public async Task Test_AddRoleByUserIdThrowsIfRoleCannotBeGivenToUsers(string nonExistantRole)
         {
             Guid id = Guid.NewGuid();
             var roleData = new UpdateRoleViewModel()
@@ -88,13 +89,13 @@ namespace Tests.Unit.Services
                 Role = nonExistantRole,
             };
 
-            var ex = Assert.ThrowsAsync<RoleUpdateFailedException>(
-                async () => await this.RoleService.AddRoleByUserId(roleData));
-            Assert.That(ex.Message, Is.EqualTo(RoleErrorMessages.UpdateFailed.RoleNotAvailableForUpdate(roleData.Role)));
+            var result = await this.RoleService.AddRoleByUserId(roleData);
+
+            Assert.That(result, Is.EqualTo(RoleUpdateResult.RoleNotAvailableForUpdate));
         }
 
         [Test]
-        public void Test_AddRoleByUserIdThrowsIfUserAlreadyHasTheRole()
+        public async Task Test_AddRoleByUserIdThrowsIfUserAlreadyHasTheRole()
         {
             Guid id = Guid.NewGuid();
             var roleData = new UpdateRoleViewModel()
@@ -111,9 +112,8 @@ namespace Tests.Unit.Services
             };
 
             this.UserManager.FindByIdAsync(roleData.UserId).Returns(appUser);
-            var ex = Assert.ThrowsAsync<RoleUpdateFailedException>(
-                async () => await this.RoleService.AddRoleByUserId(roleData));
-            Assert.That(ex.Message, Is.EqualTo(RoleErrorMessages.UpdateFailed.UserAlreadyHasRole(roleData.Role)));
+            var result = await this.RoleService.AddRoleByUserId(roleData);
+            Assert.That(result, Is.EqualTo(RoleUpdateResult.RoleAlreadyGiven));
         }
 
         [Test]
@@ -137,11 +137,11 @@ namespace Tests.Unit.Services
             this.UserManager.RemoveFromRoleAsync(appUser, roleData.Role).Returns(IdentityResult.Success);
 
             var result = await this.RoleService.RemoveRoleByUserId(roleData);
-            Assert.That(result?.UserId, Is.EqualTo(id.ToString()));
+            Assert.That(result, Is.EqualTo(RoleUpdateResult.Success));
         }
 
         [Test]
-        public void Test_RemoveRoleByUserIdThrowsIfUserDoesNotExist()
+        public async Task Test_RemoveRoleByUserIdThrowsIfUserDoesNotExist()
         {
             Guid id = Guid.NewGuid();
             var roleData = new UpdateRoleViewModel()
@@ -153,15 +153,15 @@ namespace Tests.Unit.Services
             ApplicationUser? appUser = null;
             this.UserManager.FindByIdAsync(roleData.UserId).Returns(appUser);
 
-            var ex = Assert.ThrowsAsync<RoleUpdateFailedException>(
-                async () => await this.RoleService.RemoveRoleByUserId(roleData));
-            Assert.That(ex.Message, Is.EqualTo(RoleErrorMessages.UpdateFailed.UserDoesNotExist));
+            var result = await this.RoleService.RemoveRoleByUserId(roleData);
+
+            Assert.That(result, Is.EqualTo(RoleUpdateResult.UserDoesNotExist));
         }
 
         [Test]
         [TestCase("Janitor")]
         [TestCase(User)]
-        public void Test_RemoveRoleByUserIdThrowsIfRoleCannotBeGivenToUsers(string nonExistantRole)
+        public async Task Test_RemoveRoleByUserIdThrowsIfRoleCannotBeGivenToUsers(string nonExistantRole)
         {
             Guid id = Guid.NewGuid();
             var roleData = new UpdateRoleViewModel()
@@ -170,13 +170,12 @@ namespace Tests.Unit.Services
                 Role = nonExistantRole,
             };
 
-            var ex = Assert.ThrowsAsync<RoleUpdateFailedException>(
-                async () => await this.RoleService.RemoveRoleByUserId(roleData));
-            Assert.That(ex.Message, Is.EqualTo(RoleErrorMessages.UpdateFailed.RoleNotAvailableForUpdate(roleData.Role)));
+            var result = await this.RoleService.RemoveRoleByUserId(roleData);
+            Assert.That(result, Is.EqualTo(RoleUpdateResult.RoleNotAvailableForUpdate));
         }
 
         [Test]
-        public void Test_RemoveRoleByUserIdThrowsIfUserDoesNotHaveTheRole()
+        public async Task Test_RemoveRoleByUserIdThrowsIfUserDoesNotHaveTheRole()
         {
             Guid id = Guid.NewGuid();
             var roleData = new UpdateRoleViewModel()
@@ -192,10 +191,9 @@ namespace Tests.Unit.Services
                 UserRoles = Roles
             };
 
-            this.UserManager.FindByIdAsync(roleData.UserId).Returns(appUser);
-            var ex = Assert.ThrowsAsync<RoleUpdateFailedException>(
-                async () => await this.RoleService.RemoveRoleByUserId(roleData));
-            Assert.That(ex.Message, Is.EqualTo(RoleErrorMessages.UpdateFailed.UserDoesNotHaveRole(roleData.Role)));
+            var result = await this.RoleService.RemoveRoleByUserId(roleData);
+
+            Assert.That(result, Is.EqualTo(RoleUpdateResult.RoleNotGiven));
         }
 
         [Test]
