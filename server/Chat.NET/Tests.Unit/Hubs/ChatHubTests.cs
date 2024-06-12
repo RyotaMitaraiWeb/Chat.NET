@@ -10,6 +10,7 @@ using Web.ViewModels.User;
 using Web.ViewModels.Role;
 using NSubstitute.ExceptionExtensions;
 using Common.Exceptions;
+using Common.Hubs;
 
 namespace Tests.Unit.Hubs
 {
@@ -59,7 +60,7 @@ namespace Tests.Unit.Hubs
             await this.Hub.StartSession(this.UserService, this.JwtService, this.UserSessionStore);
 
             await this.UserSessionStore.Received(1).AddUser(Arg.Is<UserViewModel>(u => u.Id == user.Id));
-            await this.Hub.Clients.Group(claims.Id)
+            await this.Hub.Clients.Group(HubPrefixes.UserGroupPrefix(claims.Id))
                 .Received()
                 .SendSessionData(Arg.Is<UserViewModel>(u =>
                     u.Id == user.Id && u.Username == user.Username));
@@ -87,7 +88,7 @@ namespace Tests.Unit.Hubs
             await this.Hub.EndSession(this.JwtService, this.UserSessionStore);
 
             await this.UserSessionStore.Received(1).RemoveUser(Arg.Is<UserClaimsViewModel>(u => u.Id == user.Id));
-            await this.Hub.Clients.Group(claims.Id)
+            await this.Hub.Clients.Group(HubPrefixes.UserGroupPrefix(claims.Id))
                 .Received()
                 .EndSession();
         }

@@ -1,6 +1,6 @@
 
-using Amazon.Auth.AccessControlPolicy;
 using Common.Authentication;
+using Common.Hubs;
 using Contracts;
 using Infrastructure.Postgres;
 using Infrastructure.Postgres.Entities;
@@ -109,7 +109,7 @@ namespace Chat.NET
                         var accessToken = context.Request.Query["access_token"];
                         var path = context.HttpContext.Request.Path;
                         if (!string.IsNullOrEmpty(accessToken) &&
-                            (path.StartsWithSegments("/chat")))
+                            (path.StartsWithSegments($"/{HubURLs.ChatURL}")))
                         {
                             context.Token = accessToken;
                         }
@@ -187,7 +187,7 @@ namespace Chat.NET
 
             var app = builder.Build();
 
-            app.MapHub<ChatHub>("/chat");
+            app.MapHub<ChatHub>($"/{HubURLs.ChatURL}");
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
