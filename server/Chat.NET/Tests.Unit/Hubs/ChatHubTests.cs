@@ -11,6 +11,8 @@ using Web.ViewModels.Role;
 using NSubstitute.ExceptionExtensions;
 using Common.Exceptions;
 using Common.Hubs;
+using Common.Enums;
+using Common.ErrorMessages;
 
 namespace Tests.Unit.Hubs
 {
@@ -109,7 +111,7 @@ namespace Tests.Unit.Hubs
                 Roles = [Roles.User, Roles.Moderator],
             };
 
-            this.RoleService.AddRoleByUserId(role).Returns(role);
+            this.RoleService.AddRoleByUserId(role).Returns(RoleUpdateResult.Success);
             this.UserSessionStore.GetUser(role.UserId).Returns(user);
 
             await this.Hub.AddRoleToUser(role, this.RoleService, this.UserSessionStore);
@@ -129,7 +131,7 @@ namespace Tests.Unit.Hubs
 
             UserViewModel? user = null;
 
-            this.RoleService.AddRoleByUserId(role).Returns(role);
+            this.RoleService.AddRoleByUserId(role).Returns(RoleUpdateResult.Success);
             this.UserSessionStore.GetUser(role.UserId).Returns(user);
 
             await this.Hub.AddRoleToUser(role, this.RoleService, this.UserSessionStore);
@@ -146,7 +148,12 @@ namespace Tests.Unit.Hubs
         }
 
         [Test]
-        public async Task Test_AddRoleToUserSendsAnErrorIfRoleUpdateFails()
+        [TestCase(RoleUpdateResult.RoleNotGiven)]
+        [TestCase(RoleUpdateResult.RoleAlreadyGiven)]
+        [TestCase(RoleUpdateResult.RoleNotAvailableForUpdate)]
+        [TestCase(RoleUpdateResult.GeneralFail)]
+        [TestCase(RoleUpdateResult.UserDoesNotExist)]
+        public async Task Test_AddRoleToUserSendsAnErrorIfRoleUpdateFails(RoleUpdateResult result)
         {
             var role = new UpdateRoleViewModel()
             {
@@ -161,11 +168,13 @@ namespace Tests.Unit.Hubs
                 Roles = [Roles.User, Roles.Moderator],
             };
 
-            this.RoleService.AddRoleByUserId(role).ThrowsAsync(new RoleUpdateFailedException("a"));
+            this.RoleService.AddRoleByUserId(role).Returns(result);
 
             await this.Hub.AddRoleToUser(role, this.RoleService, this.UserSessionStore);
 
-            await this.Hub.Clients.Caller.Received().RoleUpdateFailed(Arg.Any<string>());
+            string error = RoleErrorMessages.GenerateErrorMessage(role.Role, result);
+
+            await this.Hub.Clients.Caller.Received().RoleUpdateFailed(error);
         }
 
         [Test]
@@ -184,7 +193,7 @@ namespace Tests.Unit.Hubs
                 Roles = [Roles.User, Roles.Moderator],
             };
 
-            this.RoleService.RemoveRoleByUserId(role).Returns(role);
+            this.RoleService.RemoveRoleByUserId(role).Returns(RoleUpdateResult.Success);
             this.UserSessionStore.GetUser(role.UserId).Returns(user);
 
             await this.Hub.RemoveRoleFromUser(role, this.RoleService, this.UserSessionStore);
@@ -204,7 +213,7 @@ namespace Tests.Unit.Hubs
 
             UserViewModel? user = null;
 
-            this.RoleService.RemoveRoleByUserId(role).Returns(role);
+            this.RoleService.RemoveRoleByUserId(role).Returns(RoleUpdateResult.Success);
             this.UserSessionStore.GetUser(role.UserId).Returns(user);
 
             await this.Hub.RemoveRoleFromUser(role, this.RoleService, this.UserSessionStore);
@@ -217,7 +226,12 @@ namespace Tests.Unit.Hubs
         }
 
         [Test]
-        public async Task Test_RemoveRoleFromUserSendsAnErrorIfRoleUpdateFails()
+        [TestCase(RoleUpdateResult.RoleNotGiven)]
+        [TestCase(RoleUpdateResult.RoleAlreadyGiven)]
+        [TestCase(RoleUpdateResult.RoleNotAvailableForUpdate)]
+        [TestCase(RoleUpdateResult.GeneralFail)]
+        [TestCase(RoleUpdateResult.UserDoesNotExist)]
+        public async Task Test_RemoveRoleFromUserSendsAnErrorIfRoleUpdateFails(RoleUpdateResult result)
         {
             var role = new UpdateRoleViewModel()
             {
@@ -232,11 +246,13 @@ namespace Tests.Unit.Hubs
                 Roles = [Roles.User, Roles.Moderator],
             };
 
-            this.RoleService.RemoveRoleByUserId(role).ThrowsAsync(new RoleUpdateFailedException("a"));
+            this.RoleService.RemoveRoleByUserId(role).Returns(result);
 
             await this.Hub.RemoveRoleFromUser(role, this.RoleService, this.UserSessionStore);
 
-            await this.Hub.Clients.Caller.Received().RoleUpdateFailed(Arg.Any<string>());
+            string error = RoleErrorMessages.GenerateErrorMessage(role.Role, result);
+
+            await this.Hub.Clients.Caller.Received().RoleUpdateFailed(error);
         }
     }
 }

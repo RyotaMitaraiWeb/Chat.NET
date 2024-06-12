@@ -1,4 +1,6 @@
 ﻿using Common.Authentication;
+using Common.Enums;
+using Common.ErrorMessages;
 using Common.Exceptions;
 using Common.Hubs;
 using Contracts;
@@ -70,48 +72,55 @@ namespace Web.Hubs
         [Authorize(Policy = Policies.IsAdminSignalR)]
         public async Task AddRoleToUser(UpdateRoleViewModel updateRole, [FromServices] IRoleService roleService, [FromServices] IUserSessionStore userSessionStore)
         {
-            try
-            {
-                var role = await roleService.AddRoleByUserId(updateRole);
-                var user = await userSessionStore.GetUser(role.UserId);
-                if (user != null)
-                {
-                    await userSessionStore.UpdateRoles(user.Id, [..user.Roles, updateRole.Role]);
-                    await Clients.Group(HubPrefixes.UserGroupPrefix(user.Id)).UpdateUser(user);
-                }
+            var roleUpdateResult = await roleService.AddRoleByUserId(updateRole);
 
-                await Clients.Caller.RoleUpdateSucceeded(role);
-
-            }
-            catch (RoleUpdateFailedException ex)
+            if (roleUpdateResult != RoleUpdateResult.Success)
             {
-                await Clients.Caller.RoleUpdateFailed(ex.Message);
+                await this.NotifyCallerThatRoleUpdateFailed(updateRole, roleUpdateResult);
+                return;
             }
+
+            var user = await userSessionStore.GetUser(updateRole.UserId);
+            if (user != null)
+            {
+                var roles = user.Roles.ToList();
+                roles.Add(updateRole.Role);
+                await userSessionStore.UpdateRoles(user.Id, [.. roles]);
+                await Clients.Group(HubPrefixes.UserGroupPrefix(user.Id)).UpdateUser(user);
+            }
+
+            await Clients.Caller.RoleUpdateSucceeded(updateRole);
 
         }
 
         [Authorize(Policy = Policies.IsAdminSignalR)]
         public async Task RemoveRoleFromUser(UpdateRoleViewModel updateRole, [FromServices] IRoleService roleService, [FromServices] IUserSessionStore userSessionStore)
         {
-            try
-            {
-                var role = await roleService.RemoveRoleByUserId(updateRole);
-                var user = await userSessionStore.GetUser(role.UserId);
-                if (user != null)
-                {
-                    var roles = user.Roles.ToList();
-                    roles.Remove(role.Role);
-                    await userSessionStore.UpdateRoles(user.Id, [..roles]);
-                    await Clients.Group(HubPrefixes.UserGroupPrefix(user.Id)).UpdateUser(user);
-                }
+            
+            var roleUpdateResult = await roleService.RemoveRoleByUserId(updateRole);
 
-                await Clients.Caller.RoleUpdateSucceeded(role);
-
-            }
-            catch (RoleUpdateFailedException ex)
+            if (roleUpdateResult != RoleUpdateResult.Success)
             {
-                await Clients.Caller.RoleUpdateFailed(ex.Message);
+                await this.NotifyCallerThatRoleUpdateFailed(updateRole, roleUpdateResult);
+                return;
             }
+
+            var user = await userSessionStore.GetUser(updateRole.UserId);
+            if (user != null)
+            {
+                var roles = user.Roles.ToList();
+                roles.Remove(updateRole.Role);
+                await userSessionStore.UpdateRoles(user.Id, [..roles]);
+                await Clients.Group(HubPrefixes.UserGroupPrefix(user.Id)).UpdateUser(user);
+            }
+
+            await Clients.Caller.RoleUpdateSucceeded(updateRole);
+        }
+
+        private async Task NotifyCallerThatRoleUpdateFailed(UpdateRoleViewModel roleData, RoleUpdateResult result)
+        {
+            string error = RoleErrorMessages.GenerateErrorMessage(roleData.Role, result);
+            await this.Clients.Caller.RoleUpdateFailed(error);
         }
 
         private UserClaimsViewModel? ExtractClaims(IJwtService jwtService)
