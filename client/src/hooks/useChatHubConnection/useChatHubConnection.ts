@@ -34,8 +34,13 @@ type EventListenerCallback<TArgs> = (data: TArgs) => void | Promise<void>;
  * For each client event, you have access to its "on" and "off" functions
  * with which to subscriбe and unsubscribe, respectively.
  *
- * **Note:** it is best to register events inside hooks like ``useInit`` or
+ * **Note 1:** you should use the ``chatHubConnection`` object to initiate a
+ * connection with the server (via the ``start`` method). The object
+ * is a singleton and handles conflicts with already existing connections.
+ *
+ * **Note 2:** it is best to register events inside hooks like ``useInit`` or
  * a similar mechanism for preventing infinite rerenders.
+ *
  * @param options - optional configurations for the particular instance of
  * the hook:
  * * ``removeAllEventListenersOnDestroy`` - if ``true``, this will unsubscribe
