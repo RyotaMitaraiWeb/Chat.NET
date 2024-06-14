@@ -112,8 +112,7 @@ export const useChatHubConnection = (options?: useChatHubConnectionOptions) => {
       if (removeAllEventListenersOnDestroy) {
         for (const eventListener of eventListeners) {
           const { event, callback } = eventListener;
-          dispatch({ type: 'remove', event, callback });
-          chatHubConnection.off(event);
+          _removeEventListener(event, callback as never);
         }
       }
     };
