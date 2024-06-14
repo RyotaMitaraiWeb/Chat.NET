@@ -63,10 +63,6 @@ export const useChatHubConnection = (options?: useChatHubConnectionOptions) => {
     chatHubConnection.off(event, callback);
   }
 
-  async function start() {
-    await chatHubConnection.start();
-  }
-
   function onUpdateUser(callback: EventListenerCallback<unknown>) {
     _addEventListener('UpdateUser', callback);
   }
@@ -135,7 +131,6 @@ export const useChatHubConnection = (options?: useChatHubConnectionOptions) => {
   }, [eventListeners, removeAllEventListenersOnDestroy]);
 
   return {
-    start,
     startSession,
     endSession,
     onSendSessionData,
