@@ -27,6 +27,22 @@ type useChatHubConnectionOptions = {
 
 type EventListenerCallback<TArgs> = (data: TArgs) => void | Promise<void>;
 
+/**
+ * A hook that provides a more friendly interface for the ``chatHubConnection``
+ * by providing type safety for the different client and server events.
+ *
+ * For each client event, you have access to its "on" and "off" functions
+ * with which to subscriбe and unsubscribe, respectively.
+ *
+ * **Note:** it is best to register events inside hooks like ``useInit`` or
+ * a similar mechanism for preventing infinite rerenders.
+ * @param options - optional configurations for the particular instance of
+ * the hook:
+ * * ``removeAllEventListenersOnDestroy`` - if ``true``, this will unsubscribe
+ * from all events you have registered when the hook is destroyed,
+ * removing the need to manage this manually. Default: ``false``
+ * @returns
+ */
 export const useChatHubConnection = (options?: useChatHubConnectionOptions) => {
   const removeAllEventListenersOnDestroy = options?.removeAllEventListenersOnDestroy || false;
   const [eventListeners, dispatch] = useReducer(reducer, []);
