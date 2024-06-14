@@ -15,9 +15,9 @@ using Web.ViewModels.User;
 
 namespace Web.Hubs
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ChatHub : Hub<IChatHubClient>
     {
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task StartSession(
             [FromServices] IUserService userService,
             [FromServices] IJwtService jwtService,
@@ -50,6 +50,7 @@ namespace Web.Hubs
             await this.Clients.Group(HubPrefixes.UserGroupPrefix(user.Id)).SendSessionData(userData);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task EndSession(
             [FromServices] IJwtService jwtService,
             [FromServices] IUserSessionStore userSessionStore)
