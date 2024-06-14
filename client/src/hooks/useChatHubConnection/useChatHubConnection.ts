@@ -25,6 +25,8 @@ type useChatHubConnectionOptions = {
   removeAllEventListenersOnDestroy?: boolean;
 };
 
+type EventListenerCallback<TArgs> = (data: TArgs) => void | Promise<void>;
+
 export const useChatHubConnection = (options?: useChatHubConnectionOptions) => {
   const removeAllEventListenersOnDestroy = options?.removeAllEventListenersOnDestroy || false;
   const [eventListeners, dispatch] = useReducer(reducer, []);
@@ -33,12 +35,12 @@ export const useChatHubConnection = (options?: useChatHubConnectionOptions) => {
     await chatHubConnection.start();
   }
 
-  async function onUpdateUser(callback: (data: unknown) => void) {
+  async function onUpdateUser(callback: EventListenerCallback<unknown>) {
     dispatch({ type: 'add', event: 'UpdateUser', callback });
     chatHubConnection.on('UpdateUser', callback);
   }
 
-  async function offUpdateUser(callback: (data: unknown) => void) {
+  async function offUpdateUser(callback: EventListenerCallback<unknown>) {
     dispatch({ type: 'remove', event: 'UpdateUser', callback });
     chatHubConnection.on('UpdateUser', callback);
   }
@@ -47,22 +49,22 @@ export const useChatHubConnection = (options?: useChatHubConnectionOptions) => {
     await chatHubConnection.invoke('StartSession');
   }
 
-  function onSendSessionData(callback: (data: unknown) => void) {
+  function onSendSessionData(callback: EventListenerCallback<unknown>) {
     dispatch({ type: 'add', event: 'SendSessionData', callback });
     chatHubConnection.on('SendSessionData', callback);
   }
 
-  function onEndSession(callback: () => void) {
+  function onEndSession(callback: EventListenerCallback<unknown>) {
     dispatch({ type: 'add', event: 'EndSession', callback });
     chatHubConnection.on('EndSession', callback);
   }
 
-  function offEndSession(callback: () => void) {
+  function offEndSession(callback: EventListenerCallback<unknown>) {
     dispatch({ type: 'remove', event: 'EndSession', callback });
     chatHubConnection.off('EndSession', callback);
   }
 
-  function offSendSessionData(callback: (data: unknown) => void) {
+  function offSendSessionData(callback: EventListenerCallback<unknown>) {
     dispatch({ type: 'remove', event: 'SendSessionData', callback });
     chatHubConnection.off('SendSessionData', callback);
   }
