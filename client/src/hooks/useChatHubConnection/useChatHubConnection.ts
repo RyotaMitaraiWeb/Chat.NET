@@ -42,9 +42,18 @@ export const useChatHubConnection = (options?: useChatHubConnectionOptions) => {
     chatHubConnection.on('SendSessionData', callback);
   }
 
+  function onEndSession(callback: () => void) {
+    dispatch({ type: 'add', event: 'EndSession', callback });
+    chatHubConnection.on('EndSession', callback);
+  }
+
   function offSendSessionData(callback: (data: unknown) => void) {
     dispatch({ type: 'remove', event: 'SendSessionData', callback });
     chatHubConnection.off('SendSessionData', callback);
+  }
+
+  async function endSession() {
+    await chatHubConnection.invoke('EndSession');
   }
 
   useEffect(() => {
@@ -53,10 +62,11 @@ export const useChatHubConnection = (options?: useChatHubConnectionOptions) => {
         for (const eventListener of eventListeners) {
           const { event, callback } = eventListener;
           dispatch({ type: 'remove', event, callback });
+          chatHubConnection.off(event);
         }
       }
     };
   }, [eventListeners, removeAllEventListenersOnDestroy]);
 
-  return { start, startSession, onSendSessionData, offSendSessionData };
+  return { start, startSession, endSession, onSendSessionData, onEndSession, offSendSessionData };
 };
