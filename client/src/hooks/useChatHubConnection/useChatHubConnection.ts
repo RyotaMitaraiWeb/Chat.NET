@@ -33,6 +33,16 @@ export const useChatHubConnection = (options?: useChatHubConnectionOptions) => {
     await chatHubConnection.start();
   }
 
+  async function onUpdateUser(callback: (data: unknown) => void) {
+    dispatch({ type: 'add', event: 'UpdateUser', callback });
+    chatHubConnection.on('UpdateUser', callback);
+  }
+
+  async function offUpdateUser(callback: (data: unknown) => void) {
+    dispatch({ type: 'remove', event: 'UpdateUser', callback });
+    chatHubConnection.on('UpdateUser', callback);
+  }
+
   async function startSession() {
     await chatHubConnection.invoke('StartSession');
   }
@@ -45,6 +55,11 @@ export const useChatHubConnection = (options?: useChatHubConnectionOptions) => {
   function onEndSession(callback: () => void) {
     dispatch({ type: 'add', event: 'EndSession', callback });
     chatHubConnection.on('EndSession', callback);
+  }
+
+  function offEndSession(callback: () => void) {
+    dispatch({ type: 'remove', event: 'EndSession', callback });
+    chatHubConnection.off('EndSession', callback);
   }
 
   function offSendSessionData(callback: (data: unknown) => void) {
@@ -68,5 +83,15 @@ export const useChatHubConnection = (options?: useChatHubConnectionOptions) => {
     };
   }, [eventListeners, removeAllEventListenersOnDestroy]);
 
-  return { start, startSession, endSession, onSendSessionData, onEndSession, offSendSessionData };
+  return {
+    start,
+    startSession,
+    endSession,
+    onSendSessionData,
+    onEndSession,
+    offEndSession,
+    offSendSessionData,
+    onUpdateUser,
+    offUpdateUser,
+  };
 };
