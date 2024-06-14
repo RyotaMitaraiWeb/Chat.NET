@@ -83,6 +83,29 @@ export const useChatHubConnection = (options?: useChatHubConnectionOptions) => {
     await chatHubConnection.invoke('EndSession');
   }
 
+  function onRoleUpdateSucceeded(callback: EventListenerCallback<unknown>) {
+    _addEventListener('RoleUpdateSucceeded', callback);
+  }
+
+  function offRoleUpdateSucceeded(callback: EventListenerCallback<unknown>) {
+    _removeEventListener('RoleUpdateFailed', callback);
+  }
+
+  function onRoleUpdateFailed(callback: EventListenerCallback<unknown>) {
+    _addEventListener('RoleUpdateFailed', callback);
+  }
+
+  function offRoleUpdateFailed(callback: EventListenerCallback<unknown>) {
+    _removeEventListener('RoleUpdateFailed', callback);
+  }
+
+  async function addRoleToUser(data: unknown) {
+    await chatHubConnection.invoke('AddRoleToUser', data);
+  }
+
+  async function removeRoleFromUser(data: unknown) {
+    await chatHubConnection.invoke('RemoveRoleFromUser', data);
+  }
 
   useEffect(() => {
     return () => {
@@ -106,5 +129,11 @@ export const useChatHubConnection = (options?: useChatHubConnectionOptions) => {
     offSendSessionData,
     onUpdateUser,
     offUpdateUser,
+    onRoleUpdateSucceeded,
+    offRoleUpdateSucceeded,
+    onRoleUpdateFailed,
+    offRoleUpdateFailed,
+    addRoleToUser,
+    removeRoleFromUser,
   };
 };
