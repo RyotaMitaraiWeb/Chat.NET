@@ -2,15 +2,18 @@
   border-radius: 50%;
   .component-icon {
     &.size-large {
-      padding: 12px;
+      font-size: 24pt;
+      padding: 0 16px;
     }
 
     &.size-medium {
-      padding: 8px;
+      font-size: 18pt;
+      padding: 0 8px;
     }
 
     &.size-small {
-      padding: 5px;
+      font-size: 12pt;
+      padding: 0 5px;
     }
   }
 }
