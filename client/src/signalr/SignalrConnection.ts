@@ -62,7 +62,7 @@ export abstract class SignalrConnection<TC extends string, TS extends string>
     return this.connection.invoke(event, ...args);
   }
 
-  on(event: TC, callback: (...args: unknown[]) => void): void {
+  on(event: TC, callback: (...args: never[]) => void): void {
     this.connection.on(event, callback);
   }
 
