@@ -1,6 +1,6 @@
 'use client';
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
-import { SnackbarContext, SnackbarState } from './types';
+import type { SnackbarContext, SnackbarState } from './types';
 import { severities } from '@/constants/severity';
 import { severity } from '@/components/types/options';
 import GlobalSnackbar from './GlobalSnackbar';
