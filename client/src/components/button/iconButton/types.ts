@@ -1,7 +1,3 @@
-import { BaseButtonProps } from '@/components/types/BaseButton';
-import { palette, size } from '@/components/types/options';
+import { ButtonProps } from '../types';
 
-export interface IconButtonProps extends BaseButtonProps {
-  color?: palette;
-  size?: size;
-}
+export interface IconButtonProps extends ButtonProps {}
