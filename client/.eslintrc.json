@@ -1,5 +1,11 @@
 {
-  "extends": ["eslint:recommended", "plugin:@typescript-eslint/recommended", "eslint-config-prettier", "next/core-web-vitals"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "eslint-config-prettier",
+    "next/core-web-vitals",
+    "plugin:storybook/recommended"
+  ],
   "plugins": [
     "prettier",
     "eslint-plugin-prettier"
@@ -18,8 +24,11 @@
       "error",
       "always"
     ],
-    "@typescript-eslint/no-unused-vars": ["error"],
-    "max-len": ["warn", 100],
+    "@typescript-eslint/no-unused-vars": "error",
+    "max-len": [
+      "warn",
+      100
+    ],
     "no-console": "warn",
     "no-debugger": "error",
     "no-eval": "error",
@@ -27,11 +36,16 @@
       "error",
       "always",
       {
-        "markers": ["/"]
+        "markers": [
+          "/"
+        ]
       }
     ],
     "use-isnan": "error",
-    "eqeqeq": ["error", "smart"],
+    "eqeqeq": [
+      "error",
+      "smart"
+    ],
     "no-cond-assign": "error",
     "no-bitwise": "error",
     "yoda": "error",
