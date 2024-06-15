@@ -17,7 +17,7 @@ type Story = StoryObj<typeof meta>;
 export const Default = {
   render() {
     return (
-      <div style={{ height: 300, width: 300 }}>
+      <div>
         <p>Text 1</p>
         <Divider />
         <p>Text 2</p>
@@ -29,7 +29,7 @@ export const Default = {
 export const Vertical = {
   render() {
     return (
-      <div style={{ height: 300, width: 300, display: 'flex' }}>
+      <div style={{ display: 'flex' }}>
         <p>Text 1</p>
         <Divider variant="vertical" />
         <p>Text 2</p>
