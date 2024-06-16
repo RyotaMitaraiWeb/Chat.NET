@@ -11,8 +11,11 @@ const meta: Meta<typeof Alert> = {
   tags: ['autodocs'],
 };
 
-const longText =
-  'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quisquam, molestias ex necessitatibus repellat perferendis quo consectetur, sapiente in aspernatur accusantium magni odio voluptas cum. Molestias repudiandae ipsa eum possimus provident.';
+const longText = `Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+  Quisquam, molestias ex necessitatibus repellat perferendis quo 
+  consectetur, sapiente in aspernatur 
+  accusantium magni odio voluptas cum.
+  Molestias repudiandae ipsa eum possimus provident.`;
 export default meta;
 type Story = StoryObj<typeof meta>;
 

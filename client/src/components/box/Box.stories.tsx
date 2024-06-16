@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Box from './Box';
-import { MdCancel } from 'react-icons/md';
 
 const meta: Meta<typeof Box> = {
   title: 'Example/Box',
