@@ -87,18 +87,27 @@ export const Labels: Story = {
 
 export const Sizes: Story = {
   render: () => (
-  <>
-    <Checkbox size="small" />
-    <Checkbox size="medium" />
-    <Checkbox size="large" />
-  </>),
-}
+    <>
+      <Checkbox size="small" />
+      <Checkbox size="medium" />
+      <Checkbox size="large" />
+    </>
+  ),
+};
 
 export const SizesWithLabels: Story = {
   render: () => (
     <>
       <p>Aligned as flex column with some gap</p>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, marginBottom: 24 }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 8,
+          marginBottom: 24,
+        }}
+      >
         <Checkbox size="small" style={{ marginBottom: 8 }} side="right">
           Right
         </Checkbox>
@@ -108,9 +117,19 @@ export const SizesWithLabels: Story = {
         <Checkbox size="small" style={{ marginBottom: 8 }} side="left">
           Left
         </Checkbox>
-        <Checkbox size="small" side="top">Top</Checkbox>
+        <Checkbox size="small" side="top">
+          Top
+        </Checkbox>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, marginBottom: 32 }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 8,
+          marginBottom: 32,
+        }}
+      >
         <Checkbox size="medium" style={{ marginBottom: 8 }} side="right">
           Right
         </Checkbox>
@@ -120,7 +139,9 @@ export const SizesWithLabels: Story = {
         <Checkbox size="medium" style={{ marginBottom: 8 }} side="left">
           Left
         </Checkbox>
-        <Checkbox size="medium" side="top">Top</Checkbox>
+        <Checkbox size="medium" side="top">
+          Top
+        </Checkbox>
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
         <Checkbox size="large" style={{ marginBottom: 8 }} side="right">
@@ -132,7 +153,9 @@ export const SizesWithLabels: Story = {
         <Checkbox size="large" style={{ marginBottom: 8 }} side="left">
           Left
         </Checkbox>
-        <Checkbox size="large" side="top">Top</Checkbox>
+        <Checkbox size="large" side="top">
+          Top
+        </Checkbox>
       </div>
     </>
   ),
@@ -140,6 +163,6 @@ export const SizesWithLabels: Story = {
 
 export const CustomIcon = {
   args: {
-    icon: <MdCancel />
-  }
-}
+    icon: <MdCancel />,
+  },
+};
