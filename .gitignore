@@ -438,3 +438,4 @@ postgresql
 pgadmin4
 mongodb
 ./redis
+*storybook.log
