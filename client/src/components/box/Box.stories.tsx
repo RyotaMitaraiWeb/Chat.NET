@@ -24,13 +24,13 @@ export const CustomSelector: Story = {
   args: {
     children: <span>Box (selector is h2)</span>,
     selector: 'h2',
-  }
-}
+  },
+};
 
 export const WithPaddingForBetterVisibility: Story = {
   args: {
     children: <p>Hello</p>,
-    style: { padding: 24 }
+    style: { padding: 24 },
   },
-  name: 'With Padding (for better visibility)'
-}
+  name: 'With Padding (for better visibility)',
+};

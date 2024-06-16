@@ -27,9 +27,9 @@ export const WithAction: Story = {
   args: {
     children: longText,
     alertTitle: 'Alert title',
-    alertActions: <button>Action</button>
-  }
-}
+    alertActions: <button>Action</button>,
+  },
+};
 
 export const Severities: Story = {
   render: () => (
@@ -56,5 +56,5 @@ export const CustomIcon: Story = {
     alertTitle: 'Alert title',
     alertActions: <button>Action</button>,
     icon: <MdCancel />,
-  }
-}
+  },
+};
