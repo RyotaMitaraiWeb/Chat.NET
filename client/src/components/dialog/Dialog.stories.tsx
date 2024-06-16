@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Dialog from './Dialog';
-import { MdCancel } from 'react-icons/md';
 import { useState } from 'react';
 import DialogTitle from './dialogTitle/DialogTitle';
 import DialogContent from './dialogContent/DialogContent';
@@ -18,8 +17,10 @@ const meta: Meta<typeof Dialog> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const longText =
-  'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quos animi neque dolore doloremque molestias dolorum beatae, aut nobis earum perferendis officia accusamus inventore omnis velit non corporis laudantium voluptates dignissimos.';
+const longText = `Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+Quos animi neque dolore doloremque molestias dolorum beatae,
+aut nobis earum perferendis officia accusamus inventore omnis velit non
+corporis laudantium voluptates dignissimos.`;
 
 /**
  * A focusable element within the dialog is required to render this without issues.
@@ -35,9 +36,9 @@ export const Default: Story = {
         <button onClick={() => setOpen(true)}>Open menu</button>
         <Dialog open={open} onClose={() => setOpen(false)}>
           <p>
-            To close this dialog, press the "Close" button or the Escape key or click the overlay.
-            You can also press "Enter", as the dialog focuses the first focusable element (in this
-            case, the close button).
+            To close this dialog, press the &quot;Close&quot; button or the Escape key or click the
+            overlay. You can also press &quot;Enter&quot;, as the dialog focuses the first focusable
+            element (in this case, the close button).
           </p>
           <button onClick={() => setOpen(false)}>Close</button>
         </Dialog>

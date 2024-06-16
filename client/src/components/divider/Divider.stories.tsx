@@ -1,6 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Divider from './Divider';
-import { render } from '@testing-library/react';
 
 const meta: Meta<typeof Divider> = {
   title: 'Example/Divider',
@@ -14,7 +13,7 @@ const meta: Meta<typeof Divider> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default = {
+export const Default: Story = {
   render() {
     return (
       <div>
