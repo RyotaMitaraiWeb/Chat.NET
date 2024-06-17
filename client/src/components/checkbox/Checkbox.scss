@@ -114,6 +114,7 @@
   &:not(:has(:checked)) {
     .checkbox {
       background-color: transparent;
+      color: transparent;
     }
   }
 }
