@@ -68,18 +68,21 @@ export const Sizes: Story = {
             <ListItem>Small list item #2</ListItem>
             <ListItem>Small list item #3</ListItem>
             <ListItemButton>Small list item button</ListItemButton>
+            <ListItemButton href="/test">Small list item button link</ListItemButton>
           </List>
           <List size="medium">
             <ListItem>Medium list item #1</ListItem>
             <ListItem>Medium list item #2</ListItem>
             <ListItem>Medium list item #3</ListItem>
             <ListItemButton>Medium list item button</ListItemButton>
+            <ListItemButton href="/test">Medium list item button link</ListItemButton>
           </List>
           <List size="large">
             <ListItem>Large list item #1</ListItem>
             <ListItem>Large list item #2</ListItem>
             <ListItem>Large list item #3</ListItem>
             <ListItemButton>Large list item button</ListItemButton>
+            <ListItemButton href="/test">Large list item button link</ListItemButton>
           </List>
         </div>
       </>
@@ -101,6 +104,54 @@ export const WithIcon: Story = {
   },
 };
 
+export const SizesWithIcons: Story = {
+  render() {
+    return (
+      <>
+        <p>Lists aligned as flex column for gaps</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+          <List size="small">
+            <ListItem icon={<MdCreate />}>List item icon</ListItem>
+            <ListItem inset>Inset list item icon</ListItem>
+            <ListItemButton icon={<MdCreate />}>List item button icon</ListItemButton>
+            <ListItemButton inset>Inset list item button icon</ListItemButton>
+            <ListItemButton href="/test" icon={<MdCreate />}>
+              List item button link icon
+            </ListItemButton>
+            <ListItemButton href="/test" inset>
+              Inset list item button link icon
+            </ListItemButton>
+          </List>
+          <List size="medium">
+            <ListItem icon={<MdCreate />}>List item icon</ListItem>
+            <ListItem inset>Inset list item icon</ListItem>
+            <ListItemButton icon={<MdCreate />}>List item button icon</ListItemButton>
+            <ListItemButton inset>Inset list item button icon</ListItemButton>
+            <ListItemButton href="/test" icon={<MdCreate />}>
+              List item button link icon
+            </ListItemButton>
+            <ListItemButton href="/test" inset>
+              Inset list item button link icon
+            </ListItemButton>
+          </List>
+          <List size="large">
+            <ListItem icon={<MdCreate />}>List item icon</ListItem>
+            <ListItem inset>Inset list item icon</ListItem>
+            <ListItemButton icon={<MdCreate />}>List item button icon</ListItemButton>
+            <ListItemButton inset>Inset list item button icon</ListItemButton>
+            <ListItemButton href="/test" icon={<MdCreate />}>
+              List item button link icon
+            </ListItemButton>
+            <ListItemButton href="/test" inset>
+              Inset list item button link icon
+            </ListItemButton>
+          </List>
+        </div>
+      </>
+    );
+  },
+};
+
 export const ListItemButtons: Story = {
   args: {
     children: (
@@ -115,5 +166,176 @@ export const ListItemButtons: Story = {
         </>
       </>
     ),
+  },
+};
+
+export const LongContent: Story = {
+  render() {
+    return (
+      <>
+        <p>Lists aligned as flex column for gaps, each has a width of 300px</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 300 }}>
+          <List size="small">
+            <ListItem>
+              List item - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat sit
+              laboriosam ullam, repellendus iure culpa nesciunt quod aliquam atque. Quod ipsum vitae
+              odio excepturi libero a, quisquam fugiat aut id!
+            </ListItem>
+            <ListItemButton>
+              List item button - Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum
+              labore iusto fugit, tenetur adipisci dolorem eum repudiandae tempore modi repellendus
+              necessitatibus quae. Consectetur, iusto reprehenderit? Velit tempora quam dicta ab?
+            </ListItemButton>
+            <ListItemButton href="/test">
+              List item button link - Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Tempore minima placeat optio eveniet ullam officiis harum quam porro sit expedita?
+              Debitis, nihil porro! Suscipit ex quis esse optio vitae repellat.
+            </ListItemButton>
+          </List>
+          <List size="medium">
+            <ListItem>
+              List item - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat sit
+              laboriosam ullam, repellendus iure culpa nesciunt quod aliquam atque. Quod ipsum vitae
+              odio excepturi libero a, quisquam fugiat aut id!
+            </ListItem>
+            <ListItemButton>
+              List item button - Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum
+              labore iusto fugit, tenetur adipisci dolorem eum repudiandae tempore modi repellendus
+              necessitatibus quae. Consectetur, iusto reprehenderit? Velit tempora quam dicta ab?
+            </ListItemButton>
+            <ListItemButton href="/test">
+              List item button link - Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Tempore minima placeat optio eveniet ullam officiis harum quam porro sit expedita?
+              Debitis, nihil porro! Suscipit ex quis esse optio vitae repellat.
+            </ListItemButton>
+          </List>
+          <List size="large">
+            <ListItem>
+              List item - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat sit
+              laboriosam ullam, repellendus iure culpa nesciunt quod aliquam atque. Quod ipsum vitae
+              odio excepturi libero a, quisquam fugiat aut id!
+            </ListItem>
+            <ListItemButton>
+              List item button - Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum
+              labore iusto fugit, tenetur adipisci dolorem eum repudiandae tempore modi repellendus
+              necessitatibus quae. Consectetur, iusto reprehenderit? Velit tempora quam dicta ab?
+            </ListItemButton>
+            <ListItemButton href="/test">
+              List item button link - Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Tempore minima placeat optio eveniet ullam officiis harum quam porro sit expedita?
+              Debitis, nihil porro! Suscipit ex quis esse optio vitae repellat.
+            </ListItemButton>
+          </List>
+        </div>
+      </>
+    );
+  },
+};
+
+export const LongContentWithIcons: Story = {
+  render() {
+    return (
+      <>
+        <p>Lists aligned as flex column for gaps, each has a width of 300px</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 300 }}>
+          <List size="small">
+            <ListItem icon={<MdCreate />}>
+              List item - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat sit
+              laboriosam ullam, repellendus iure culpa nesciunt quod aliquam atque. Quod ipsum vitae
+              odio excepturi libero a, quisquam fugiat aut id!
+            </ListItem>
+            <ListItem inset>
+              Inset list item - Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rem
+              expedita consectetur tenetur culpa voluptas quas, magnam, dolorum, provident veniam
+              quaerat pariatur soluta et explicabo sunt odit alias sequi dicta ea?
+            </ListItem>
+            <ListItemButton icon={<MdCreate />}>
+              List item button - Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum
+              labore iusto fugit, tenetur adipisci dolorem eum repudiandae tempore modi repellendus
+              necessitatibus quae. Consectetur, iusto reprehenderit? Velit tempora quam dicta ab?
+            </ListItemButton>
+            <ListItemButton inset>
+              Inset list item button icon - Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Porro atque eligendi facilis explicabo alias aliquid iste, odio maxime, perferendis
+              dolor, velit nihil voluptatum hic dolorum in numquam error. Quam, voluptate!
+            </ListItemButton>
+            <ListItemButton href="/test" icon={<MdCreate />}>
+              List item button link - Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Tempore minima placeat optio eveniet ullam officiis harum quam porro sit expedita?
+              Debitis, nihil porro! Suscipit ex quis esse optio vitae repellat.
+            </ListItemButton>
+            <ListItemButton href="/test" inset>
+              Inset list item button link - Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Temporibus dicta rerum iure asperiores quod magni minus cumque ea odio. Ex similique
+              error velit esse laboriosam dolorem quam corporis nihil delectus.
+            </ListItemButton>
+          </List>
+          <List size="medium">
+            <ListItem icon={<MdCreate />}>
+              List item - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat sit
+              laboriosam ullam, repellendus iure culpa nesciunt quod aliquam atque. Quod ipsum vitae
+              odio excepturi libero a, quisquam fugiat aut id!
+            </ListItem>
+            <ListItem inset>
+              Inset list item - Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rem
+              expedita consectetur tenetur culpa voluptas quas, magnam, dolorum, provident veniam
+              quaerat pariatur soluta et explicabo sunt odit alias sequi dicta ea?
+            </ListItem>
+            <ListItemButton icon={<MdCreate />}>
+              List item button - Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum
+              labore iusto fugit, tenetur adipisci dolorem eum repudiandae tempore modi repellendus
+              necessitatibus quae. Consectetur, iusto reprehenderit? Velit tempora quam dicta ab?
+            </ListItemButton>
+            <ListItemButton inset>
+              Inset list item button icon - Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Porro atque eligendi facilis explicabo alias aliquid iste, odio maxime, perferendis
+              dolor, velit nihil voluptatum hic dolorum in numquam error. Quam, voluptate!
+            </ListItemButton>
+            <ListItemButton href="/test" icon={<MdCreate />}>
+              List item button link - Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Tempore minima placeat optio eveniet ullam officiis harum quam porro sit expedita?
+              Debitis, nihil porro! Suscipit ex quis esse optio vitae repellat.
+            </ListItemButton>
+            <ListItemButton href="/test" inset>
+              Inset list item button link - Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Temporibus dicta rerum iure asperiores quod magni minus cumque ea odio. Ex similique
+              error velit esse laboriosam dolorem quam corporis nihil delectus.
+            </ListItemButton>
+          </List>
+          <List size="large">
+            <ListItem icon={<MdCreate />}>
+              List item - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quaerat sit
+              laboriosam ullam, repellendus iure culpa nesciunt quod aliquam atque. Quod ipsum vitae
+              odio excepturi libero a, quisquam fugiat aut id!
+            </ListItem>
+            <ListItem inset>
+              Inset list item - Lorem ipsum dolor sit amet consectetur, adipisicing elit. Rem
+              expedita consectetur tenetur culpa voluptas quas, magnam, dolorum, provident veniam
+              quaerat pariatur soluta et explicabo sunt odit alias sequi dicta ea?
+            </ListItem>
+            <ListItemButton icon={<MdCreate />}>
+              List item button - Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum
+              labore iusto fugit, tenetur adipisci dolorem eum repudiandae tempore modi repellendus
+              necessitatibus quae. Consectetur, iusto reprehenderit? Velit tempora quam dicta ab?
+            </ListItemButton>
+            <ListItemButton inset>
+              Inset list item button icon - Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Porro atque eligendi facilis explicabo alias aliquid iste, odio maxime, perferendis
+              dolor, velit nihil voluptatum hic dolorum in numquam error. Quam, voluptate!
+            </ListItemButton>
+            <ListItemButton href="/test" icon={<MdCreate />}>
+              List item button link - Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Tempore minima placeat optio eveniet ullam officiis harum quam porro sit expedita?
+              Debitis, nihil porro! Suscipit ex quis esse optio vitae repellat.
+            </ListItemButton>
+            <ListItemButton href="/test" inset>
+              Inset list item button link - Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Temporibus dicta rerum iure asperiores quod magni minus cumque ea odio. Ex similique
+              error velit esse laboriosam dolorem quam corporis nihil delectus.
+            </ListItemButton>
+          </List>
+        </div>
+      </>
+    );
   },
 };
