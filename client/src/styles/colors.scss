@@ -73,7 +73,7 @@ $palette: (
 
   .text-#{$color} {
     @include apply-values-for-modes(
-      background-color,
+      color,
       map.get($values, 'dark'),
       map.get($values, 'light')
     );
