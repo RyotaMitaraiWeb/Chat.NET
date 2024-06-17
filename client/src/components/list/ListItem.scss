@@ -3,12 +3,13 @@
 @import '../../styles/effects.scss';
 
 .component-list-item,
+.component-list-item-button,
 .component-list-item-button .button {
   @extend .accent-background;
   @extend .theme-emphasis-text;
   width: 100%;
 
-  &.with-icon {
+  &.with-icon, &.with-icon .button {
     display: flex;
     align-items: center;
     gap: 16px;

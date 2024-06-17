@@ -22,7 +22,7 @@ function ListItemButton(props: ListItemButtonProps): React.JSX.Element {
 
   return (
     <li
-      className={`component-list-item-button ${bold ? 'bolded' : ''}  ${
+      className={`component-list-item-button ${bold ? 'bolded' : ''} ${
         icon || inset ? 'with-icon' : ''
       } ${className}`}
       {...others}
