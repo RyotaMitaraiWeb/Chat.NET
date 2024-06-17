@@ -13,6 +13,7 @@
     align-items: center;
     gap: 16px;
     flex-direction: row;
+
     .component-list-item-icon,
     .component-icon {
       width: 24px;
@@ -43,6 +44,11 @@
   .bolded,
   .bolded .button {
     font-weight: bold;
+  }
+
+  .button {
+    font-size: inherit;
+    font-family: inherit;
   }
 
   &.size-large > .component-list-item,
