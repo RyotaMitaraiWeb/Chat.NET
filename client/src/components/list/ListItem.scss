@@ -8,7 +8,8 @@
   @extend .accent-background;
   @extend .theme-emphasis-text;
 
-  &.with-icon, &.with-icon .button {
+  &.with-icon,
+  &.with-icon .button {
     display: flex;
     align-items: center;
     gap: 16px;
