@@ -60,12 +60,14 @@ textarea.component-text-field {
     top: 150%;
     left: 0;
     right: 0;
+    @extend .theme-text;
   }
 
   .component-label-text {
     position: absolute;
     left: 0;
     right: 0;
+
     &.large {
       font-size: 11pt;
       bottom: 75px;
