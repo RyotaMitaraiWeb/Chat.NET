@@ -2,7 +2,7 @@
 import { TextFieldProps } from '../types';
 import '../TextField.scss';
 import '@/styles/colors.scss';
-import { useCallback, useLayoutEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { HelperTextProps, LabelTextProps } from '../../types/BaseInput';
 /**
  * A controlled ``input`` field.
@@ -43,9 +43,11 @@ function TextField(props: TextFieldProps): React.JSX.Element {
     }
   }, [autoresize]);
 
-  useLayoutEffect(() => {
-    adjustHeight();
-  }, [adjustHeight]);
+  useEffect(() => {
+    if (autoresize) {
+      adjustHeight();
+    }
+  }, [adjustHeight, autoresize]);
 
   if (type === 'text' && autoresize) {
     const height = Number(ref.current?.scrollHeight) || 0;
