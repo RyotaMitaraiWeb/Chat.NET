@@ -4,6 +4,8 @@ import '../TextField.scss';
 import '@/styles/colors.scss';
 import { useCallback, useEffect, useRef } from 'react';
 import { HelperTextProps, LabelTextProps } from '../../types/BaseInput';
+import { _generatePlaceholderText } from '../generatePlaceholderText';
+
 /**
  * A controlled ``input`` field.
  */
@@ -27,6 +29,7 @@ function TextField(props: TextFieldProps): React.JSX.Element {
     ...others
   } = props;
   const ref = useRef<HTMLTextAreaElement>(null);
+  const placeholderText = _generatePlaceholderText(placeholder, required);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     if (onChange) {
@@ -59,7 +62,7 @@ function TextField(props: TextFieldProps): React.JSX.Element {
         theme-emphasis-text ${size} ${className}`}
           rows={1}
           ref={ref}
-          placeholder={placeholder ? placeholder + '*' : undefined}
+          placeholder={placeholderText}
           value={value}
           form={form}
           disabled={disabled}
@@ -80,7 +83,7 @@ function TextField(props: TextFieldProps): React.JSX.Element {
         onChange={handleChange}
         className={`component-text-field
         accent-background theme-emphasis-text ${size}`}
-        placeholder={placeholder ? placeholder + '*' : undefined}
+        placeholder={placeholderText}
         value={value}
         form={form}
         disabled={disabled}

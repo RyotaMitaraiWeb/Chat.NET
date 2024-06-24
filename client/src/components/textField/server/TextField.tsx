@@ -2,6 +2,7 @@ import '../TextField.scss';
 import '@/styles/colors.scss';
 import { HelperTextProps, LabelTextProps } from '../../types/BaseInput';
 import { ServerTextFieldProps } from './types';
+import { _generatePlaceholderText } from '../generatePlaceholderText';
 /**
  * An uncontrolled text field, suitable for server components. Note that
  * this text field does not support automatic resizing; use the client
@@ -30,6 +31,7 @@ function TextField(props: ServerTextFieldProps): React.JSX.Element {
     step,
     ...others
   } = props;
+  const placeholderText = _generatePlaceholderText(placeholder, required);
 
   return (
     <label className={`component-helper-text-wrapper ${className}`} {...others}>
@@ -38,7 +40,7 @@ function TextField(props: ServerTextFieldProps): React.JSX.Element {
         type={type}
         className={`component-text-field
         accent-background theme-emphasis-text ${size}`}
-        placeholder={placeholder ? placeholder + '*' : undefined}
+        placeholder={placeholderText}
         form={form}
         disabled={disabled}
         name={name}
