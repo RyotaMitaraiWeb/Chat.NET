@@ -6,6 +6,7 @@
   border-radius: 5px;
   border: 1px solid gray;
   outline: 1px solid gray;
+  width: 100%;
 
   @media (prefers-reduced-motion: no-preference) {
     transition: outline-color 0.25s ease-in-out;
@@ -24,19 +25,16 @@
   &.small {
     padding: 8px 4px;
     font-size: 10pt;
-    width: 200px;
   }
 
   &.medium {
     padding: 16px 8px;
     font-size: 12pt;
-    width: 250px;
   }
 
   &.large {
     padding: 24px 12px;
     font-size: 14pt;
-    width: 300px;
   }
 }
 
@@ -50,35 +48,37 @@ textarea.component-text-field {
 }
 
 .component-helper-text-wrapper {
-  position: relative;
-  bottom: 20px;
-  top: 20px;
+  display: block;
 
+  &.small {
+    width: 200px;
+  }
+
+  &.medium {
+    width: 250px;
+  }
+
+  &.large {
+    width: 300px;
+  }
   .component-helper-text {
-    position: absolute;
     font-size: 10pt;
-    top: 150%;
-    left: 0;
-    right: 0;
+    margin-top: 3px;
+    @extend .theme-text;
   }
 
   .component-label-text {
-    position: absolute;
-    left: 0;
-    right: 0;
+    margin-bottom: 3px;
     &.large {
       font-size: 11pt;
-      bottom: 75px;
     }
 
     &.medium {
       font-size: 9pt;
-      bottom: 55px;
     }
 
     &.small {
       font-size: 8pt;
-      bottom: 36px;
     }
   }
 
