@@ -19,6 +19,5 @@ export interface HelperTextProps {
 export interface LabelTextProps {
   labelText: string;
   size: size;
-  bottom?: number;
   disabled?: boolean;
 }

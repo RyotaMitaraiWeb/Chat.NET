@@ -73,13 +73,9 @@ function LabelText(props: LabelTextProps): React.JSX.Element {
     return <></>;
   }
 
-  const style = props.bottom ? { bottom: props.bottom + 5 } : undefined;
   const disabledClass = props.disabled ? 'disabled' : '';
   return (
-    <div
-      style={style}
-      className={`component-label-text theme-emphasis-text ${props.size} ${disabledClass}`}
-    >
+    <div className={`component-label-text theme-emphasis-text ${props.size} ${disabledClass}`}>
       {props.labelText}
     </div>
   );

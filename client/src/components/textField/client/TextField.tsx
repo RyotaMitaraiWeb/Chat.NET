@@ -50,10 +50,9 @@ function TextField(props: TextFieldProps): React.JSX.Element {
   }, [adjustHeight, autoresize]);
 
   if (type === 'text' && autoresize) {
-    const height = Number(ref.current?.scrollHeight) || 0;
     return (
       <label className={`component-helper-text-wrapper ${size} ${className}`} {...others}>
-        <LabelText bottom={height} size={size} labelText={label} />
+        <LabelText size={size} labelText={label} />
         <textarea
           onChange={handleChange}
           className={`component-text-field accent-background
