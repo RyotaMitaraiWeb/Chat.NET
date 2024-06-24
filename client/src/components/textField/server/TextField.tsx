@@ -34,7 +34,6 @@ function TextField(props: ServerTextFieldProps): React.JSX.Element {
   return (
     <label className={`component-helper-text-wrapper ${className}`} {...others}>
       <LabelText disabled={disabled} size={size} labelText={label} />
-      <HelperText disabled={disabled} helperText={helperText} />
       <input
         type={type}
         className={`component-text-field
@@ -54,6 +53,7 @@ function TextField(props: ServerTextFieldProps): React.JSX.Element {
         step={step}
         defaultValue={value}
       />
+      <HelperText disabled={disabled} helperText={helperText} />
     </label>
   );
 }

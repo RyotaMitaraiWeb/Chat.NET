@@ -2,7 +2,7 @@
 import { TextFieldProps } from '../types';
 import '../TextField.scss';
 import '@/styles/colors.scss';
-import { useEffect, useRef } from 'react';
+import { useCallback, useLayoutEffect, useRef } from 'react';
 import { HelperTextProps, LabelTextProps } from '../../types/BaseInput';
 /**
  * A controlled ``input`` field.
@@ -27,6 +27,7 @@ function TextField(props: TextFieldProps): React.JSX.Element {
     ...others
   } = props;
   const ref = useRef<HTMLTextAreaElement>(null);
+
   function handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     if (onChange) {
       onChange(event);
@@ -35,23 +36,22 @@ function TextField(props: TextFieldProps): React.JSX.Element {
     adjustHeight();
   }
 
-  function adjustHeight() {
+  const adjustHeight = useCallback(() => {
     if (ref.current && autoresize) {
       ref.current.style.height = 'auto';
       ref.current.style.height = `${ref.current!.scrollHeight}px`;
     }
-  }
+  }, [autoresize]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     adjustHeight();
-  });
+  }, [adjustHeight]);
 
   if (type === 'text' && autoresize) {
     const height = Number(ref.current?.scrollHeight) || 0;
     return (
-      <label className={`component-helper-text-wrapper ${className}`} {...others}>
+      <label className={`component-helper-text-wrapper ${size} ${className}`} {...others}>
         <LabelText bottom={height} size={size} labelText={label} />
-        <HelperText helperText={helperText} />
         <textarea
           onChange={handleChange}
           className={`component-text-field accent-background
@@ -66,14 +66,14 @@ function TextField(props: TextFieldProps): React.JSX.Element {
           readOnly={readonly}
           required={required}
         ></textarea>
+        <HelperText helperText={helperText} />
       </label>
     );
   }
 
   return (
-    <label className={`component-helper-text-wrapper ${className}`} {...others}>
+    <label className={`component-helper-text-wrapper ${size} ${className}`} {...others}>
       <LabelText disabled={disabled} size={size} labelText={label} />
-      <HelperText disabled={disabled} helperText={helperText} />
       <input
         type={type}
         onChange={handleChange}
@@ -88,6 +88,7 @@ function TextField(props: TextFieldProps): React.JSX.Element {
         required={required}
         list={list}
       />
+      <HelperText disabled={disabled} helperText={helperText} />
     </label>
   );
 }
@@ -107,13 +108,9 @@ function LabelText(props: LabelTextProps): React.JSX.Element {
     return <></>;
   }
 
-  const style = props.bottom ? { bottom: props.bottom + 5 } : undefined;
   const disabledClass = props.disabled ? 'disabled' : '';
   return (
-    <div
-      style={style}
-      className={`component-label-text theme-emphasis-text ${props.size} ${disabledClass}`}
-    >
+    <div className={`component-label-text theme-emphasis-text ${props.size} ${disabledClass}`}>
       {props.labelText}
     </div>
   );
