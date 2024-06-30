@@ -1,1 +1,5 @@
 @import '../../styles/font.scss';
+
+.component-icon {
+  @include apply-font-sizes();
+}

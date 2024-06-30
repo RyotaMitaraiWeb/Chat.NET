@@ -1,5 +1,7 @@
 @import '../../styles/util.scss';
 @import '../../styles/colors.scss';
+@import '../../styles/font.scss';
+
 .component-button {
   border-radius: 5px;
   border: 0;
@@ -21,7 +23,9 @@
         background-color: rgba(128, 128, 128, 0.4);
       }
     }
-  }
+  } 
+
+  @include apply-font-sizes();
 
   &.size-small {
     padding: 8px 4px;

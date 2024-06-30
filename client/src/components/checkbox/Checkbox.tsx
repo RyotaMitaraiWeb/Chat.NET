@@ -28,13 +28,13 @@ function Checkbox(props: CheckboxProps): React.JSX.Element {
 
   return (
     <label
-      className={`component-checkbox ${generateCheckedClassName(checked)} ${side} ${size} ${
+      className={`component-checkbox ${generateCheckedClassName(checked)} ${side} size-${size} ${
         disabled ? 'disabled' : 'enabled'
       } ${className}`}
       {...others}
     >
       <div className="component-checkbox-label">{children}</div>
-      <div className={`checkbox ${size} ${color}`}>
+      <div className={`checkbox size-${size} ${color}`}>
         <Icon size={size} className="component-checkbox-icon">
           {icon}
         </Icon>

@@ -6,8 +6,20 @@ $sizes: (
   'large': 18pt,
 );
 
-@each $size, $value in $sizes {
-  .size-#{$size} {
-    font-size: $value;
+// @each $size, $value in $sizes {
+//   .size-#{$size} {
+//     font-size: $value;
+//   }
+// }
+
+@mixin apply-font-size($size) {
+  font-size: map-get($map: $sizes, $key: $size);
+}
+
+@mixin apply-font-sizes() {
+  @each $size, $value in $sizes {
+    &.size-#{$size} {
+      font-size: $value;
+    }
   }
 }

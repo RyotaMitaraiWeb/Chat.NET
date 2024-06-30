@@ -4,7 +4,6 @@ import { ButtonProps } from './types';
 import './Button.scss';
 import '@/styles/colors.scss';
 import '@/styles/effects.scss';
-import '@/styles/font.scss';
 import BaseButtonWithIcon from '../internal/baseButton/BaseButtonWithIcon';
 
 /**

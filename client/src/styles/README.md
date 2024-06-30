@@ -66,13 +66,17 @@ animation preferences.
 
 ### Font
 
-The following classes are available:
+The following mixins are available:
 
-```css
-.size-small /* 8pt */
-.size-medium /* 12pt */
-.size-large /* 18pt */
+```scss
+@mixin apply-font-sizes();
 ```
+This mixin will apply three classes to the selector upon which the mixin is called for. Those classes are ``size-large``, ``size-medium``, and ``size-small``, with font sizes 18pt, 12pt, and 6pt.
+
+```scss
+@mixin apply-font-size($size);
+```
+Applies a ``font-size`` to the element, corresponding to the provided ``$size``. Valid arguments are ``small``, ``medium``, and ``large``, which are respectively 6pt, 12pt, and 18pt.
 
 ### Animations
 

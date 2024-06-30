@@ -26,11 +26,11 @@ function Radio(props: RadioProps): React.JSX.Element {
     <label
       className={`component-radio ${disabled ? 'disabled' : 'enabled'} ${
         checked ? 'checked' : 'unchecked'
-      } ${side} ${size} ${className}`}
+      } ${side} size-${size} ${className}`}
       {...others}
     >
       <div className="component-radio-label">{children}</div>
-      <div className={`radio ${size}`}>
+      <div className={`radio size-${size}`}>
         <span className={`radio-button ${color}`}>
           <BaseRadio
             defaultChecked={defaultChecked}

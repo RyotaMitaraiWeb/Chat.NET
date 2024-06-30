@@ -58,16 +58,19 @@
   &.size-large > .component-list-item,
   &.size-large > .component-list-item-button .button {
     padding: 24px 12px;
+    @include apply-font-size($size: 'large');
   }
 
   &.size-medium > .component-list-item,
   &.size-medium > .component-list-item-button .button {
     padding: 16px 8px;
+    @include apply-font-size($size: 'medium');
   }
 
   &.size-small > .component-list-item,
   &.size-small > .component-list-item-button .button {
     padding: 8px 4px;
+    @include apply-font-size($size: 'small');
   }
 }
 

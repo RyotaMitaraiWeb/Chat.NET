@@ -1,11 +1,13 @@
 @import '../../styles/colors.scss';
 @import '../../styles/util.scss';
+@import '../../styles/font.scss';
 
 .component-checkbox {
   cursor: pointer;
   display: inline-flex;
   gap: 4px;
   text-align: center;
+  @include apply-font-sizes();
 
   &.disabled {
     cursor: not-allowed;
@@ -32,7 +34,7 @@
   }
 
   &.left,
-  .top {
+  &.top {
     .checkbox {
       order: 2;
     }
@@ -75,19 +77,19 @@
       transform: translate(-50%, -50%);
     }
 
-    &.small {
+    &.size-small {
       width: 12px;
       height: 12px;
       border-radius: 2px;
       border: 2px solid gray;
     }
 
-    &.medium {
+    &.size-medium {
       width: 24px;
       height: 24px;
     }
 
-    &.large {
+    &.size-large {
       width: 36px;
       height: 36px;
     }
