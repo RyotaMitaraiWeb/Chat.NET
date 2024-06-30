@@ -1,12 +1,15 @@
 @import '../../styles/util.scss';
 @import '../../styles/colors.scss';
 @import '../../styles/font.scss';
+@import '../../styles/effects.scss';
 
 .component-button {
   border-radius: 5px;
   border: 0;
   display: inline-flex;
   text-align: center;
+
+  @include apply-palette-effects();
 
   &.transparent {
     background-color: transparent;

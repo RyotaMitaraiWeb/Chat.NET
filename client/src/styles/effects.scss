@@ -39,7 +39,7 @@ $outline-color: #50dfff;
 }
 
 
-@mixin applyEffectTheme($hover-bg, $hover-text, $click-bg, $click-text) {
+@mixin _apply-effect-theme($hover-bg, $hover-text, $click-bg, $click-text) {
   &:hover:not(:disabled) {
     background-color: $hover-bg;
     color: $hover-text;
@@ -107,14 +107,16 @@ $effects: (
   'info': $info-effects,
 );
 
-@each $palette, $values in $effects {
-  .#{$palette}-effects {
-    @include applyEffectTheme(
-      map.get($values, 'hover-bg'),
-      map.get($values, 'hover-text'),
-      map.get($values, 'click-bg'),
-      map.get($values, 'click-text')
-    );
+@mixin apply-palette-effects() {
+  @each $palette, $values in $effects {
+    &.#{$palette}-effects {
+      @include _apply-effect-theme(
+        map.get($values, 'hover-bg'),
+        map.get($values, 'hover-text'),
+        map.get($values, 'click-bg'),
+        map.get($values, 'click-text')
+      );
+    }
   }
 }
 

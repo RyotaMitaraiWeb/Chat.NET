@@ -55,9 +55,10 @@ These variables can also be included with the following classes:
 It is preferable to extend the classes rather than use the variables, as those also handle the user's preferences.
 
 ### Effects
-
-To apply the effects for a given palette (e.g. primary, secondary, etc.), use a
-`.[palette]-effects` class (e.g. `.primary-effects`).
+```scss
+@mixin apply-palette-effects();
+```
+Applies a class for each palette option in the format ``.{palette}-effects`` (e.g. ``.primary-effects``). These classes handle an element's hover, active, focused, and disabled states.
 
 To apply effects for accent containers, use `.accent-hover` and `.accent-click`.
 
