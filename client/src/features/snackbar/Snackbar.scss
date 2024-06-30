@@ -22,7 +22,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    @extend .ripple;
+    @include ripple();
 
     &:hover {
       opacity: 0.6;

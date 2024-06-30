@@ -61,7 +61,11 @@ To apply the effects for a given palette (e.g. primary, secondary, etc.), use a
 
 To apply effects for accent containers, use `.accent-hover` and `.accent-click`.
 
-To apply a ripple effect when the user clicks an element, use the `.ripple` class. Note that the effect starts from the center (regardless of where the user clicks) and that the ripple is activated regardless of the user's
+```scss
+@mixin ripple();
+```
+
+Applies a ripple effect that triggers when the element is clicked. Note that the effect starts from the center (regardless of where the user clicks) and that the ripple is activated regardless of the user's
 animation preferences.
 
 ### Font

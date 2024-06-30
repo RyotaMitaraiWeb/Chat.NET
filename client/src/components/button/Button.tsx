@@ -3,7 +3,6 @@ import React from 'react';
 import { ButtonProps } from './types';
 import './Button.scss';
 import '@/styles/colors.scss';
-import '@/styles/effects.scss';
 import BaseButtonWithIcon from '../internal/baseButton/BaseButtonWithIcon';
 
 /**

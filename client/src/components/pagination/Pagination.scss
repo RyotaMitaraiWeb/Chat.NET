@@ -25,7 +25,7 @@
     @include apply-values-for-modes(color, white, black);
     @include apply-transition(background-color 0.2s, color 0.2s);
     cursor: pointer;
-    @extend .ripple;
+    @include ripple();
 
     &:hover:not(:disabled, .disabled),
     &:focus-visible:not(.disabled) {
