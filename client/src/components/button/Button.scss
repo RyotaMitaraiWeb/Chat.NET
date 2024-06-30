@@ -9,9 +9,10 @@
   display: inline-flex;
   text-align: center;
 
+  @include apply-palette-backgrounds();
   @include apply-palette-effects();
 
-  &.transparent {
+  &.background-transparent {
     background-color: transparent;
     @include apply-values-for-modes(color, $text-medium-dark, $text-medium-light);
     @include apply-transition(background-color 0.3s);

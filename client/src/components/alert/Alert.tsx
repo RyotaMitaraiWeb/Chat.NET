@@ -1,6 +1,5 @@
 import { AlertProps } from './types';
 import './Alert.scss';
-import '@/styles/colors.scss';
 import { severity } from '../types/options';
 import { MdCheckCircleOutline, MdInfoOutline, MdErrorOutline, MdWarning } from 'react-icons/md';
 import Icon from '../icon/Icon';
@@ -37,7 +36,7 @@ function Alert(props: AlertProps): React.JSX.Element {
   const title = alertTitle ? <AlertTitle>{alertTitle}</AlertTitle> : <></>;
   const actions = alertActions ? <AlertActions>{alertActions}</AlertActions> : <></>;
   return (
-    <div className={`component-alert ${className} ${severity}`} {...others}>
+    <div className={`component-alert ${className} background-${severity}`} {...others}>
       <div className="alert-icon title">
         <Icon size="large">{AlertIcon}</Icon>
         {title}

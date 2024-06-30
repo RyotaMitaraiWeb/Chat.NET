@@ -52,58 +52,62 @@ $palette: (
   'info': $info-colors,
 );
 
-@each $color, $values in $palette {
-  .background-#{$color} {
-    @include apply-transition(background-color 0.2s);
-    @include apply-values-for-modes(
-      background-color,
-      map.get($values, 'dark'),
-      map.get($values, 'light')
-    );
-
-    &:disabled,
-    & :disabled {
+@mixin apply-palette-backgrounds() {
+  @each $color, $values in $palette {
+    &.background-#{$color} {
+      @include apply-transition(background-color 0.2s);
       @include apply-values-for-modes(
         background-color,
-        rgba(255, 255, 255, 0.12),
-        rgba(0, 0, 0, 0.12)
+        map.get($values, 'dark'),
+        map.get($values, 'light')
       );
+  
+      &:disabled,
+      & :disabled,
+      &.disabled,
+      & .disabled {
+        @include apply-values-for-modes(
+          background-color,
+          rgba(255, 255, 255, 0.12),
+          rgba(0, 0, 0, 0.12)
+        );
+      }
     }
-  }
-
-  .text-#{$color} {
-    @include apply-values-for-modes(color, map.get($values, 'dark'), map.get($values, 'light'));
-  }
-
-  .text-on-#{$color} {
-    color: map.get($values, 'contrast-text-dark');
-    @include apply-transition(color 0.2s);
-    @include apply-values-for-modes(
-      color,
-      map.get($values, 'contrast-text-dark'),
-      map.get($values, 'contrast-text-light')
-    );
-
-    &:disabled,
-    & :disabled {
-      @include apply-values-for-modes(color, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.26));
-    }
-  }
-
-  .#{$color} {
-    @extend .text-on-#{$color};
-    @extend .background-#{$color};
-
-    @include apply-transition(background-color 0.2s, color 0.2s);
-
-    .contrast-text-color {
-      @include apply-transition(color 0.2s);
-      @include apply-values-for-modes(
-        color,
-        map.get($values, 'contrast-text-dark'),
-        map.get($values, 'contrast-text-light')
-      );
-    }
+  
+    // .text-#{$color} {
+    //   @include apply-values-for-modes(color, map.get($values, 'dark'), map.get($values, 'light'));
+    // }
+  
+    // .text-on-#{$color} {
+    //   color: map.get($values, 'contrast-text-dark');
+    //   @include apply-transition(color 0.2s);
+    //   @include apply-values-for-modes(
+    //     color,
+    //     map.get($values, 'contrast-text-dark'),
+    //     map.get($values, 'contrast-text-light')
+    //   );
+  
+    //   &:disabled,
+    //   & :disabled {
+    //     @include apply-values-for-modes(color, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.26));
+    //   }
+    // }
+  
+    // .#{$color} {
+    //   @extend .text-on-#{$color};
+    //   @extend .background-#{$color};
+  
+    //   @include apply-transition(background-color 0.2s, color 0.2s);
+  
+    //   .contrast-text-color {
+    //     @include apply-transition(color 0.2s);
+    //     @include apply-values-for-modes(
+    //       color,
+    //       map.get($values, 'contrast-text-dark'),
+    //       map.get($values, 'contrast-text-light')
+    //     );
+    //   }
+    // }
   }
 }
 

@@ -97,8 +97,10 @@
 
   &.checked,
   &:has(:checked) {
+
     .checkbox {
       border: 3px solid transparent;
+      @include apply-palette-backgrounds();
 
       &.small {
         border: 2px solid transparent;

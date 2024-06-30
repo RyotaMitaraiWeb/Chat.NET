@@ -1,7 +1,6 @@
 import BaseRadio from '../internal/baseRadio/BaseRadio';
 import { RadioProps } from './types';
 import './Radio.scss';
-import '@/styles/colors.scss';
 
 /**
  * A styled radio button whose color, positioning, and size can be configured.
@@ -31,7 +30,7 @@ function Radio(props: RadioProps): React.JSX.Element {
     >
       <div className="component-radio-label">{children}</div>
       <div className={`radio size-${size}`}>
-        <span className={`radio-button ${color}`}>
+        <span className={`radio-button background-${color}`}>
           <BaseRadio
             defaultChecked={defaultChecked}
             value={value}
