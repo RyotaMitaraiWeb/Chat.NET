@@ -87,7 +87,7 @@
 
     @extend .accent-background;
     @extend .theme-emphasis-text;
-    @extend .accent-hover;
-    @extend .accent-click;
+    @include apply-accent-hover();
+    @include apply-accent-click();
   }
 }

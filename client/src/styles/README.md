@@ -60,7 +60,11 @@ It is preferable to extend the classes rather than use the variables, as those a
 ```
 Applies a class for each palette option in the format ``.{palette}-effects`` (e.g. ``.primary-effects``). These classes handle an element's hover, active, focused, and disabled states.
 
-To apply effects for accent containers, use `.accent-hover` and `.accent-click`.
+```scss
+@mixin apply-accent-hover();
+@mixin apply-accent-click();
+```
+These mixins provide styling for elements' hover and active states, using the app's accent colors.
 
 ```scss
 @mixin ripple();

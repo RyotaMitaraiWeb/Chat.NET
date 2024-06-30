@@ -38,7 +38,6 @@ $outline-color: #50dfff;
   }
 }
 
-
 @mixin _apply-effect-theme($hover-bg, $hover-text, $click-bg, $click-text) {
   &:hover:not(:disabled) {
     background-color: $hover-bg;
@@ -120,10 +119,11 @@ $effects: (
   }
 }
 
-.accent-hover {
+@mixin apply-accent-hover() {
   @include apply-transition(background-color 0.2s, color 0.2s);
 
-  &:hover:not(:disabled) {
+  &:hover:not(:disabled),
+  &:hover:not(.disabled) {
     background-color: rgba(202, 202, 202, 0.5);
   }
 
@@ -132,8 +132,8 @@ $effects: (
   }
 }
 
-.accent-click {
-  &:active:not(:disabled) {
+@mixin apply-accent-click() {
+  &:active:not(:disabled), &:active:not(.disabled) {
     background-color: rgba(202, 202, 202, 0.7);
   }
 
