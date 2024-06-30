@@ -5,8 +5,7 @@ import { severity } from '../../components/types/options';
 import { SnackbarProps } from './types';
 import './Snackbar.scss';
 import '@/styles/colors.scss';
-import { useCallback, useEffect, useState } from 'react';
-import { useDebounce } from '@/hooks/useDebounce/useDebounce';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { isBrowser } from '@/util/isBrowser/isBrowser';
 
 const titles: Record<severity, string> = {
@@ -49,6 +48,8 @@ function Snackbar(props: SnackbarProps): JSX.Element {
     ...others
   } = props;
 
+  const ref = useRef<ReturnType<typeof setTimeout>>();
+
   /*
    * Used to trigger a closing animation before
    * the snackbar is unmounted from the DOM.
@@ -64,11 +65,13 @@ function Snackbar(props: SnackbarProps): JSX.Element {
     }
   }, [onClose]);
 
-  const closeWithTimeout = useDebounce(() => {
-    if (open) {
-      close();
-    }
-  }, duration);
+  const closeWithTimeout = useCallback(() => {
+    ref.current = setTimeout(() => {
+      if (open) {
+        close();
+      }
+    }, duration);
+  }, [open, close, duration]);
 
   function handleClose(event: React.MouseEvent) {
     event.preventDefault();
@@ -88,11 +91,14 @@ function Snackbar(props: SnackbarProps): JSX.Element {
     if (open) {
       window.addEventListener('keydown', handleEscape);
     }
-
-    return () => window.removeEventListener('keydown', handleEscape);
+    return () => {
+      window.removeEventListener('keydown', handleEscape);
+      clearTimeout(ref.current);
+    };
   }, [handleEscape, open, close]);
 
   useEffect(() => {
+    clearTimeout(ref.current);
     if (open && !disappear) {
       if (duration) {
         closeWithTimeout();
