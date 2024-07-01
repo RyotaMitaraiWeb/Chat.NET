@@ -23,6 +23,14 @@
   &.background {
     background-color: gray;
 
+    &:hover {
+      background-color: rgba(128, 128, 128, 0.6);
+    }
+
+    &:active {
+      background-color: rgba(128, 128, 128, 0.3);
+    }
+
     &:disabled,
     &.disabled {
       @include apply-values-for-modes(
