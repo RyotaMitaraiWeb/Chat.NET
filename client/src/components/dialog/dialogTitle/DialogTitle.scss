@@ -6,5 +6,5 @@
   top: 0;
   z-index: 1000;
   padding: 16px;
-  @extend .accent-background;
+  @include apply-accent-background();
 }

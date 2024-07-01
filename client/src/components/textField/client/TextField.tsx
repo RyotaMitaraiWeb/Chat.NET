@@ -1,7 +1,6 @@
 'use client';
 import { TextFieldProps } from '../types';
 import '../TextField.scss';
-import '@/styles/colors.scss';
 import { useCallback, useEffect, useRef } from 'react';
 import { HelperTextProps, LabelTextProps } from '../../types/BaseInput';
 import { _generatePlaceholderText } from '../generatePlaceholderText';
@@ -58,8 +57,7 @@ function TextField(props: TextFieldProps): React.JSX.Element {
         <LabelText size={size} labelText={label} />
         <textarea
           onChange={handleChange}
-          className={`component-text-field accent-background
-        theme-emphasis-text ${size} ${className}`}
+          className={`component-text-field ${size} ${className}`}
           rows={1}
           ref={ref}
           placeholder={placeholderText}
@@ -81,8 +79,7 @@ function TextField(props: TextFieldProps): React.JSX.Element {
       <input
         type={type}
         onChange={handleChange}
-        className={`component-text-field
-        accent-background theme-emphasis-text ${size}`}
+        className={`component-text-field ${size}`}
         placeholder={placeholderText}
         value={value}
         form={form}
@@ -114,9 +111,7 @@ function LabelText(props: LabelTextProps): React.JSX.Element {
 
   const disabledClass = props.disabled ? 'disabled' : '';
   return (
-    <div className={`component-label-text theme-emphasis-text ${props.size} ${disabledClass}`}>
-      {props.labelText}
-    </div>
+    <div className={`component-label-text ${props.size} ${disabledClass}`}>{props.labelText}</div>
   );
 }
 

@@ -40,19 +40,16 @@ $text-medium-light
 $shadow
 ```
 
-These variables can also be included with the following classes:
-
-```css
-.theme-background
-.accent-background
-.theme-text
-.theme-emphasis-text
-.accent /* .accent-background + .theme-text */
-.accent-emphasis /* .accent-background + .theme-emphasis-text */
-.shadow
+These variables are used in the following mixins:
+```scss
+@mixin apply-theme-background();
+@mixin apply-accent-background();
+@mixin apply-theme-text();
+@mixin apply-theme-emphasis-text();
+@mixin shadow();
 ```
 
-It is preferable to extend the classes rather than use the variables, as those also handle the user's preferences.
+It is preferable to use the mixins, as they handle user preferences and stuff like disabled status out-of-the-box for you.
 
 ### Effects
 ```scss
@@ -70,8 +67,7 @@ These mixins provide styling for elements' hover and active states, using the ap
 @mixin ripple();
 ```
 
-Applies a ripple effect that triggers when the element is clicked. Note that the effect starts from the center (regardless of where the user clicks) and that the ripple is activated regardless of the user's
-animation preferences.
+Applies a ripple effect that triggers when the element is clicked. Note that the effect starts from the center (regardless of where the user clicks) and that the ripple is activated regardless of the user's animation preferences.
 
 ### Font
 

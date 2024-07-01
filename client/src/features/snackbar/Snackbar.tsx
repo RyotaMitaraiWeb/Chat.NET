@@ -4,7 +4,6 @@ import Alert from '../../components/alert/Alert';
 import { severity } from '../../components/types/options';
 import { SnackbarProps } from './types';
 import './Snackbar.scss';
-import '@/styles/colors.scss';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { isBrowser } from '@/util/isBrowser/isBrowser';
 
@@ -128,7 +127,7 @@ function Snackbar(props: SnackbarProps): JSX.Element {
         alertTitle={snackbarTitle || titles[severity]}
         severity={severity}
         alertActions={
-          <button className="snackbar-close-button contrast-text-color" onClick={handleClose}>
+          <button className="snackbar-close-button" onClick={handleClose}>
             {closeButtonText || 'Close'}
           </button>
         }

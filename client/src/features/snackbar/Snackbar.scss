@@ -29,7 +29,7 @@
     }
 
     &:active {
-      @extend .shadow;
+      @include shadow();
     }
   }
 

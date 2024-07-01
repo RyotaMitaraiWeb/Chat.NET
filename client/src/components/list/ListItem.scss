@@ -5,8 +5,8 @@
 .component-list-item,
 .component-list-item-button,
 .component-list-item-button .button {
-  @extend .accent-background;
-  @extend .theme-emphasis-text;
+  @include apply-accent-background();
+  @include apply-theme-emphasis-text();
 
   &.with-icon,
   &.with-icon .button {
@@ -85,8 +85,8 @@
     text-align: left;
     display: block;
 
-    @extend .accent-background;
-    @extend .theme-emphasis-text;
+    @include apply-accent-background();
+    @include apply-theme-emphasis-text();
     @include apply-accent-hover();
     @include apply-accent-click();
   }
