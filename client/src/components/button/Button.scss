@@ -1,3 +1,4 @@
+@use 'sass:map';
 @import '../../styles/util.scss';
 @import '../../styles/colors.scss';
 @import '../../styles/font.scss';
@@ -12,7 +13,6 @@
   border: 1px solid transparent;
 
   @include apply-palette-backgrounds();
-  @include apply-palette-effects();
 
   // &.background-transparent {
   //   background-color: transparent;
@@ -31,11 +31,15 @@
   //   }
   // }
 
-  @include apply-palette-text();
-  @include apply-palette-outlined-text();
+  @include apply-palette-text($interactive: true);
+  @include apply-palette-outlined-text($interactive: true);
 
   &[class*="text-"], &[class*="outlined-"] {
     background-color: transparent;
+  }
+
+  &[class*="background-"] {
+    @include apply-palette-effects();
   }
 
   @include apply-font-sizes();

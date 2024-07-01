@@ -1,4 +1,5 @@
 @use 'sass:map';
+@use 'sass:color';
 @import './util.scss';
 
 $primary-colors: (
@@ -85,26 +86,34 @@ $palette: (
   }
 }
 
-@mixin apply-palette-text() {
+@mixin apply-palette-text($interactive: false) {
   @each $color, $values in $palette {
     &.text-#{$color} {
       @include apply-values-for-modes(color, map.get($values, 'dark'), map.get($values, 'light'));
+
+      @if $interactive {
+        @include ripple(map.get($values, 'light'), map.get($values, 'dark'));
+
+        &:hover:not(:disabled) {
+          @include apply-values-for-modes(
+            background-color,
+            color.adjust(map.get($values, 'dark'), $alpha: -0.9),
+            color.adjust(map.get($values, 'light'), $alpha: -0.9)
+          );
+        }
+      }
 
       &:disabled,
       & :disabled,
       &.disabled,
       & .disabled {
-        @include apply-values-for-modes(
-          color,
-          rgba(255, 255, 255, 0.12),
-          rgba(0, 0, 0, 0.12)
-        );
+        @include apply-values-for-modes(color, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.12));
       }
     }
   }
 }
 
-@mixin apply-palette-outlined-text() {
+@mixin apply-palette-outlined-text($interactive: false) {
   @each $color, $values in $palette {
     &.outlined-#{$color} {
       @include apply-values-for-modes(
@@ -112,6 +121,18 @@ $palette: (
         map.get($values, 'dark'),
         map.get($values, 'light')
       );
+
+      @if $interactive {
+        @include ripple(map.get($values, 'light'), map.get($values, 'dark'));
+
+        &:hover:not(:disabled, .disabled) {
+          @include apply-values-for-modes(
+            background-color,
+            color.adjust(map.get($values, 'dark'), $alpha: -0.9),
+            color.adjust(map.get($values, 'light'), $alpha: -0.9)
+          );
+        }
+      }
 
       @include apply-values-for-modes(color, map.get($values, 'dark'), map.get($values, 'light'));
       border-width: 1px;
@@ -121,11 +142,7 @@ $palette: (
       & :disabled,
       &.disabled,
       & .disabled {
-        @include apply-values-for-modes(
-          color,
-          rgba(255, 255, 255, 0.12),
-          rgba(0, 0, 0, 0.12)
-        );
+        @include apply-values-for-modes(color, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.12));
 
         @include apply-values-for-modes(
           border-color,

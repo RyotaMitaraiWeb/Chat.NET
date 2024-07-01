@@ -18,8 +18,8 @@ Currently, the palette options are primary, secondary, success, warning, info, a
 
 ```scss
 @mixin apply-palette-backgrounds();
-@mixin apply-palette-text();
-@mixin apply-palette-outlined-text();
+@mixin apply-palette-text($interactive: false);
+@mixin apply-palette-outlined-text($interactive: false);
 ```
 These mixins apply styling to elements with the following classes, in order:
 - ``background-{palette}``
@@ -28,6 +28,8 @@ These mixins apply styling to elements with the following classes, in order:
 where ``{palette}`` is each palette color.
 
 The background class will apply the palette color as a background color with an appropriate contrast text. The text class applies the palette as a text color. The outlined class applies the palette as a text and border color (by default, the border has a width of 1px).
+
+For the text and outlined variants, you can also mark them as interactive, which applies a ripple of the respective colors.
 
 The following SCSS variables (representing the app's theming) are available:
 
@@ -67,10 +69,12 @@ Applies styling for elements with classes in the format ``.{palette}-effects`` (
 These mixins provide styling for elements' hover and active states, using the app's accent colors.
 
 ```scss
-@mixin ripple();
+@mixin ripple($ripple-color-light: black, $ripple-color-dark: white)
 ```
 
 Applies a ripple effect that triggers when the element is clicked. Note that the effect starts from the center (regardless of where the user clicks) and that the ripple is activated regardless of the user's animation preferences.
+
+By default, the ripple color is black or white, depending on the current theme. You can configure the colors for both themes via parameters.
 
 ### Font
 
