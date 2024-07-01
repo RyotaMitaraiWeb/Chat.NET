@@ -93,6 +93,17 @@ $palette: (
   }
 }
 
+@mixin apply-palette-outlined-text() {
+  @each $color, $values in $palette {
+    &.outlined-#{$color} {
+      @include apply-values-for-modes(border-color, map.get($values, 'dark'), map.get($values, 'light'));
+      @include apply-values-for-modes(color, map.get($values, 'dark'), map.get($values, 'light'));
+      border-width: 1px;
+      border-style: solid;
+    }
+  }
+}
+
 $background-dark: #121212;
 $background-light: #e9e4e4;
 $accent-light: white;
