@@ -30,7 +30,7 @@ export const Sizes: Story = {
   render: () => (
     <>
       <>
-        <p>Variants: primary, secondary, info, error, transparent, disabled</p>
+        <p>Variants: primary, secondary, info, error, no color, disabled</p>
         <div>
           <h6>Small</h6>
           <IconButton onClick={fn} size="small" color="primary">
@@ -45,7 +45,7 @@ export const Sizes: Story = {
           <IconButton onClick={fn} size="small" color="error">
             <MdCancel />
           </IconButton>
-          <IconButton onClick={fn} size="small" color="transparent">
+          <IconButton onClick={fn} size="small">
             <MdCancel />
           </IconButton>
           <IconButton size="small" disabled>
@@ -66,7 +66,7 @@ export const Sizes: Story = {
           <IconButton onClick={fn} size="medium" color="error">
             <MdCancel />
           </IconButton>
-          <IconButton onClick={fn} size="medium" color="transparent">
+          <IconButton onClick={fn} size="medium">
             <MdCancel />
           </IconButton>
           <IconButton size="medium" disabled>
@@ -87,7 +87,7 @@ export const Sizes: Story = {
           <IconButton size="large" color="error">
             <MdCancel />
           </IconButton>
-          <IconButton size="large" color="transparent">
+          <IconButton size="large">
             <MdCancel />
           </IconButton>
           <IconButton onClick={fn} size="large" disabled>
@@ -116,7 +116,7 @@ export const Variants: Story = {
         <IconButton variant="text" color="error">
           <MdCancel />
         </IconButton>
-        <IconButton variant="text" color="transparent">
+        <IconButton variant="text">
           <MdCancel />
         </IconButton>
         <IconButton variant="text" disabled>
@@ -137,7 +137,7 @@ export const Variants: Story = {
         <IconButton variant="fill" color="error">
           <MdCancel />
         </IconButton>
-        <IconButton variant="fill" color="transparent">
+        <IconButton variant="fill">
           <MdCancel />
         </IconButton>
         <IconButton variant="fill" disabled>
@@ -158,7 +158,7 @@ export const Variants: Story = {
         <IconButton variant="outlined" color="error">
           <MdCancel />
         </IconButton>
-        <IconButton variant="outlined" color="transparent">
+        <IconButton variant="outlined">
           <MdCancel />
         </IconButton>
         <IconButton variant="outlined" disabled>

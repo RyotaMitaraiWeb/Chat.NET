@@ -29,7 +29,7 @@ export const Default: Story = {
 export const Sizes: Story = {
   render: () => (
     <>
-      <p>Variants: primary, secondary, info, error, transparent, disabled</p>
+      <p>Variants: primary, secondary, info, error, no color, disabled</p>
       <div>
         <h6>Small</h6>
         <Button size="small" color="primary">
@@ -44,9 +44,7 @@ export const Sizes: Story = {
         <Button size="small" color="error">
           Hello
         </Button>
-        <Button size="small" color="transparent">
-          Hello
-        </Button>
+        <Button size="small">Hello</Button>
         <Button size="small" disabled>
           Hello
         </Button>
@@ -65,9 +63,7 @@ export const Sizes: Story = {
         <Button size="medium" color="error">
           Hello
         </Button>
-        <Button size="medium" color="transparent">
-          Hello
-        </Button>
+        <Button size="medium">Hello</Button>
         <Button size="medium" disabled>
           Hello
         </Button>
@@ -86,9 +82,7 @@ export const Sizes: Story = {
         <Button size="large" color="error">
           Hello
         </Button>
-        <Button size="large" color="transparent">
-          Hello
-        </Button>
+        <Button size="large">Hello</Button>
         <Button onClick={fn} size="large" disabled>
           Hello
         </Button>
@@ -114,9 +108,7 @@ export const Variants: Story = {
         <Button variant="text" color="error">
           Hello
         </Button>
-        <Button variant="text" color="transparent">
-          Hello
-        </Button>
+        <Button variant="text">Hello</Button>
         <Button variant="text" disabled>
           Hello
         </Button>
@@ -135,9 +127,7 @@ export const Variants: Story = {
         <Button variant="fill" color="error">
           Hello
         </Button>
-        <Button variant="fill" color="transparent">
-          Hello
-        </Button>
+        <Button variant="fill">Hello</Button>
         <Button variant="fill" disabled>
           Hello
         </Button>
@@ -156,9 +146,7 @@ export const Variants: Story = {
         <Button variant="outlined" color="error">
           Hello
         </Button>
-        <Button variant="outlined" color="transparent">
-          Hello
-        </Button>
+        <Button variant="outlined">Hello</Button>
         <Button variant="outlined" disabled>
           Hello
         </Button>

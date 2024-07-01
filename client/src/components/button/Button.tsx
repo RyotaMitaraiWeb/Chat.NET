@@ -13,7 +13,7 @@ import { generateVariantClassName } from '@/util/generateVariantClassName/genera
 function Button(props: ButtonProps): React.JSX.Element {
   const {
     className = '',
-    color = 'primary',
+    color,
     size = 'medium',
     children,
     onClick,
@@ -23,12 +23,13 @@ function Button(props: ButtonProps): React.JSX.Element {
   } = props;
 
   const variantClassName = generateVariantClassName(variant);
+  const variantColorClassName = color ? `${variantClassName}-${color}` : variantClassName;
 
   return (
     <BaseButtonWithIcon
       icon={icon}
       className={`component-button 
-        ${variantClassName}-${color} ${color}-effects size-${size}
+        ${variantColorClassName} ${color}-effects size-${size}
         ${icon ? 'with-icon' : ''} ${className}`}
       onClick={onClick}
       {...others}
