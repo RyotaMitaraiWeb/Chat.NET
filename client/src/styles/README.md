@@ -14,17 +14,22 @@ The colors and effects also take into account the user's preferences in regards 
 
 ### Colors
 
-When you want to apply a palette color (e.g. primary, secondary) to a component, you can use classes like `.primary`, `.secondary` and similar.
-These classes are a combination of the `.background-[palette]` and `.text-on-[palette]` (which applies an appropriate constrast text color) classes which you can also use if you wish to. `text-[palette]` applies a text color of the given palette.
-
-Normally, each palette class defines a contrast text for its color. However, this occassionally does not apply correctly to some elements (e.g. a native `button` tag). You can bypass it like this:
-
-```css
-/** Substitute ``primary`` with whatever color you want */
-.primary .contrast-text-color
-```
-
 Currently, the palette options are primary, secondary, success, warning, info, and error.
+
+```scss
+@mixin apply-palette-backgrounds();
+@mixin apply-palette-text($interactive: false);
+@mixin apply-palette-outlined-text($interactive: false);
+```
+These mixins apply styling to elements with the following classes, in order:
+- ``background-{palette}``
+- ``text-{palette}``
+- ``outlined-{palette}``
+where ``{palette}`` is each palette color.
+
+The background class will apply the palette color as a background color with an appropriate contrast text. The text class applies the palette as a text color. The outlined class applies the palette as a text and border color (by default, the border has a width of 1px).
+
+For the text and outlined variants, you can also mark them as interactive, which applies a ripple of the respective colors.
 
 The following SCSS variables (representing the app's theming) are available:
 
@@ -55,7 +60,7 @@ It is preferable to use the mixins, as they handle user preferences and stuff li
 ```scss
 @mixin apply-palette-effects();
 ```
-Applies a class for each palette option in the format ``.{palette}-effects`` (e.g. ``.primary-effects``). These classes handle an element's hover, active, focused, and disabled states.
+Applies styling for elements with classes in the format ``.{palette}-effects`` (e.g. ``.primary-effects``). These styles handle an element's hover, active, focused, and disabled states with colors appropriate for the palette.
 
 ```scss
 @mixin apply-accent-hover();
@@ -64,10 +69,12 @@ Applies a class for each palette option in the format ``.{palette}-effects`` (e.
 These mixins provide styling for elements' hover and active states, using the app's accent colors.
 
 ```scss
-@mixin ripple();
+@mixin ripple($ripple-color-light: black, $ripple-color-dark: white)
 ```
 
 Applies a ripple effect that triggers when the element is clicked. Note that the effect starts from the center (regardless of where the user clicks) and that the ripple is activated regardless of the user's animation preferences.
+
+By default, the ripple color is black or white, depending on the current theme. You can configure the colors for both themes via parameters.
 
 ### Font
 

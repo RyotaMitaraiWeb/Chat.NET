@@ -3,7 +3,7 @@
 
 $outline-color: #50dfff;
 
-@mixin ripple() {
+@mixin ripple($ripple-color-light: black, $ripple-color-dark: white) {
   position: relative;
   overflow: hidden;
   transform: translate3d(0, 0, 0);
@@ -19,8 +19,8 @@ $outline-color: #50dfff;
     pointer-events: none;
     @include apply-values-for-modes(
       background-image,
-      radial-gradient(circle, white 10%, transparent 10.01%),
-      radial-gradient(circle, black 10%, transparent 10.01%)
+      radial-gradient(circle, $ripple-color-dark 10%, transparent 10.01%),
+      radial-gradient(circle, $ripple-color-dark 10%, transparent 10.01%)
     );
     background-repeat: no-repeat;
     background-position: 50%;
@@ -141,7 +141,7 @@ $effects: (
   @include apply-transition(background-color 0.2s);
 }
 
-@mixin ripple() {
+@mixin ripple($ripple-color-light: black, $ripple-color-dark: white) {
   position: relative;
   overflow: hidden;
   transform: translate3d(0, 0, 0);
@@ -157,8 +157,8 @@ $effects: (
     pointer-events: none;
     @include apply-values-for-modes(
       background-image,
-      radial-gradient(circle, white 10%, transparent 10.01%),
-      radial-gradient(circle, black 10%, transparent 10.01%)
+      radial-gradient(circle, $ripple-color-dark 10%, transparent 10.01%),
+      radial-gradient(circle, $ripple-color-light 10%, transparent 10.01%)
     );
     background-repeat: no-repeat;
     background-position: 50%;

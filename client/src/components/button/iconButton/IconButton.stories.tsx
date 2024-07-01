@@ -30,7 +30,7 @@ export const Sizes: Story = {
   render: () => (
     <>
       <>
-        <p>Variants: primary, secondary, info, error, transparent, disabled</p>
+        <p>Variants: primary, secondary, info, error, success, warning, no color, disabled</p>
         <div>
           <h6>Small</h6>
           <IconButton onClick={fn} size="small" color="primary">
@@ -45,7 +45,13 @@ export const Sizes: Story = {
           <IconButton onClick={fn} size="small" color="error">
             <MdCancel />
           </IconButton>
-          <IconButton onClick={fn} size="small" color="transparent">
+          <IconButton onClick={fn} size="small" color="success">
+            <MdCancel />
+          </IconButton>
+          <IconButton onClick={fn} size="small" color="warning">
+            <MdCancel />
+          </IconButton>
+          <IconButton onClick={fn} size="small">
             <MdCancel />
           </IconButton>
           <IconButton size="small" disabled>
@@ -66,7 +72,13 @@ export const Sizes: Story = {
           <IconButton onClick={fn} size="medium" color="error">
             <MdCancel />
           </IconButton>
-          <IconButton onClick={fn} size="medium" color="transparent">
+          <IconButton onClick={fn} size="medium" color="success">
+            <MdCancel />
+          </IconButton>
+          <IconButton onClick={fn} size="medium" color="warning">
+            <MdCancel />
+          </IconButton>
+          <IconButton onClick={fn} size="medium">
             <MdCancel />
           </IconButton>
           <IconButton size="medium" disabled>
@@ -87,7 +99,13 @@ export const Sizes: Story = {
           <IconButton size="large" color="error">
             <MdCancel />
           </IconButton>
-          <IconButton size="large" color="transparent">
+          <IconButton onClick={fn} size="large" color="success">
+            <MdCancel />
+          </IconButton>
+          <IconButton onClick={fn} size="large" color="warning">
+            <MdCancel />
+          </IconButton>
+          <IconButton size="large">
             <MdCancel />
           </IconButton>
           <IconButton onClick={fn} size="large" disabled>
@@ -99,11 +117,98 @@ export const Sizes: Story = {
   ),
 };
 
+export const Variants: Story = {
+  render: () => (
+    <>
+      <div>
+        <h3>Text</h3>
+        <IconButton variant="text" color="primary">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="text" color="secondary">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="text" color="success">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="text" color="warning">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="text" color="info">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="text" color="error">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="text">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="text" disabled>
+          <MdCancel />
+        </IconButton>
+      </div>
+      <div>
+        <h3>Fill (default)</h3>
+        <IconButton variant="fill" color="primary">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="fill" color="secondary">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="fill" color="success">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="fill" color="warning">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="fill" color="info">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="fill" color="error">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="fill">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="fill" disabled>
+          <MdCancel />
+        </IconButton>
+      </div>
+      <div>
+        <h3>Outlined</h3>
+        <IconButton variant="outlined" color="primary">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="outlined" color="secondary">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="outlined" color="success">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="outlined" color="warning">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="outlined" color="info">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="outlined" color="error">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="outlined">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="outlined" disabled>
+          <MdCancel />
+        </IconButton>
+      </div>
+    </>
+  ),
+};
+
 export const LinkIconButton: Story = {
   render: () => (
     <>
       <div>
-        <p>Hover over each button for its classification</p>
         <IconButton
           title="External link (no target)"
           href="https://storybook.js.org/"

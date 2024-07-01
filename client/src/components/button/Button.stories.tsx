@@ -29,7 +29,7 @@ export const Default: Story = {
 export const Sizes: Story = {
   render: () => (
     <>
-      <p>Variants: primary, secondary, info, error, transparent, disabled</p>
+      <p>Variants: primary, secondary, info, error, success, warning, no color, disabled</p>
       <div>
         <h6>Small</h6>
         <Button size="small" color="primary">
@@ -44,9 +44,13 @@ export const Sizes: Story = {
         <Button size="small" color="error">
           Hello
         </Button>
-        <Button size="small" color="transparent">
+        <Button size="small" color="success">
           Hello
         </Button>
+        <Button size="small" color="warning">
+          Hello
+        </Button>
+        <Button size="small">Hello</Button>
         <Button size="small" disabled>
           Hello
         </Button>
@@ -65,9 +69,13 @@ export const Sizes: Story = {
         <Button size="medium" color="error">
           Hello
         </Button>
-        <Button size="medium" color="transparent">
+        <Button size="medium" color="success">
           Hello
         </Button>
+        <Button size="medium" color="warning">
+          Hello
+        </Button>
+        <Button size="medium">Hello</Button>
         <Button size="medium" disabled>
           Hello
         </Button>
@@ -86,10 +94,96 @@ export const Sizes: Story = {
         <Button size="large" color="error">
           Hello
         </Button>
-        <Button size="large" color="transparent">
+        <Button size="large" color="success">
           Hello
         </Button>
+        <Button size="large" color="warning">
+          Hello
+        </Button>
+        <Button size="large">Hello</Button>
         <Button onClick={fn} size="large" disabled>
+          Hello
+        </Button>
+      </div>
+    </>
+  ),
+};
+
+export const Variants: Story = {
+  render: () => (
+    <>
+      <div>
+        <h3>Text</h3>
+        <Button variant="text" color="primary">
+          Hello
+        </Button>
+        <Button variant="text" color="secondary">
+          Hello
+        </Button>
+        <Button variant="text" color="success">
+          Hello
+        </Button>
+        <Button variant="text" color="warning">
+          Hello
+        </Button>
+        <Button variant="text" color="info">
+          Hello
+        </Button>
+        <Button variant="text" color="error">
+          Hello
+        </Button>
+        <Button variant="text">Hello</Button>
+        <Button variant="text" disabled>
+          Hello
+        </Button>
+      </div>
+      <div>
+        <h3>Fill (default)</h3>
+        <Button variant="fill" color="primary">
+          Hello
+        </Button>
+        <Button variant="fill" color="secondary">
+          Hello
+        </Button>
+        <Button variant="fill" color="success">
+          Hello
+        </Button>
+        <Button variant="fill" color="warning">
+          Hello
+        </Button>
+        <Button variant="fill" color="info">
+          Hello
+        </Button>
+        <Button variant="fill" color="error">
+          Hello
+        </Button>
+        <Button variant="fill">Hello</Button>
+        <Button variant="fill" disabled>
+          Hello
+        </Button>
+      </div>
+      <div>
+        <h3>Outlined</h3>
+        <Button variant="outlined" color="primary">
+          Hello
+        </Button>
+        <Button variant="outlined" color="secondary">
+          Hello
+        </Button>
+        <Button variant="outlined" color="success">
+          Hello
+        </Button>
+        <Button variant="outlined" color="warning">
+          Hello
+        </Button>
+        <Button variant="outlined" color="info">
+          Hello
+        </Button>
+        <Button variant="outlined" color="error">
+          Hello
+        </Button>
+        <Button variant="outlined">Hello</Button>
+        <Button variant="outlined" disabled>
           Hello
         </Button>
       </div>
@@ -122,11 +216,13 @@ export const WithIcon: Story = {
   render: () => (
     <>
       <div style={{ marginBottom: '2em' }}>
-        <Button icon={<MdCancel />} size="small">
+        <Button color="primary" icon={<MdCancel />} size="small">
           Small
         </Button>
-        <Button icon={<MdCancel />}>Medium</Button>
-        <Button icon={<MdCancel />} size="large">
+        <Button color="success" icon={<MdCancel />}>
+          Medium
+        </Button>
+        <Button color="error" icon={<MdCancel />} size="large">
           Large
         </Button>
       </div>

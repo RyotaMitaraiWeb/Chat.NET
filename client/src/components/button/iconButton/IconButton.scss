@@ -1,6 +1,8 @@
+@import '../../../styles/colors.scss';
+
 .component-icon-button {
   border-radius: 50%;
-  display: inline-block;
+  display: inline-flex;
 
   .component-icon {
     &.size-large {
