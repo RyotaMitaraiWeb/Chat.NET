@@ -99,6 +99,76 @@ export const Sizes: Story = {
   ),
 };
 
+export const Variants: Story = {
+  render: () => (
+    <>
+      <div>
+        <h6>Text</h6>
+        <IconButton variant="text" color="primary">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="text" color="secondary">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="text" color="info">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="text" color="error">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="text" color="transparent">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="text" disabled>
+          <MdCancel />
+        </IconButton>
+      </div>
+      <div>
+        <h6>Fill (default)</h6>
+        <IconButton variant="fill" color="primary">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="fill" color="secondary">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="fill" color="info">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="fill" color="error">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="fill" color="transparent">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="fill" disabled>
+          <MdCancel />
+        </IconButton>
+      </div>
+      <div>
+        <h6>Outlined</h6>
+        <IconButton variant="outlined" color="primary">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="outlined" color="secondary">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="outlined" color="info">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="outlined" color="error">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="outlined" color="transparent">
+          <MdCancel />
+        </IconButton>
+        <IconButton variant="outlined" disabled>
+          <MdCancel />
+        </IconButton>
+      </div>
+    </>
+  ),
+};
+
 export const LinkIconButton: Story = {
   render: () => (
     <>

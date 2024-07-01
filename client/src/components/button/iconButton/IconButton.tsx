@@ -12,9 +12,14 @@ import Icon from '@/components/icon/Icon';
  * this component automatically wraps it up.
  */
 function IconButton(props: IconButtonProps): React.JSX.Element {
-  const { className = '', children, size = 'medium', ...others } = props;
+  const { className = '', children, size = 'medium', variant = 'fill', ...others } = props;
   return (
-    <Button size={size} className={`component-icon-button ${className}`} {...others}>
+    <Button
+      variant={variant}
+      size={size}
+      className={`component-icon-button ${className}`}
+      {...others}
+    >
       <Icon size={size}>{children}</Icon>
     </Button>
   );
