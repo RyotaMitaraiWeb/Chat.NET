@@ -12,21 +12,27 @@
   @include apply-palette-backgrounds();
   @include apply-palette-effects();
 
-  &.background-transparent {
+  // &.background-transparent {
+  //   background-color: transparent;
+  //   @include apply-values-for-modes(color, $text-medium-dark, $text-medium-light);
+  //   @include apply-transition(background-color 0.3s);
+
+  //   &:not(:disabled),
+  //   &:not(.disabled) {
+  //     &:hover {
+  //       background-color: rgba(128, 128, 128, 0.2);
+  //     }
+
+  //     &:active {
+  //       background-color: rgba(128, 128, 128, 0.4);
+  //     }
+  //   }
+  // }
+
+  @include apply-palette-text();
+
+  &[class*="text-"], &[class*="outlined-"] {
     background-color: transparent;
-    @include apply-values-for-modes(color, $text-medium-dark, $text-medium-light);
-    @include apply-transition(background-color 0.3s);
-
-    &:not(:disabled),
-    &:not(.disabled) {
-      &:hover {
-        background-color: rgba(128, 128, 128, 0.2);
-      }
-
-      &:active {
-        background-color: rgba(128, 128, 128, 0.4);
-      }
-    }
   }
 
   @include apply-font-sizes();

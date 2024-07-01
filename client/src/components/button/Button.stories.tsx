@@ -97,6 +97,76 @@ export const Sizes: Story = {
   ),
 };
 
+export const Variants: Story = {
+  render: () => (
+    <>
+      <div>
+        <h6>Text</h6>
+        <Button variant="text" color="primary">
+          Hello
+        </Button>
+        <Button variant="text" color="secondary">
+          Hello
+        </Button>
+        <Button variant="text" color="info">
+          Hello
+        </Button>
+        <Button variant="text" color="error">
+          Hello
+        </Button>
+        <Button variant="text" color="transparent">
+          Hello
+        </Button>
+        <Button variant="text" disabled>
+          Hello
+        </Button>
+      </div>
+      <div>
+        <h6>Fill (default)</h6>
+        <Button variant="fill" color="primary">
+          Hello
+        </Button>
+        <Button variant="fill" color="secondary">
+          Hello
+        </Button>
+        <Button variant="fill" color="info">
+          Hello
+        </Button>
+        <Button variant="fill" color="error">
+          Hello
+        </Button>
+        <Button variant="fill" color="transparent">
+          Hello
+        </Button>
+        <Button variant="fill" disabled>
+          Hello
+        </Button>
+      </div>
+      <div>
+        <h6>Outlined</h6>
+        <Button variant="outlined" color="primary">
+          Hello
+        </Button>
+        <Button variant="outlined" color="secondary">
+          Hello
+        </Button>
+        <Button variant="outlined" color="info">
+          Hello
+        </Button>
+        <Button variant="outlined" color="error">
+          Hello
+        </Button>
+        <Button variant="outlined" color="transparent">
+          Hello
+        </Button>
+        <Button variant="outlined" disabled>
+          Hello
+        </Button>
+      </div>
+    </>
+  ),
+};
+
 export const LinkButton: Story = {
   render: () => (
     <>

@@ -3,6 +3,7 @@ import React from 'react';
 import { ButtonProps } from './types';
 import './Button.scss';
 import BaseButtonWithIcon from '../internal/baseButton/BaseButtonWithIcon';
+import { generateVariantClassName } from '@/util/generateVariantClassName/generateVariantClassName';
 
 /**
  * A standard client button with preconfigured styling and coloring.
@@ -17,13 +18,18 @@ function Button(props: ButtonProps): React.JSX.Element {
     children,
     onClick,
     icon,
+    variant = 'fill',
     ...others
   } = props;
+
+  const variantClassName = generateVariantClassName(variant);
+
   return (
     <BaseButtonWithIcon
       icon={icon}
       className={`component-button 
-        background-${color} ${color}-effects size-${size} ${icon ? 'with-icon' : ''} ${className}`}
+        ${variantClassName}-${color} ${color}-effects size-${size}
+        ${icon ? 'with-icon' : ''} ${className}`}
       onClick={onClick}
       {...others}
     >
