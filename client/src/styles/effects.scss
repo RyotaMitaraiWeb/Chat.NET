@@ -133,7 +133,8 @@ $effects: (
 }
 
 @mixin apply-accent-click() {
-  &:active:not(:disabled), &:active:not(.disabled) {
+  &:active:not(:disabled),
+  &:active:not(.disabled) {
     background-color: rgba(202, 202, 202, 0.7);
   }
 
