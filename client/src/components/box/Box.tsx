@@ -8,7 +8,7 @@ import './Box.scss';
 function Box(props: BoxProps): React.JSX.Element {
   const { className = '', selector = 'div', ...others } = props;
   const element = createElement(selector as string, {
-    className: 'component-box shadow ' + className,
+    className: 'component-box ' + className,
     ...others,
   });
 

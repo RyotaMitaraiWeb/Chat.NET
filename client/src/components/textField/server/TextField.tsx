@@ -1,5 +1,4 @@
 import '../TextField.scss';
-import '@/styles/colors.scss';
 import { HelperTextProps, LabelTextProps } from '../../types/BaseInput';
 import { ServerTextFieldProps } from './types';
 import { _generatePlaceholderText } from '../generatePlaceholderText';
@@ -38,8 +37,7 @@ function TextField(props: ServerTextFieldProps): React.JSX.Element {
       <LabelText disabled={disabled} size={size} labelText={label} />
       <input
         type={type}
-        className={`component-text-field
-        accent-background theme-emphasis-text ${size}`}
+        className={`component-text-field ${size}`}
         placeholder={placeholderText}
         form={form}
         disabled={disabled}
@@ -77,9 +75,7 @@ function LabelText(props: LabelTextProps): React.JSX.Element {
 
   const disabledClass = props.disabled ? 'disabled' : '';
   return (
-    <div className={`component-label-text theme-emphasis-text ${props.size} ${disabledClass}`}>
-      {props.labelText}
-    </div>
+    <div className={`component-label-text ${props.size} ${disabledClass}`}>{props.labelText}</div>
   );
 }
 

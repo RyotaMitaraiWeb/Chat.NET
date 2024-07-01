@@ -8,6 +8,8 @@
   outline: 1px solid gray;
   width: 100%;
 
+  @include apply-accent-background();
+  @include apply-theme-emphasis-text();
   @media (prefers-reduced-motion: no-preference) {
     transition: outline-color 0.25s ease-in-out;
   }
@@ -64,7 +66,7 @@ textarea.component-text-field {
   .component-helper-text {
     font-size: 10pt;
     margin-top: 3px;
-    @extend .theme-text;
+    @include apply-theme-text();
   }
 
   .component-label-text {

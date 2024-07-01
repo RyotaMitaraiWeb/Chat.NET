@@ -3,7 +3,6 @@ import BaseCheckbox from '../internal/baseCheckbox/BaseCheckbox';
 import { CheckboxProps } from './types';
 import { MdDone } from 'react-icons/md';
 import './Checkbox.scss';
-import '@/styles/colors.scss';
 
 /**
  * A styled checkbox whose color, size, positioning, and icon can be
@@ -28,13 +27,13 @@ function Checkbox(props: CheckboxProps): React.JSX.Element {
 
   return (
     <label
-      className={`component-checkbox ${generateCheckedClassName(checked)} ${side} ${size} ${
+      className={`component-checkbox ${generateCheckedClassName(checked)} ${side} size-${size} ${
         disabled ? 'disabled' : 'enabled'
       } ${className}`}
       {...others}
     >
       <div className="component-checkbox-label">{children}</div>
-      <div className={`checkbox ${size} ${color}`}>
+      <div className={`checkbox size-${size} background-${color}`}>
         <Icon size={size} className="component-checkbox-icon">
           {icon}
         </Icon>

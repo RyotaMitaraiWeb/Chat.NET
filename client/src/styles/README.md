@@ -40,39 +40,48 @@ $text-medium-light
 $shadow
 ```
 
-These variables can also be included with the following classes:
-
-```css
-.theme-background
-.accent-background
-.theme-text
-.theme-emphasis-text
-.accent /* .accent-background + .theme-text */
-.accent-emphasis /* .accent-background + .theme-emphasis-text */
-.shadow
+These variables are used in the following mixins:
+```scss
+@mixin apply-theme-background();
+@mixin apply-accent-background();
+@mixin apply-theme-text();
+@mixin apply-theme-emphasis-text();
+@mixin shadow();
 ```
 
-It is preferable to extend the classes rather than use the variables, as those also handle the user's preferences.
+It is preferable to use the mixins, as they handle user preferences and stuff like disabled status out-of-the-box for you.
 
 ### Effects
+```scss
+@mixin apply-palette-effects();
+```
+Applies a class for each palette option in the format ``.{palette}-effects`` (e.g. ``.primary-effects``). These classes handle an element's hover, active, focused, and disabled states.
 
-To apply the effects for a given palette (e.g. primary, secondary, etc.), use a
-`.[palette]-effects` class (e.g. `.primary-effects`).
+```scss
+@mixin apply-accent-hover();
+@mixin apply-accent-click();
+```
+These mixins provide styling for elements' hover and active states, using the app's accent colors.
 
-To apply effects for accent containers, use `.accent-hover` and `.accent-click`.
+```scss
+@mixin ripple();
+```
 
-To apply a ripple effect when the user clicks an element, use the `.ripple` class. Note that the effect starts from the center (regardless of where the user clicks) and that the ripple is activated regardless of the user's
-animation preferences.
+Applies a ripple effect that triggers when the element is clicked. Note that the effect starts from the center (regardless of where the user clicks) and that the ripple is activated regardless of the user's animation preferences.
 
 ### Font
 
-The following classes are available:
+The following mixins are available:
 
-```css
-.size-small /* 8pt */
-.size-medium /* 12pt */
-.size-large /* 18pt */
+```scss
+@mixin apply-font-sizes();
 ```
+This mixin will apply three classes to the selector upon which the mixin is called for. Those classes are ``size-large``, ``size-medium``, and ``size-small``, with font sizes 18pt, 12pt, and 6pt.
+
+```scss
+@mixin apply-font-size($size);
+```
+Applies a ``font-size`` to the element, corresponding to the provided ``$size``. Valid arguments are ``small``, ``medium``, and ``large``, which are respectively 6pt, 12pt, and 18pt.
 
 ### Animations
 

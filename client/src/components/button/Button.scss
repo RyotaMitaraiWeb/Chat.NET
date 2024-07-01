@@ -1,12 +1,18 @@
 @import '../../styles/util.scss';
 @import '../../styles/colors.scss';
+@import '../../styles/font.scss';
+@import '../../styles/effects.scss';
+
 .component-button {
   border-radius: 5px;
   border: 0;
   display: inline-flex;
   text-align: center;
 
-  &.transparent {
+  @include apply-palette-backgrounds();
+  @include apply-palette-effects();
+
+  &.background-transparent {
     background-color: transparent;
     @include apply-values-for-modes(color, $text-medium-dark, $text-medium-light);
     @include apply-transition(background-color 0.3s);
@@ -22,6 +28,8 @@
       }
     }
   }
+
+  @include apply-font-sizes();
 
   &.size-small {
     padding: 8px 4px;

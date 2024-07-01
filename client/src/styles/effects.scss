@@ -3,7 +3,42 @@
 
 $outline-color: #50dfff;
 
-@mixin applyEffectTheme($hover-bg, $hover-text, $click-bg, $click-text) {
+@mixin ripple() {
+  position: relative;
+  overflow: hidden;
+  transform: translate3d(0, 0, 0);
+
+  &:after {
+    content: '';
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    @include apply-values-for-modes(
+      background-image,
+      radial-gradient(circle, white 10%, transparent 10.01%),
+      radial-gradient(circle, black 10%, transparent 10.01%)
+    );
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition:
+      transform 0.5s,
+      opacity 1s;
+  }
+
+  &:active:not(:disabled):after {
+    transform: scale(0, 0);
+    opacity: 0.2;
+    transition: 0s;
+  }
+}
+
+@mixin _apply-effect-theme($hover-bg, $hover-text, $click-bg, $click-text) {
   &:hover:not(:disabled) {
     background-color: $hover-bg;
     color: $hover-text;
@@ -16,7 +51,7 @@ $outline-color: #50dfff;
   &:active:not(:disabled) {
     background-color: $click-bg;
     color: $click-text;
-    @extend .ripple;
+    @include ripple();
   }
 }
 
@@ -71,21 +106,24 @@ $effects: (
   'info': $info-effects,
 );
 
-@each $palette, $values in $effects {
-  .#{$palette}-effects {
-    @include applyEffectTheme(
-      map.get($values, 'hover-bg'),
-      map.get($values, 'hover-text'),
-      map.get($values, 'click-bg'),
-      map.get($values, 'click-text')
-    );
+@mixin apply-palette-effects() {
+  @each $palette, $values in $effects {
+    &.#{$palette}-effects {
+      @include _apply-effect-theme(
+        map.get($values, 'hover-bg'),
+        map.get($values, 'hover-text'),
+        map.get($values, 'click-bg'),
+        map.get($values, 'click-text')
+      );
+    }
   }
 }
 
-.accent-hover {
+@mixin apply-accent-hover() {
   @include apply-transition(background-color 0.2s, color 0.2s);
 
-  &:hover:not(:disabled) {
+  &:hover:not(:disabled),
+  &:hover:not(.disabled) {
     background-color: rgba(202, 202, 202, 0.5);
   }
 
@@ -94,15 +132,16 @@ $effects: (
   }
 }
 
-.accent-click {
-  &:active:not(:disabled) {
+@mixin apply-accent-click() {
+  &:active:not(:disabled),
+  &:active:not(.disabled) {
     background-color: rgba(202, 202, 202, 0.7);
   }
 
   @include apply-transition(background-color 0.2s);
 }
 
-.ripple {
+@mixin ripple() {
   position: relative;
   overflow: hidden;
   transform: translate3d(0, 0, 0);

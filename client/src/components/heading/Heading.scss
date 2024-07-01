@@ -1,7 +1,7 @@
 @import '../../styles/colors.scss';
 
 .component-heading {
-  @extend .theme-emphasis-text;
+  @include apply-theme-emphasis-text();
   margin: 0;
 }
 

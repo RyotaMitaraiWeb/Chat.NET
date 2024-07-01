@@ -52,57 +52,43 @@ $palette: (
   'info': $info-colors,
 );
 
-@each $color, $values in $palette {
-  .background-#{$color} {
-    @include apply-transition(background-color 0.2s);
-    @include apply-values-for-modes(
-      background-color,
-      map.get($values, 'dark'),
-      map.get($values, 'light')
-    );
-
-    &:disabled,
-    & :disabled {
+@mixin apply-palette-backgrounds() {
+  @each $color, $values in $palette {
+    &.background-#{$color} {
+      @include apply-transition(background-color 0.2s);
       @include apply-values-for-modes(
         background-color,
-        rgba(255, 255, 255, 0.12),
-        rgba(0, 0, 0, 0.12)
+        map.get($values, 'dark'),
+        map.get($values, 'light')
       );
-    }
-  }
 
-  .text-#{$color} {
-    @include apply-values-for-modes(color, map.get($values, 'dark'), map.get($values, 'light'));
-  }
+      &:disabled,
+      & :disabled,
+      &.disabled,
+      & .disabled {
+        @include apply-values-for-modes(
+          background-color,
+          rgba(255, 255, 255, 0.12),
+          rgba(0, 0, 0, 0.12)
+        );
 
-  .text-on-#{$color} {
-    color: map.get($values, 'contrast-text-dark');
-    @include apply-transition(color 0.2s);
-    @include apply-values-for-modes(
-      color,
-      map.get($values, 'contrast-text-dark'),
-      map.get($values, 'contrast-text-light')
-    );
+        @include apply-values-for-modes(color, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.26));
+      }
 
-    &:disabled,
-    & :disabled {
-      @include apply-values-for-modes(color, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.26));
-    }
-  }
-
-  .#{$color} {
-    @extend .text-on-#{$color};
-    @extend .background-#{$color};
-
-    @include apply-transition(background-color 0.2s, color 0.2s);
-
-    .contrast-text-color {
       @include apply-transition(color 0.2s);
       @include apply-values-for-modes(
         color,
         map.get($values, 'contrast-text-dark'),
         map.get($values, 'contrast-text-light')
       );
+    }
+  }
+}
+
+@mixin apply-palette-text() {
+  @each $color, $values in $palette {
+    &.text-#{$color} {
+      @include apply-values-for-modes(color, map.get($values, 'dark'), map.get($values, 'light'));
     }
   }
 }
@@ -117,13 +103,12 @@ $text-emphasis-light: black;
 $text-medium-light: #0e0e0e;
 $shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 
-.theme-background {
-  background-color: $background-dark;
+@mixin apply-theme-background() {
   @include apply-transition(background-color 0.2s);
   @include apply-values-for-modes(background-color, $background-dark, $background-light);
 }
 
-.accent-background {
+@mixin apply-accent-background() {
   @include apply-values-for-modes(background-color, $accent-dark, $accent-light);
   @include apply-transition(background-color 0.2s);
 
@@ -137,7 +122,7 @@ $shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   }
 }
 
-.theme-text {
+@mixin apply-theme-text() {
   @include apply-values-for-modes(color, $text-medium-dark, $text-medium-light);
   @include apply-transition(color 0.2s);
 
@@ -147,7 +132,7 @@ $shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   }
 }
 
-.theme-emphasis-text {
+@mixin apply-theme-emphasis-text() {
   @include apply-values-for-modes(color, $text-emphasis-dark, $text-emphasis-light);
   @include apply-transition(color 0.2s);
 
@@ -157,18 +142,6 @@ $shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   }
 }
 
-.accent {
-  @extend .accent-background;
-  @extend .theme-text;
-  @include apply-transition(background-color 0.2s, color 0.2s);
-}
-
-.accent-emphasis {
-  @extend .accent-background;
-  @extend .theme-emphasis-text;
-  @include apply-transition(background-color 0.2s, color 0.2s);
-}
-
-.shadow {
+@mixin shadow() {
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }

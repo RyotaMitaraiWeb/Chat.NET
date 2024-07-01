@@ -2,9 +2,6 @@
 import React from 'react';
 import { ButtonProps } from './types';
 import './Button.scss';
-import '@/styles/colors.scss';
-import '@/styles/effects.scss';
-import '@/styles/font.scss';
 import BaseButtonWithIcon from '../internal/baseButton/BaseButtonWithIcon';
 
 /**
@@ -26,7 +23,7 @@ function Button(props: ButtonProps): React.JSX.Element {
     <BaseButtonWithIcon
       icon={icon}
       className={`component-button 
-        ${color} ${color}-effects size-${size} ${icon ? 'with-icon' : ''} ${className}`}
+        background-${color} ${color}-effects size-${size} ${icon ? 'with-icon' : ''} ${className}`}
       onClick={onClick}
       {...others}
     >

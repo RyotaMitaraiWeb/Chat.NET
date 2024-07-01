@@ -1,4 +1,5 @@
 @import '../../styles/util.scss';
+@import '../../styles/colors.scss';
 
 .component-link {
   @include apply-transition(color 0.2s);
@@ -10,4 +11,6 @@
   &.text-default {
     @include apply-values-for-modes(color, rgb(144, 202, 249), rgb(25, 118, 210));
   }
+
+  @include apply-palette-text();
 }
