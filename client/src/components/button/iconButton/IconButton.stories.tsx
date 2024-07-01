@@ -103,7 +103,7 @@ export const Variants: Story = {
   render: () => (
     <>
       <div>
-        <h6>Text</h6>
+        <h3>Text</h3>
         <IconButton variant="text" color="primary">
           <MdCancel />
         </IconButton>
@@ -124,7 +124,7 @@ export const Variants: Story = {
         </IconButton>
       </div>
       <div>
-        <h6>Fill (default)</h6>
+        <h3>Fill (default)</h3>
         <IconButton variant="fill" color="primary">
           <MdCancel />
         </IconButton>
@@ -145,7 +145,7 @@ export const Variants: Story = {
         </IconButton>
       </div>
       <div>
-        <h6>Outlined</h6>
+        <h3>Outlined</h3>
         <IconButton variant="outlined" color="primary">
           <MdCancel />
         </IconButton>
