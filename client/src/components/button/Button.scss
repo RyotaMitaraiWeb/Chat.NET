@@ -21,6 +21,8 @@
   }
 
   &.background {
+    background-color: gray;
+
     &:disabled,
     &.disabled {
       @include apply-values-for-modes(
