@@ -53,6 +53,7 @@ function Chip(props: ChipProps): React.JSX.Element {
           aria-label={deleteButtonLabel}
           disabled={disabled}
           className="chip-delete-button"
+          onClick={onDelete}
         >
           <Icon>{deleteIcon}</Icon>
         </BaseButton>
