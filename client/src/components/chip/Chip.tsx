@@ -2,6 +2,7 @@ import { ChipProps } from './types';
 import './Chip.scss';
 import { _generateClassName } from './_generateClassName';
 import BaseButtonWithIcon from '../internal/baseButton/BaseButtonWithIcon';
+import ChipBody from '../internal/chipBody/ChipBody';
 
 function Chip(props: ChipProps): React.JSX.Element {
   const {
@@ -13,7 +14,7 @@ function Chip(props: ChipProps): React.JSX.Element {
     variant = 'fill',
     color,
     children,
-    size,
+    size = 'medium',
     disabled,
     href,
     target,
@@ -33,9 +34,16 @@ function Chip(props: ChipProps): React.JSX.Element {
 
   return (
     <div className={`component-chip ${chipClassNames} ${className}`} {...others}>
-      <BaseButtonWithIcon onClick={onClick} target={target} href={href}>
+      <ChipBody
+        href={href}
+        target={target}
+        onClick={onClick}
+        clickable={clickable}
+        startIcon={startIcon}
+        disabled={disabled}
+      >
         {children}
-      </BaseButtonWithIcon>
+      </ChipBody>
     </div>
   );
 }
