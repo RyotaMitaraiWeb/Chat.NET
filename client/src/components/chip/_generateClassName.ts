@@ -11,6 +11,7 @@ export function _generateClassName(props: Partial<ChipProps>): string {
   const disabledClassName = props.disabled ? 'disabled' : '';
   const clickableClassName = props.clickable ? 'clickable' : '';
   const multilineClassName = props.multiline ? 'multiline' : '';
+  const deletableClassName = props.onDelete ? 'deletable' : '';
 
   return [
     variantColorClassName,
@@ -18,5 +19,8 @@ export function _generateClassName(props: Partial<ChipProps>): string {
     disabledClassName,
     clickableClassName,
     multilineClassName,
-  ].join(' ');
+    deletableClassName,
+  ]
+    .filter((cn) => cn !== '')
+    .join(' ');
 }

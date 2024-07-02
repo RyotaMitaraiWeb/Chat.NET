@@ -2,6 +2,8 @@ import { ChipProps } from './types';
 import './Chip.scss';
 import { _generateClassName } from './_generateClassName';
 import ChipBody from '../internal/chipBody/ChipBody';
+import Icon from '../icon/Icon';
+import BaseButton from '../internal/baseButton/BaseButton';
 
 function Chip(props: ChipProps): React.JSX.Element {
   const {
@@ -29,6 +31,7 @@ function Chip(props: ChipProps): React.JSX.Element {
     size,
     disabled,
     clickable,
+    onDelete,
   });
 
   return (
@@ -43,6 +46,11 @@ function Chip(props: ChipProps): React.JSX.Element {
       >
         {children}
       </ChipBody>
+      {onDelete ? (
+        <BaseButton disabled={disabled} className="chip-delete-button">
+          <Icon>{deleteIcon}</Icon>
+        </BaseButton>
+      ) : null}
     </div>
   );
 }
