@@ -40,6 +40,12 @@
     }
   }
 
+  &.deletable {
+    .component-chip-body {
+      padding-right: 4px;
+    }
+  }
+
   .component-chip-body {
     display: flex;
     gap: 4px;
@@ -47,6 +53,10 @@
     height: 100%;
     flex: 1;
     justify-content: center;
+
+    &.with-icon {
+      padding-left: 4px;
+    }
 
     .component-icon {
       display: flex;
