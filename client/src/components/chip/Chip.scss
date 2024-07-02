@@ -1,0 +1,27 @@
+@import '../../styles/colors.scss';
+@import '../../styles/effects.scss';
+
+.component-chip {
+  border-radius: 16px;
+  display: inline-flex;
+  font-size: 1.2rem;
+
+  align-items: center;
+
+  @include apply-palette-backgrounds();
+
+  &.size-small {
+    height: 24px;
+    padding: 0 8px;
+  }
+
+  &.size-medium {
+    height: 32px;
+    padding: 0 12px;
+  }
+
+  &.size-large {
+    height: 48px;
+    padding: 0 12px;
+  }
+}
