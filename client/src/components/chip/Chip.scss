@@ -9,6 +9,7 @@
   align-items: center;
 
   @include apply-palette-backgrounds();
+  @include apply-palette-outlined-text();
 
   &.size-small {
     height: 24px;
