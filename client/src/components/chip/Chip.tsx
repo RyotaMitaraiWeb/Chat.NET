@@ -4,12 +4,13 @@ import { _generateClassName } from './_generateClassName';
 import ChipBody from '../internal/chipBody/ChipBody';
 import Icon from '../icon/Icon';
 import BaseButton from '../internal/baseButton/BaseButton';
+import { MdCancel } from 'react-icons/md';
 
 function Chip(props: ChipProps): React.JSX.Element {
   const {
     onClick,
     onDelete,
-    deleteIcon,
+    deleteIcon = <MdCancel />,
     startIcon,
     multiline,
     variant = 'fill',
