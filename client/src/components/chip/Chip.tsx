@@ -21,6 +21,7 @@ function Chip(props: ChipProps): React.JSX.Element {
     target,
     className = '',
     clickable,
+    deleteButtonLabel,
     ...others
   } = props;
 
@@ -47,7 +48,11 @@ function Chip(props: ChipProps): React.JSX.Element {
         {children}
       </ChipBody>
       {onDelete ? (
-        <BaseButton disabled={disabled} className="chip-delete-button">
+        <BaseButton
+          aria-label={deleteButtonLabel}
+          disabled={disabled}
+          className="chip-delete-button"
+        >
           <Icon>{deleteIcon}</Icon>
         </BaseButton>
       ) : null}

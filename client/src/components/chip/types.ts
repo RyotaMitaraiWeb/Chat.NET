@@ -11,4 +11,5 @@ export interface ChipProps extends BaseButtonProps {
   startIcon?: React.ReactNode;
   size?: size;
   clickable?: boolean;
+  deleteButtonLabel?: string;
 }
