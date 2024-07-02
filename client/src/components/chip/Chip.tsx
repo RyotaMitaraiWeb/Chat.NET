@@ -1,7 +1,6 @@
 import { ChipProps } from './types';
 import './Chip.scss';
 import { _generateClassName } from './_generateClassName';
-import BaseButtonWithIcon from '../internal/baseButton/BaseButtonWithIcon';
 import ChipBody from '../internal/chipBody/ChipBody';
 
 function Chip(props: ChipProps): React.JSX.Element {
