@@ -36,9 +36,7 @@
 
   /* End colorless */
 
-  /* Prevent ripple from overflowing */
-  overflow: hidden;
-
+  
   &.clickable {
     .component-chip-body {
       &[class*='background-'] {
@@ -93,6 +91,8 @@
   &.deletable {
     .component-chip-body {
       padding-right: 4px;
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
     }
   }
 
@@ -107,6 +107,11 @@
     height: 100%;
     flex: 1;
     justify-content: center;
+    border-radius: 16px;
+
+    &:focus-visible {
+      outline: 1px solid $outline-color;
+    }
 
     &.with-icon {
       padding-left: 4px;
@@ -120,6 +125,8 @@
   .chip-delete-button {
     background-color: transparent;
     border: 0;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
 
     &[class*='background-'] {
       @include apply-palette-effects();
