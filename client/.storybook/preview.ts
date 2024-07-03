@@ -1,5 +1,7 @@
 import type { Preview } from '@storybook/react';
-import '../src/app/globals.scss'
+import '../src/app/globals.scss';
+import 'normalize.css';
+
 const preview: Preview = {
   parameters: {
     controls: {
