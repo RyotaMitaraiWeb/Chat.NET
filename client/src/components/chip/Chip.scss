@@ -26,6 +26,20 @@
   /* Prevent ripple from overflowing */
   overflow: hidden;
 
+
+  &.clickable {
+    .component-chip-body {
+      &[class*="background-"] {
+        @include apply-palette-backgrounds();
+        @include apply-palette-effects();
+      }
+
+      &[class*="outlined-"] {
+        @include apply-palette-outlined-text($interactive: true, $outlined: false);
+      }
+    }
+  }
+
   button {
     background-color: transparent;
     border: none;
@@ -90,6 +104,16 @@
     display: flex;
     align-items: center;
     font-size: 13px;
+
+    &[class*="background-"] {
+      @include apply-palette-effects();
+    }
+
+    &[class*="outlined-"] {
+      @include apply-palette-outlined-text($interactive: true, $outlined: false);
+    }
+
+    @include apply-outlined-ripple();
     
     .component-icon {
       display: flex;

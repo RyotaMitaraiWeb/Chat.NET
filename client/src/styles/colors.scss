@@ -113,14 +113,21 @@ $palette: (
   }
 }
 
-@mixin apply-palette-outlined-text($interactive: false) {
+@mixin apply-palette-outlined-text($interactive: false, $outlined: true) {
   @each $color, $values in $palette {
     &.outlined-#{$color} {
-      @include apply-values-for-modes(
-        border-color,
-        map.get($values, 'dark'),
-        map.get($values, 'light')
-      );
+      @if ($outlined) {
+        @include apply-values-for-modes(
+          border-color,
+          map.get($values, 'dark'),
+          map.get($values, 'light')
+        );
+
+        border-width: 1px;
+        border-style: solid;
+      }
+
+      @include apply-values-for-modes(color, map.get($values, 'dark'), map.get($values, 'light'));
 
       @if $interactive {
         @include ripple(map.get($values, 'light'), map.get($values, 'dark'));
@@ -133,23 +140,15 @@ $palette: (
           );
         }
       }
+    }
 
-      @include apply-values-for-modes(color, map.get($values, 'dark'), map.get($values, 'light'));
-      border-width: 1px;
-      border-style: solid;
+    &:disabled,
+    & :disabled,
+    &.disabled,
+    & .disabled {
+      @include apply-values-for-modes(color, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.12));
 
-      &:disabled,
-      & :disabled,
-      &.disabled,
-      & .disabled {
-        @include apply-values-for-modes(color, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.12));
-
-        @include apply-values-for-modes(
-          border-color,
-          rgba(255, 255, 255, 0.12),
-          rgba(0, 0, 0, 0.12)
-        );
-      }
+      @include apply-values-for-modes(border-color, rgba(255, 255, 255, 0.12), rgba(0, 0, 0, 0.12));
     }
   }
 }

@@ -3,12 +3,22 @@ import BaseButtonWithIcon from '../baseButton/BaseButtonWithIcon';
 import { ChipBodyProps } from './types';
 
 function ChipBody(props: ChipBodyProps): React.JSX.Element {
-  const { children, clickable, startIcon, disabled, href, target, onClick, ...others } = props;
+  const {
+    children,
+    className = '',
+    clickable,
+    startIcon,
+    disabled,
+    href,
+    target,
+    onClick,
+    ...others
+  } = props;
 
   if (clickable) {
     return (
       <BaseButtonWithIcon
-        className="component-chip-body"
+        className={`component-chip-body ${className}`}
         icon={startIcon}
         disabled={disabled}
         href={href}

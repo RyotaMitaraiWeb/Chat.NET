@@ -7,6 +7,8 @@ export function _generateClassName(props: Partial<ChipProps>): string {
     ? `${variantClassName}-${props.color}`
     : variantClassName;
 
+  const effectsClassName = props.color ? `${props.color}-effects` : '';
+
   const sizeClassName = `size-${props.size}`;
   const disabledClassName = props.disabled ? 'disabled' : '';
   const clickableClassName = props.clickable ? 'clickable' : '';
@@ -15,6 +17,7 @@ export function _generateClassName(props: Partial<ChipProps>): string {
 
   return [
     variantColorClassName,
+    effectsClassName,
     sizeClassName,
     disabledClassName,
     clickableClassName,
