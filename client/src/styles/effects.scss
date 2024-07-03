@@ -145,7 +145,10 @@ $effects: (
 @mixin apply-outlined-ripple() {
   @each $palette, $values in $palette {
     &.outlined-#{$palette} {
-      @include ripple($ripple-color-light: map.get($values, 'light'), $ripple-color-dark: map.get($values, 'dark'))
+      @include ripple(
+        $ripple-color-light: map.get($values, 'light'),
+        $ripple-color-dark: map.get($values, 'dark')
+      );
     }
   }
 }
