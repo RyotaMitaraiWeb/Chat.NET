@@ -35,5 +35,21 @@ describe('Chip component', () => {
 
       expect(fn).toHaveBeenCalled();
     });
+
+    it('Triggers the onDelete callback if delete is pressed', async () => {
+      const fn = jest.fn();
+      const user = userEvent.setup();
+      render(
+        <Chip clickable onDelete={fn} deleteButtonLabel="Remove this tag">
+          Games
+        </Chip>,
+      );
+
+      const chip = screen.getByRole('button', { name: /Games/i });
+      act(() => chip.focus());
+      await user.keyboard('{Delete}');
+
+      expect(fn).toHaveBeenCalled();
+    });
   });
 });

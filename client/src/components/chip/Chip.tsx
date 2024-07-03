@@ -39,7 +39,7 @@ function Chip(props: ChipProps): React.JSX.Element {
 
   function handleKeyPress(event: React.KeyboardEvent) {
     event.preventDefault();
-    if (event.key === 'Backspace' && onDelete) {
+    if ((event.key === 'Backspace' || event.key === 'Delete') && onDelete) {
       onDelete();
     }
   }
