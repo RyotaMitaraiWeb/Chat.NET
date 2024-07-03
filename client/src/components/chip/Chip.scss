@@ -4,7 +4,7 @@
   border-radius: 16px;
   display: inline-flex;
   font-size: 13px;
-  align-items: center;
+  align-items: stretch;
 
   /* Colorless */
   &.background {
@@ -55,6 +55,7 @@
   button {
     background-color: transparent;
     border: none;
+    text-align: left;
   }
 
   @include apply-palette-backgrounds();
@@ -63,6 +64,9 @@
   a,
   button {
     color: inherit;
+    font-size: inherit;
+    white-space: pre-wrap;
+    font-weight: normal;
   }
 
   &.size-small {
@@ -92,8 +96,12 @@
     }
   }
 
+  &.multiline {
+    height: auto;
+  }
+
   .component-chip-body {
-    display: flex;
+    display: inline-flex;
     gap: 4px;
     align-items: center;
     height: 100%;
@@ -112,10 +120,6 @@
   .chip-delete-button {
     background-color: transparent;
     border: 0;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    font-size: 13px;
 
     &[class*='background-'] {
       @include apply-palette-effects();

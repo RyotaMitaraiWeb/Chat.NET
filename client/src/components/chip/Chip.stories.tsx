@@ -312,3 +312,40 @@ export const Sizes: Story = {
     );
   },
 };
+
+export const Multiline: Story = {
+  render() {
+    return (
+      <div style={{ width: 300 }}>
+        <div>
+          <Chip multiline>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit dicta commodi cumque
+            fugiat, facere distinctio eos quisquam rem aperiam iusto illum, cum animi accusamus
+            voluptatibus cupiditate? Suscipit iusto nisi cumque.
+          </Chip>
+        </div>
+        <div>
+          <Chip clickable multiline>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit dicta commodi cumque
+            fugiat, facere distinctio eos quisquam rem aperiam iusto illum, cum animi accusamus
+            voluptatibus cupiditate? Suscipit iusto nisi cumque.
+          </Chip>
+        </div>
+        <div>
+          <Chip clickable onDelete={() => {}} multiline>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit dicta commodi cumque
+            fugiat, facere distinctio eos quisquam rem aperiam iusto illum, cum animi accusamus
+            voluptatibus cupiditate? Suscipit iusto nisi cumque.
+          </Chip>
+        </div>
+        <div>
+          <Chip href="/test" clickable onDelete={() => {}} multiline>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sit dicta commodi cumque
+            fugiat, facere distinctio eos quisquam rem aperiam iusto illum, cum animi accusamus
+            voluptatibus cupiditate? Suscipit iusto nisi cumque.
+          </Chip>
+        </div>
+      </div>
+    );
+  },
+};
