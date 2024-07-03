@@ -1,0 +1,160 @@
+@import '../../styles/colors.scss';
+@import '../../styles/effects.scss';
+.component-chip {
+  border-radius: 16px;
+  display: inline-flex;
+  font-size: 13px;
+  align-items: stretch;
+
+  /* Colorless */
+  &.background {
+    @include apply-accent-background();
+    &.clickable {
+      .component-chip-body {
+        @include apply-accent-hover();
+        @include apply-accent-click();
+      }
+    }
+
+    .chip-delete-button {
+      @include apply-accent-hover();
+      @include apply-accent-click();
+    }
+  }
+
+  &.outlined {
+    border: 1px solid gray;
+    @include apply-theme-text();
+
+    &.clickable .component-chip-body,
+    .chip-delete-button {
+      &:hover {
+        background-color: rgba(128, 128, 128, 0.12);
+      }
+
+      &:disabled {
+        background-color: transparent;
+      }
+    }
+  }
+
+  &.background,
+  &.outlined {
+    button,
+    a {
+      @include apply-theme-text();
+    }
+  }
+
+  /* End colorless */
+
+  &.clickable {
+    .component-chip-body {
+      &[class*='background-'] {
+        @include apply-palette-backgrounds();
+        @include apply-palette-effects();
+      }
+
+      &[class*='outlined-'] {
+        @include apply-palette-outlined-text($interactive: true, $outlined: false);
+      }
+    }
+  }
+
+  button {
+    background-color: transparent;
+    border: none;
+    text-align: left;
+  }
+
+  @include apply-palette-backgrounds();
+  @include apply-palette-outlined-text();
+
+  a,
+  button {
+    color: inherit;
+    font-size: inherit;
+    white-space: pre-wrap;
+    font-weight: normal;
+  }
+
+  &.size-small {
+    height: 24px;
+    .component-chip-body {
+      padding: 0 8px;
+    }
+  }
+
+  &.size-medium {
+    height: 32px;
+    .component-chip-body {
+      padding: 0 12px;
+    }
+  }
+
+  &.size-large {
+    height: 48px;
+    .component-chip-body {
+      padding: 0 12px;
+    }
+  }
+
+  &.deletable {
+    .component-chip-body {
+      padding-right: 4px;
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+    }
+  }
+
+  &.multiline {
+    height: auto;
+  }
+
+  .component-chip-body {
+    display: inline-flex;
+    gap: 4px;
+    align-items: center;
+    height: 100%;
+    flex: 1;
+    justify-content: center;
+    border-radius: 16px;
+
+    &:focus-visible {
+      outline: 1px solid $outline-color;
+    }
+
+    &.with-icon {
+      padding-left: 4px;
+    }
+
+    .component-icon {
+      display: flex;
+    }
+  }
+
+  .chip-delete-button {
+    background-color: transparent;
+    border: 0;
+    border-top-right-radius: 16px;
+    border-bottom-right-radius: 16px;
+
+    &:focus-visible {
+      outline: 3px solid $outline-color;
+    }
+
+    &[class*='background-'] {
+      @include apply-palette-effects();
+    }
+
+    &[class*='outlined-'] {
+      @include apply-palette-outlined-text($interactive: true, $outlined: false);
+    }
+
+    @include apply-outlined-ripple();
+
+    .component-icon {
+      display: flex;
+    }
+  }
+}

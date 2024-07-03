@@ -1,3 +1,4 @@
+import React from 'react';
 import { ElementProps } from './Element';
 
 /**
@@ -9,6 +10,7 @@ export interface BaseButtonProps extends ElementProps {
   onClick?: (event?: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement, MouseEvent>) => void;
   href?: string;
   target?: React.HTMLAttributeAnchorTarget;
+  onKeyUp?: (event: React.KeyboardEvent) => void;
 }
 
 export interface BaseButtonWithIconProps extends BaseButtonProps {
