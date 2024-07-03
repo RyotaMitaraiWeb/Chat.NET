@@ -249,3 +249,66 @@ export const ClickableWithVariantsAndColors: Story = {
     );
   },
 };
+
+export const Sizes: Story = {
+  render() {
+    return (
+      <>
+        <div>
+          <h3>Normal chips</h3>
+          <Chip size="small">Small</Chip>
+          <Chip size="medium">Medium</Chip>
+          <Chip size="large">Large</Chip>
+        </div>
+        <div>
+          <h3>Clickable chips</h3>
+          <Chip clickable size="small">
+            Small
+          </Chip>
+          <Chip clickable size="medium">
+            Medium
+          </Chip>
+          <Chip clickable size="large">
+            Large
+          </Chip>
+        </div>
+        <div>
+          <h3>Deletable chips</h3>
+          <Chip onDelete={() => {}} size="small">
+            Small
+          </Chip>
+          <Chip onDelete={() => {}} size="medium">
+            Medium
+          </Chip>
+          <Chip onDelete={() => {}} size="large">
+            Large
+          </Chip>
+        </div>
+        <div>
+          <h3>Deletable and clickable chips</h3>
+          <Chip clickable onDelete={() => {}} size="small">
+            Small
+          </Chip>
+          <Chip clickable onDelete={() => {}} size="medium">
+            Medium
+          </Chip>
+          <Chip clickable onDelete={() => {}} size="large">
+            Large
+          </Chip>
+        </div>
+        <div>
+          <h3>Deletable and clickable chips with start icons</h3>
+          <Chip startIcon={<MdAdd />} clickable onDelete={() => {}} size="small">
+            Small
+          </Chip>
+          <Chip startIcon={<MdAdd />} clickable onDelete={() => {}} size="medium">
+            Medium
+          </Chip>
+          <Chip startIcon={<MdAdd />} clickable onDelete={() => {}} size="large">
+            Large
+          </Chip>
+        </div>
+      </>
+    );
+  },
+};
