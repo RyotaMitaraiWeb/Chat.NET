@@ -1,11 +1,27 @@
 @import '../../styles/colors.scss';
 @import '../../styles/effects.scss';
-
 .component-chip {
   border-radius: 16px;
   display: inline-flex;
-  font-size: 1rem;
+  font-size: 13px;
   align-items: center;
+
+  /* Colorless */
+  &.background {
+    @include apply-accent-background();
+  }
+
+  &.outlined {
+    border: 1px solid gray;
+  }
+  
+  &.background, &.outlined {
+    button, a {
+      @include apply-theme-text();
+    }
+  }
+
+  /* End colorless */
 
   /* Prevent ripple from overflowing */
   overflow: hidden;
@@ -17,6 +33,10 @@
 
   @include apply-palette-backgrounds();
   @include apply-palette-outlined-text();
+
+  a, button {
+    color: inherit;
+  }
 
   &.size-small {
     height: 24px;
@@ -69,6 +89,7 @@
     height: 100%;
     display: flex;
     align-items: center;
+    font-size: 13px;
     
     .component-icon {
       display: flex;
