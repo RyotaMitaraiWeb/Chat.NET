@@ -5,6 +5,7 @@ import ChipBody from '../internal/chipBody/ChipBody';
 import Icon from '../icon/Icon';
 import BaseButton from '../internal/baseButton/BaseButton';
 import { MdCancel } from 'react-icons/md';
+import React from 'react';
 
 function Chip(props: ChipProps): React.JSX.Element {
   const {
@@ -36,6 +37,13 @@ function Chip(props: ChipProps): React.JSX.Element {
     onDelete,
   });
 
+  function handleKeyPress(event: React.KeyboardEvent) {
+    event.preventDefault();
+    if (event.key === 'Backspace' && onDelete) {
+      onDelete();
+    }
+  }
+
   return (
     <div className={`component-chip ${chipClassNames} ${className}`} {...others}>
       <ChipBody
@@ -46,6 +54,7 @@ function Chip(props: ChipProps): React.JSX.Element {
         startIcon={startIcon}
         disabled={disabled}
         className={chipClassNames}
+        onKeyUp={handleKeyPress}
       >
         {children}
       </ChipBody>

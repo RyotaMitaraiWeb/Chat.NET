@@ -11,7 +11,7 @@ function BaseButton(props: BaseButtonProps): React.JSX.Element {
   const classNames = `component-base-button ${disabled ? 'disabled' : ''} ${className}`;
   if (href && !disabled) {
     return (
-      <Link href={href} target={target} className={classNames}>
+      <Link href={href} target={target} className={classNames} {...others}>
         {children}
       </Link>
     );
