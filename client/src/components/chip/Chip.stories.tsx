@@ -74,6 +74,24 @@ export const ClickableWithStartIcon: Story = {
   },
 };
 
+export const Link: Story = {
+  render() {
+    return (
+      <>
+        <Chip href="/test" clickable>
+          Local link
+        </Chip>
+        <Chip clickable href="http://localhost:6006" target="_blank">
+          target _blank
+        </Chip>
+        <Chip onDelete={() => {}} clickable href="/test">
+          link with delete
+        </Chip>
+      </>
+    );
+  },
+};
+
 export const Variants: Story = {
   render() {
     return (
