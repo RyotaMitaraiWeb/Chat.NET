@@ -9,14 +9,27 @@
   /* Colorless */
   &.background {
     @include apply-accent-background();
+    &.clickable {
+      .component-chip-body {
+        @include apply-accent-hover();
+        @include apply-accent-click();
+      }
+    }
+
+    .chip-delete-button {
+      @include apply-accent-hover();
+      @include apply-accent-click();
+    }
   }
 
   &.outlined {
     border: 1px solid gray;
   }
-  
-  &.background, &.outlined {
-    button, a {
+
+  &.background,
+  &.outlined {
+    button,
+    a {
       @include apply-theme-text();
     }
   }
@@ -26,15 +39,14 @@
   /* Prevent ripple from overflowing */
   overflow: hidden;
 
-
   &.clickable {
     .component-chip-body {
-      &[class*="background-"] {
+      &[class*='background-'] {
         @include apply-palette-backgrounds();
         @include apply-palette-effects();
       }
 
-      &[class*="outlined-"] {
+      &[class*='outlined-'] {
         @include apply-palette-outlined-text($interactive: true, $outlined: false);
       }
     }
@@ -48,7 +60,8 @@
   @include apply-palette-backgrounds();
   @include apply-palette-outlined-text();
 
-  a, button {
+  a,
+  button {
     color: inherit;
   }
 
@@ -64,7 +77,6 @@
     .component-chip-body {
       padding: 0 12px;
     }
-    
   }
 
   &.size-large {
@@ -105,16 +117,16 @@
     align-items: center;
     font-size: 13px;
 
-    &[class*="background-"] {
+    &[class*='background-'] {
       @include apply-palette-effects();
     }
 
-    &[class*="outlined-"] {
+    &[class*='outlined-'] {
       @include apply-palette-outlined-text($interactive: true, $outlined: false);
     }
 
     @include apply-outlined-ripple();
-    
+
     .component-icon {
       display: flex;
     }
