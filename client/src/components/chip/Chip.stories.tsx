@@ -142,7 +142,7 @@ export const Variants: Story = {
             Error
           </Chip>
           <Chip variant="outlined">Colorless</Chip>
-          <Chip clickable variant="fill" disabled>
+          <Chip clickable variant="outlined" disabled>
             Disabled
           </Chip>
         </div>
@@ -205,7 +205,7 @@ export const ClickableWithVariantsAndColors: Story = {
           <Chip clickable variant="outlined">
             Colorless
           </Chip>
-          <Chip clickable variant="fill" disabled>
+          <Chip clickable variant="outlined" disabled>
             Disabled
           </Chip>
         </div>
@@ -232,7 +232,7 @@ export const ClickableWithVariantsAndColors: Story = {
           <Chip onDelete={() => {}} clickable variant="fill">
             Colorless
           </Chip>
-          <Chip onDelete={() => {}} clickable variant="fill" disabled>
+          <Chip onDelete={() => {}} clickable variant="outlined" disabled>
             Disabled
           </Chip>
         </div>
@@ -259,7 +259,7 @@ export const ClickableWithVariantsAndColors: Story = {
           <Chip clickable onDelete={() => {}} variant="outlined">
             Colorless
           </Chip>
-          <Chip clickable onDelete={() => {}} variant="fill" disabled>
+          <Chip clickable onDelete={() => {}} variant="outlined" disabled>
             Disabled
           </Chip>
         </div>
