@@ -1,9 +1,16 @@
 @import '../../../styles/colors.scss';
 
 .component-icon-button {
+  /* General */
   border-radius: 50%;
+
+  // Link buttons have some extra top spacing due to the ripple styling
+  // This fixes the issue
   display: inline-flex;
 
+  /* End general */
+
+  /* Size */
   .component-icon {
     &.size-large {
       font-size: 24pt;
@@ -21,10 +28,15 @@
     }
   }
 
+  /* End size */
+
+  /* Icon */
   span {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     vertical-align: middle;
   }
+
+  /* End icon */
 }
