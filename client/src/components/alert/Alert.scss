@@ -1,14 +1,18 @@
 @import '../../styles/colors.scss';
 
 .component-alert {
+  /* General */
   width: 100%;
   border-radius: 4px;
   padding-left: 12px;
   padding-right: 8px;
   margin-bottom: 8px;
 
+  /* End general */
+
   @include apply-palette-backgrounds();
 
+  /* Alert title */
   .title {
     display: flex;
     flex-direction: row;
@@ -22,6 +26,9 @@
     }
   }
 
+  /* End alert title */
+
+  /* Alert content */
   .alert-content {
     display: flex;
     flex-direction: row;
@@ -36,7 +43,12 @@
     }
   }
 
+  /* End alert content */
+
+  /* Alert icon */
   svg {
     display: block;
   }
+
+  /* End of alert icon */
 }
