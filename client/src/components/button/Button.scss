@@ -5,10 +5,13 @@
 @import '../../styles/effects.scss';
 
 .component-button {
+  /* General */
   border-radius: 5px;
   border: 0;
   display: inline-flex;
   text-align: center;
+
+  /* End of general */
 
   /* in case a color is not provided */
   background-color: transparent;
@@ -40,8 +43,10 @@
       );
     }
   }
+
   /* end of no color */
 
+  /* Palette and variants */
   border: 1px solid transparent;
   @include apply-palette-backgrounds();
   @include apply-palette-text($interactive: true);
@@ -56,8 +61,10 @@
     @include apply-palette-effects();
   }
 
-  @include apply-font-sizes();
+  /* End of palette and variants */
 
+  /* Size */
+  @include apply-font-sizes();
   &.size-small {
     padding: 8px 4px;
   }
@@ -70,6 +77,9 @@
     padding: 24px 12px;
   }
 
+  /* End size */
+
+  /* If an icon is passed */
   &.with-icon {
     display: inline-flex;
     gap: 4px;
@@ -80,4 +90,5 @@
       vertical-align: middle;
     }
   }
+  /* End of icon */
 }
