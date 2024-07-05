@@ -1,6 +1,13 @@
 import { TooltipProps } from './types';
 import './Tooltip.scss';
 
+/**
+ * The tooltip is a black / gray (depending on the user's theme) block
+ * containing some content. The block is visible only when the component's children
+ * are hovered or focused.
+ *
+ * Currently, the tooltip will always be displayed above the children.
+ */
 function Tooltip(props: TooltipProps): React.JSX.Element {
   const { children, content, ...others } = props;
   return (

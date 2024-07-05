@@ -43,6 +43,10 @@
     left: 50%;
     border-width: 5px;
     border-style: solid;
-    @include apply-values-for-modes(border-color, gray transparent transparent transparent, black transparent transparent transparent);
+    @include apply-values-for-modes(
+      border-color,
+      gray transparent transparent transparent,
+      black transparent transparent transparent
+    );
   }
 }
