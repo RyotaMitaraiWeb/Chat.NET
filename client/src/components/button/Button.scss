@@ -11,8 +11,6 @@
   display: inline-flex;
   text-align: center;
 
-  /* End of general */
-
   /* in case a color is not provided */
   background-color: transparent;
   @include apply-theme-text();
@@ -44,8 +42,6 @@
     }
   }
 
-  /* end of no color */
-
   /* Palette and variants */
   border: 1px solid transparent;
   @include apply-palette-backgrounds();
@@ -60,8 +56,6 @@
   &[class*='background-'] {
     @include apply-palette-effects();
   }
-
-  /* End of palette and variants */
 
   /* Size */
   @include apply-font-sizes();
@@ -90,5 +84,4 @@
       vertical-align: middle;
     }
   }
-  /* End of icon */
 }

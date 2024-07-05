@@ -8,8 +8,6 @@
   // This fixes the issue
   display: inline-flex;
 
-  /* End general */
-
   /* Size */
   .component-icon {
     &.size-large {
@@ -28,8 +26,6 @@
     }
   }
 
-  /* End size */
-
   /* Icon */
   span {
     display: flex;
@@ -37,6 +33,4 @@
     justify-content: center;
     vertical-align: middle;
   }
-
-  /* End icon */
 }

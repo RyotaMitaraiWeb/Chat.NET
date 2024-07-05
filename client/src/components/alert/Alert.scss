@@ -8,8 +8,6 @@
   padding-right: 8px;
   margin-bottom: 8px;
 
-  /* End general */
-
   @include apply-palette-backgrounds();
 
   /* Alert title */
@@ -26,8 +24,6 @@
     }
   }
 
-  /* End alert title */
-
   /* Alert content */
   .alert-content {
     display: flex;
@@ -43,12 +39,8 @@
     }
   }
 
-  /* End alert content */
-
   /* Alert icon */
   svg {
     display: block;
   }
-
-  /* End of alert icon */
 }
