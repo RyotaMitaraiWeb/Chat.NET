@@ -8,6 +8,7 @@
   @include apply-accent-background();
   @include apply-theme-emphasis-text();
 
+  /* If an icon is passed */
   &.with-icon,
   &.with-icon .button {
     display: flex;
@@ -55,6 +56,7 @@
     font-family: inherit;
   }
 
+  /* Sizes */
   &.size-large > .component-list-item,
   &.size-large > .component-list-item-button .button {
     padding: 24px 12px;

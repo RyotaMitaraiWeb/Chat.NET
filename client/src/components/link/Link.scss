@@ -8,6 +8,7 @@
     text-decoration: none;
   }
 
+  /* In case a color is not provided */
   &.text-default {
     @include apply-values-for-modes(color, rgb(144, 202, 249), rgb(25, 118, 210));
   }
