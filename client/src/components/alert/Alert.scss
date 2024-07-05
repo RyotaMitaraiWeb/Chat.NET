@@ -1,6 +1,7 @@
 @import '../../styles/colors.scss';
 
 .component-alert {
+  /* General */
   width: 100%;
   border-radius: 4px;
   padding-left: 12px;
@@ -9,6 +10,7 @@
 
   @include apply-palette-backgrounds();
 
+  /* Alert title */
   .title {
     display: flex;
     flex-direction: row;
@@ -22,6 +24,7 @@
     }
   }
 
+  /* Alert content */
   .alert-content {
     display: flex;
     flex-direction: row;
@@ -36,6 +39,7 @@
     }
   }
 
+  /* Alert icon */
   svg {
     display: block;
   }

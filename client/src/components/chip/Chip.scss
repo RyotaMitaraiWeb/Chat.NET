@@ -1,14 +1,18 @@
 @import '../../styles/colors.scss';
 @import '../../styles/effects.scss';
 .component-chip {
+  /* General */
   border-radius: 16px;
   display: inline-flex;
   font-size: 13px;
   align-items: stretch;
 
   /* Colorless */
+
+  // "fill" variant
   &.background {
     @include apply-accent-background();
+
     &.clickable {
       .component-chip-body {
         @include apply-accent-hover();
@@ -22,6 +26,7 @@
     }
   }
 
+  // "outlined" variant
   &.outlined {
     border: 1px solid gray;
     @include apply-theme-text();
@@ -46,30 +51,34 @@
     }
   }
 
-  /* End colorless */
-
+  /* Clickable chips (buttons and links) */
   &.clickable {
     .component-chip-body {
+      // "fill" variant
       &[class*='background-'] {
         @include apply-palette-backgrounds();
         @include apply-palette-effects();
       }
 
+      // "outlined" variant
       &[class*='outlined-'] {
         @include apply-palette-outlined-text($interactive: true, $outlined: false);
       }
     }
   }
 
+  // override default button styles
   button {
     background-color: transparent;
     border: none;
     text-align: left;
   }
 
+  /* Palette and variants */
   @include apply-palette-backgrounds();
   @include apply-palette-outlined-text();
 
+  /* Override default stylings of anchors and buttons */
   a,
   button {
     color: inherit;
@@ -78,8 +87,10 @@
     font-weight: normal;
   }
 
+  /* Sizes */
   &.size-small {
     height: 24px;
+
     .component-chip-body {
       padding: 0 8px;
     }
@@ -87,6 +98,7 @@
 
   &.size-medium {
     height: 32px;
+
     .component-chip-body {
       padding: 0 12px;
     }
@@ -94,11 +106,13 @@
 
   &.size-large {
     height: 48px;
+
     .component-chip-body {
       padding: 0 12px;
     }
   }
 
+  /* Deletable chips */
   &.deletable {
     .component-chip-body {
       padding-right: 4px;
@@ -107,10 +121,12 @@
     }
   }
 
+  /* Multiline chips */
   &.multiline {
     height: auto;
   }
 
+  /* Content passed as child to the chip */
   .component-chip-body {
     display: inline-flex;
     gap: 4px;
@@ -128,11 +144,13 @@
       padding-left: 4px;
     }
 
+    // Ensures that the left icon is centered vertically
     .component-icon {
       display: flex;
     }
   }
 
+  /* Delete button on the right side of deletable chips */
   .chip-delete-button {
     background-color: transparent;
     border: 0;
@@ -153,6 +171,7 @@
 
     @include apply-outlined-ripple();
 
+    // Ensures that the icon is centered vertically
     .component-icon {
       display: flex;
     }

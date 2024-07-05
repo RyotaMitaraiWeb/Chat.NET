@@ -3,23 +3,29 @@
 @import '../../styles/font.scss';
 
 .component-checkbox {
+  /* General */
   cursor: pointer;
   display: inline-flex;
   gap: 4px;
   text-align: center;
+
+  /* Size */
   @include apply-font-sizes();
 
+  /* Disabled */
   &.disabled {
     cursor: not-allowed;
     opacity: 0.5;
   }
 
+  /* When the checkbox itself is focused */
   &:has(:focus-visible) {
     .checkbox {
       outline: 3px solid #50dfff;
     }
   }
 
+  /* Label positioning */
   &.right,
   &.left {
     flex-direction: row;
@@ -55,6 +61,7 @@
     }
   }
 
+  /* Element that acts as the visible checkbox */
   .checkbox {
     border: 3px solid gray;
     border-radius: 4px;
@@ -64,12 +71,13 @@
     justify-content: center;
     @include apply-transition(background-color 0.1s);
 
-    overflow: hidden;
-
+    // causes the SVG to take up the entire height of the icon, ensuring
+    // that it is centered vertically
     svg {
       display: block;
     }
 
+    // Position icon to the center of the checkbox
     .component-icon {
       position: absolute;
       top: 50%;
@@ -77,6 +85,7 @@
       transform: translate(-50%, -50%);
     }
 
+    // Size
     &.size-small {
       width: 12px;
       height: 12px;
@@ -95,8 +104,12 @@
     }
   }
 
+  /* When the checkbox control is checked */
   &.checked,
   &:has(:checked) {
+    // Solid borders ensure that the checkbox doesn't affect the layout
+    // when the state changes and gives off the illusion that
+    // the color has filled up the entire checkbox
     .checkbox {
       border: 3px solid transparent;
       @include apply-palette-backgrounds();
