@@ -54,7 +54,6 @@
   /* Clickable chips (buttons and links) */
   &.clickable {
     .component-chip-body {
-
       // "fill" variant
       &[class*='background-'] {
         @include apply-palette-backgrounds();

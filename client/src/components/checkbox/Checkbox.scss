@@ -107,7 +107,6 @@
   /* When the checkbox control is checked */
   &.checked,
   &:has(:checked) {
-
     // Solid borders ensure that the checkbox doesn't affect the layout
     // when the state changes and gives off the illusion that
     // the color has filled up the entire checkbox
