@@ -22,3 +22,9 @@ export const WithCustomSwitchIcons: Story = {
     iconOff: <MdSunny />,
   },
 };
+
+export const WithColor: Story = {
+  args: {
+    color: 'success',
+  },
+};

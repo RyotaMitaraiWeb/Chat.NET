@@ -8,6 +8,7 @@ function Switch(props: SwitchProps) {
   const {
     side,
     children,
+    color,
     defaultChecked,
     checked,
     disabled,
@@ -18,10 +19,12 @@ function Switch(props: SwitchProps) {
     iconOff = <MdCircle />,
     ...others
   } = props;
+
+  const backgroundClass = color ? 'background-' + color : '';
   return (
     <label className={`component-switch ${side}`} {...others}>
       <div className="component-radio-label">{children}</div>
-      <div className="switch">
+      <div className={`switch ${backgroundClass}`}>
         <Icon size="large" className="switch-icon">
           <span aria-hidden={true} className="off">
             {iconOff}

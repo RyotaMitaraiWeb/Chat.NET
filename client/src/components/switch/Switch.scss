@@ -30,12 +30,16 @@
   height: 12px;
   border-radius: 16px;
   cursor: pointer;
+  background-color: gray;
+
 
   .on {
     opacity: 0;
   }
 
   &:has(:checked) {
+    @include apply-palette-backgrounds();
+
     .switch-icon {
       left: 32px;
     }
@@ -48,8 +52,6 @@
       opacity: 1;
     }
   }
-
-  background-color: red;
 
   .switch-icon {
     position: absolute;
