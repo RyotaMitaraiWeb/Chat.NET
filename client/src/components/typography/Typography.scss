@@ -10,7 +10,7 @@
     @include apply-theme-emphasis-text();
 
     // in case a color is applied
-    &[class*="text-"] {
+    &[class*='text-'] {
       font-weight: bold;
     }
   }
