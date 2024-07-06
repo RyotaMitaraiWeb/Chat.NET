@@ -4,6 +4,12 @@ import { MdCircle } from 'react-icons/md';
 import './Switch.scss';
 import BaseCheckbox from '../internal/baseCheckbox/BaseCheckbox';
 
+/**
+ * The switch component is a special kind of checkbox, typically used
+ * for binary choices (e.g. choosing the app's theme).
+ * The switch's bar color (when checked) and icons can be customized to
+ * fit different scenarios. The switch can be controlled or uncontrolled.
+ */
 function Switch(props: SwitchProps) {
   const {
     side = 'left',
@@ -22,6 +28,7 @@ function Switch(props: SwitchProps) {
 
   const backgroundClass = color ? 'background-' + color : '';
   const disabledClass = disabled ? 'disabled' : 'enabled';
+
   return (
     <label className={`component-switch ${side} ${disabledClass}`} {...others}>
       <div className="component-radio-label">{children}</div>
