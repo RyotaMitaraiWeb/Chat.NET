@@ -9,6 +9,15 @@
   }
 }
 
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 0.5;
+  }
+}
+
 @keyframes zoomIn {
   from {
     transform: scale(0);
@@ -21,6 +30,12 @@
 @mixin fadeInFromTransparentToSemiTransparent($time: 0.3s) {
   @media (prefers-reduced-motion: no-preference) {
     animation: fadeInTransparently $time;
+  }
+}
+
+@mixin fadeInFromTransparentToOpaque($time: 0.3s) {
+  @media (prefers-reduced-motion: no-preference) {
+    animation: fadeIn $time;
   }
 }
 
