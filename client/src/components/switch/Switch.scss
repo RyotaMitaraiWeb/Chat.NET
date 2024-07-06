@@ -22,6 +22,26 @@
 }
 
 .component-switch {
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+
+  &.top {
+    flex-direction: column;
+  }
+
+  &.left {
+    flex-direction: row;
+  }
+
+  &.right {
+    flex-direction: row-reverse;
+  }
+
+  &.bottom {
+    flex-direction: column-reverse;
+  }
 }
 
 .component-switch .switch {

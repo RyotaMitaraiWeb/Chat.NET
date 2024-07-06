@@ -28,3 +28,18 @@ export const WithColor: Story = {
     color: 'success',
   },
 };
+
+export const WithLabel: Story = {
+  render() {
+    return (
+      <>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+          <Switch side="left">Left</Switch>
+          <Switch side="top">Top</Switch>
+          <Switch side="bottom">Bottom</Switch>
+          <Switch side="right">Right</Switch>
+        </div>
+      </>
+    );
+  },
+};
