@@ -1,6 +1,26 @@
 @import '../../styles/util.scss';
 @import '../../styles/colors.scss';
 
+@keyframes switch-from-left-to-right {
+  from {
+    left: -6px;
+  }
+
+  to {
+    left: 32px;
+  }
+}
+
+@keyframes switch-from-right-to-left {
+  from {
+    left: 32px;
+  }
+
+  to {
+    left: -6px;
+  }
+}
+
 .component-switch {
 }
 
@@ -30,14 +50,19 @@
   }
 
   background-color: red;
+
   .switch-icon {
     position: absolute;
-    color: white;
     top: -6px;
     left: -6px;
+    @include apply-transition(left 0.1s);
 
     & > span {
       position: absolute;
     }
   }
+}
+
+.switch-icon {
+  color: white;
 }

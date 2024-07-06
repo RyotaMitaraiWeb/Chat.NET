@@ -8,7 +8,6 @@ function Switch(props: SwitchProps) {
   const {
     side,
     children,
-    color,
     defaultChecked,
     checked,
     disabled,
@@ -24,8 +23,12 @@ function Switch(props: SwitchProps) {
       <div className="component-radio-label">{children}</div>
       <div className="switch">
         <Icon size="large" className="switch-icon">
-          <span className="off">{iconOff}</span>
-          <span className="on">{iconOn}</span>
+          <span aria-hidden={true} className="off">
+            {iconOff}
+          </span>
+          <span aria-hidden={true} className="on">
+            {iconOn}
+          </span>
         </Icon>
         <div className="switch-bar">
           <BaseCheckbox
