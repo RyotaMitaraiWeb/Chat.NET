@@ -1,0 +1,101 @@
+@import '../../styles/util.scss';
+@import '../../styles/colors.scss';
+@import '../../styles/effects.scss';
+
+@keyframes switch-from-left-to-right {
+  from {
+    left: -6px;
+  }
+
+  to {
+    left: 32px;
+  }
+}
+
+@keyframes switch-from-right-to-left {
+  from {
+    left: 32px;
+  }
+
+  to {
+    left: -6px;
+  }
+}
+
+.component-switch {
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+
+  &.top {
+    flex-direction: column;
+  }
+
+  &.left {
+    flex-direction: row;
+  }
+
+  &.right {
+    flex-direction: row-reverse;
+  }
+
+  &.bottom {
+    flex-direction: column-reverse;
+  }
+
+  &.disabled {
+    .switch {
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+  }
+}
+
+.component-switch .switch {
+  position: relative;
+  width: 48px;
+  height: 12px;
+  border-radius: 16px;
+  cursor: pointer;
+  background-color: gray;
+
+  &:has(:focus-visible) {
+    outline: 3px solid $outline-color;
+  }
+
+  .on {
+    opacity: 0;
+  }
+
+  &:has(:checked) {
+    @include apply-palette-backgrounds();
+
+    .switch-icon {
+      left: 32px;
+    }
+
+    .off {
+      opacity: 0;
+    }
+
+    .on {
+      opacity: 1;
+    }
+  }
+
+  .switch-icon {
+    position: absolute;
+    top: -6px;
+    left: -6px;
+    @include apply-transition(left 0.1s);
+
+    & > span {
+      position: absolute;
+    }
+  }
+}
+
+.switch-icon {
+  color: white;
+}
