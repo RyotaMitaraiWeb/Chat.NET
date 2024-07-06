@@ -1,0 +1,43 @@
+@import '../../styles/util.scss';
+@import '../../styles/colors.scss';
+
+.component-switch {
+}
+
+.component-switch .switch {
+  position: relative;
+  width: 48px;
+  height: 12px;
+  border-radius: 16px;
+  cursor: pointer;
+
+  .on {
+    opacity: 0;
+  }
+
+  &:has(:checked) {
+    .switch-icon {
+      left: 32px;
+    }
+
+    .off {
+      opacity: 0;
+    }
+
+    .on {
+      opacity: 1;
+    }
+  }
+
+  background-color: red;
+  .switch-icon {
+    position: absolute;
+    color: white;
+    top: -6px;
+    left: -6px;
+
+    & > span {
+      position: absolute;
+    }
+  }
+}
