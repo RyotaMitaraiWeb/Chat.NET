@@ -61,3 +61,17 @@ export const Controlled: Story = {
     );
   },
 };
+
+export const Disabled: Story = {
+  args: {
+    disabled: true,
+  },
+};
+
+export const DisabledWithColor: Story = {
+  args: {
+    disabled: true,
+    color: 'success',
+    checked: true,
+  },
+};

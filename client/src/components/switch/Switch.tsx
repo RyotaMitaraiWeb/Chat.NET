@@ -21,8 +21,9 @@ function Switch(props: SwitchProps) {
   } = props;
 
   const backgroundClass = color ? 'background-' + color : '';
+  const disabledClass = disabled ? 'disabled' : 'enabled';
   return (
-    <label className={`component-switch ${side}`} {...others}>
+    <label className={`component-switch ${side} ${disabledClass}`} {...others}>
       <div className="component-radio-label">{children}</div>
       <div className={`switch ${backgroundClass}`}>
         <Icon size="large" className="switch-icon">
