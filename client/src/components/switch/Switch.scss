@@ -1,5 +1,6 @@
 @import '../../styles/util.scss';
 @import '../../styles/colors.scss';
+@import '../../styles/effects.scss';
 
 @keyframes switch-from-left-to-right {
   from {
@@ -51,6 +52,10 @@
   border-radius: 16px;
   cursor: pointer;
   background-color: gray;
+
+  &:has(:focus-visible) {
+    outline: 3px solid $outline-color;
+  }
 
 
   .on {
