@@ -6,7 +6,7 @@ import BaseCheckbox from '../internal/baseCheckbox/BaseCheckbox';
 
 function Switch(props: SwitchProps) {
   const {
-    side,
+    side = 'left',
     children,
     color,
     defaultChecked,
