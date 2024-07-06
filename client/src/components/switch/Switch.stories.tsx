@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Switch from './Switch';
 import { MdModeNight, MdSunny } from 'react-icons/md';
+import { useState } from 'react';
 
 const meta: Meta<typeof Switch> = {
   title: 'Example/Switch',
@@ -39,6 +40,23 @@ export const WithLabel: Story = {
           <Switch side="bottom">Bottom</Switch>
           <Switch side="right">Right</Switch>
         </div>
+      </>
+    );
+  },
+};
+
+export const Controlled: Story = {
+  render() {
+    const [checked, setChecked] = useState(false);
+
+    function handleChange() {
+      setChecked((c) => !c);
+    }
+    return (
+      <>
+        <p>Switches are checked: {checked.toString()}</p>
+        <Switch checked={checked} onChange={handleChange} />
+        <Switch checked={checked} onChange={handleChange} />
       </>
     );
   },
