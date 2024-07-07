@@ -2,7 +2,7 @@
 
 .component-icon-button {
   /* General */
-  border-radius: 50%;
+  border-radius: 100%;
 
   // Link buttons have some extra top spacing due to the ripple styling
   // This fixes the issue
@@ -12,17 +12,17 @@
   .component-icon {
     &.size-large {
       font-size: 24pt;
-      padding: 0 16px;
+      padding: 16px 0;
     }
 
     &.size-medium {
       font-size: 18pt;
-      padding: 0 8px;
+      padding: 10px 0;
     }
 
     &.size-small {
       font-size: 12pt;
-      padding: 0 5px;
+      padding: 4px 8px;
     }
   }
 
