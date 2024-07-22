@@ -56,6 +56,8 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   function handleKeyPress(event: React.KeyboardEvent) {
     if (event.key === 'Enter' || event.code === 'Space') {
       setOpen((o) => !o);
+    } else if (event.key === 'Home' && !open) {
+      setOpen(true);
     }
   }
 

@@ -98,7 +98,7 @@ describe('DropdownMenu', () => {
       expect(option).not.toBeInTheDocument();
     });
 
-    it('Opens and closes with space button', async () => {
+    it('Opens and closes with space key', async () => {
       const fn = jest.fn();
       render(
         <DropdownMenu
@@ -119,7 +119,7 @@ describe('DropdownMenu', () => {
       expect(option).not.toBeInTheDocument();
     });
 
-    it('Opens and closes with enter button', async () => {
+    it('Opens and closes with enter key', async () => {
       const fn = jest.fn();
       render(
         <DropdownMenu
@@ -138,6 +138,24 @@ describe('DropdownMenu', () => {
 
       await userEvent.keyboard('{Enter}');
       expect(option).not.toBeInTheDocument();
+    });
+
+    it('Opens with Home key', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+        />,
+      );
+
+      const menu = await screen.findByRole('combobox');
+      act(() => menu.focus());
+      expect(menu).toHaveFocus();
+      await userEvent.keyboard('{Home}');
+      await screen.findByText('Bulgaria');
     });
   });
 });
