@@ -20,8 +20,13 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   const [open, setOpen] = useState(false);
   const disabledClass = disabled ? 'disabled' : '';
 
+  const [temporarySelectValue, setTemporarySelectValue] = useState(value || values[0]);
+
   const userDefinedElements = (values as never[]).map(renderOption);
   const valueIndex = value ? values.indexOf(value) : 0;
+
+  const firstValue = values[0];
+  const lastValue = values[values.length - 1];
 
   const selectedValueElement = userDefinedElements[valueIndex];
   const elementsToRender = values.map((value, index) => {
@@ -30,13 +35,16 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
       <div
         key={value}
         id={`option-${value}`}
-        className={`dropdown-menu-option ${props.value === value ? 'selected' : 'not-selected'}`}
+        className={`dropdown-menu-option
+          ${props.value === value ? 'selected' : 'not-selected'}
+          ${value === temporarySelectValue ? 'focused' : 'not-focused'}`}
         aria-selected={props.value === value}
         role="option"
         onClick={() => {
           if (onChange) {
             onChange(value);
             setOpen(false);
+            setTemporarySelectValue(value);
           }
         }}
       >
@@ -45,8 +53,9 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
     );
   });
 
-  function handleClick() {
+  function toggleMenu() {
     setOpen((o) => !o);
+    ref.current?.focus();
   }
 
   function closeByOutsideClick() {
@@ -56,8 +65,13 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   function handleKeyPress(event: React.KeyboardEvent) {
     if (event.key === 'Enter' || event.code === 'Space') {
       setOpen((o) => !o);
-    } else if (event.key === 'Home' && !open) {
+      if (open && onChange) {
+        onChange(temporarySelectValue);
+      }
+    } else if (event.key === 'Home') {
       setOpen(true);
+      setTemporarySelectValue(firstValue);
+      ref.current?.focus();
     }
   }
 
@@ -72,12 +86,12 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
       ref={ref}
     >
       {label ? (
-        <div onClick={handleClick} id={labelId} className="dropdown-menu-label">
+        <div onClick={toggleMenu} id={labelId} className="dropdown-menu-label">
           {label}
         </div>
       ) : null}
       <div
-        onClick={handleClick}
+        onClick={toggleMenu}
         className="dropdown-menu-selected-value"
         aria-controls={`combobox-${labelId}`}
         aria-expanded={open}

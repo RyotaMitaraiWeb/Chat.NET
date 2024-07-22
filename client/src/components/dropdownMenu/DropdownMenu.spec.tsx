@@ -140,7 +140,7 @@ describe('DropdownMenu', () => {
       expect(option).not.toBeInTheDocument();
     });
 
-    it('Opens with Home key', async () => {
+    it('Opens with Home key and correctly sets the temporary select value', async () => {
       const fn = jest.fn();
       render(
         <DropdownMenu
@@ -155,7 +155,14 @@ describe('DropdownMenu', () => {
       act(() => menu.focus());
       expect(menu).toHaveFocus();
       await userEvent.keyboard('{Home}');
-      await screen.findByText('Bulgaria');
+      const option = await screen.findByText('Bulgaria');
+      await userEvent.click(option);
+
+      act(() => menu.focus());
+
+      await userEvent.keyboard('{Home}');
+      const selectedItem = document.querySelector('.focused');
+      expect(selectedItem?.textContent?.includes('Austria')).toBe(true);
     });
   });
 });
