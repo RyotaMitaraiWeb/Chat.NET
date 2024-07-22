@@ -53,6 +53,12 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
     setOpen(false);
   }
 
+  function handleKeyPress(event: React.KeyboardEvent) {
+    if (event.key === 'Enter' || event.code === 'Space') {
+      setOpen((o) => !o);
+    }
+  }
+
   const ref = useRef<HTMLDivElement>(null);
   useOutsideClick(ref, closeByOutsideClick);
 
@@ -76,6 +82,7 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
         tabIndex={0}
         aria-activedescendant={value ? `option-${value}` : ''}
         role="combobox"
+        onKeyDown={handleKeyPress}
       >
         {selectedValueElement}
       </div>

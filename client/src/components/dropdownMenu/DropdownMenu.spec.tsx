@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import DropdownMenu from './DropdownMenu';
 import userEvent from '@testing-library/user-event';
 
@@ -95,6 +95,48 @@ describe('DropdownMenu', () => {
       const button = await screen.findByText(/Off-topic/i);
       await userEvent.click(button);
 
+      expect(option).not.toBeInTheDocument();
+    });
+
+    it('Opens and closes with space button', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+        />,
+      );
+
+      const menu = await screen.findByRole('combobox');
+      act(() => menu.focus());
+      expect(menu).toHaveFocus();
+      await userEvent.keyboard(' ');
+      const option = await screen.findByText('Bulgaria');
+
+      await userEvent.keyboard(' ');
+      expect(option).not.toBeInTheDocument();
+    });
+
+    it('Opens and closes with enter button', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+        />,
+      );
+
+      const menu = await screen.findByRole('combobox');
+      act(() => menu.focus());
+      expect(menu).toHaveFocus();
+      await userEvent.keyboard('{Enter}');
+      const option = await screen.findByText('Bulgaria');
+
+      await userEvent.keyboard('{Enter}');
       expect(option).not.toBeInTheDocument();
     });
   });
