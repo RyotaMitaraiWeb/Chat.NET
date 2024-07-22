@@ -1,7 +1,8 @@
 'use client';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import './DropdownMenu.scss';
 import { DropdownMenuProps } from './types';
+import { useOutsideClick } from '@/hooks/useOutsideClick/useOutsideClick';
 
 function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   const {
@@ -48,11 +49,19 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
     setOpen((o) => !o);
   }
 
+  function closeByOutsideClick() {
+    setOpen(false);
+  }
+
+  const ref = useRef<HTMLDivElement>(null);
+  useOutsideClick(ref, closeByOutsideClick);
+
   return (
     <div
       aria-disabled={disabled}
       className={`component-dropdown-menu ${className} ${disabledClass}`}
       {...others}
+      ref={ref}
     >
       {label ? (
         <div onClick={handleClick} id={labelId} className="dropdown-menu-label">
