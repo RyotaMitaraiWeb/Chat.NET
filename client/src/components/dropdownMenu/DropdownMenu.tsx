@@ -81,11 +81,28 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
     } else if (event.key === 'ArrowDown' && !open) {
       setOpen(true);
       ref.current?.focus();
+    } else if (event.key.length === 1 && event.key.match(/[a-zA-Z0-9]/)) {
+      setOpen(true);
+      clearTimeout(printableCharactersTimer.current);
+      printableCharacters.current += event.key;
+      const matchingValue = values.find((v) =>
+        v.toLowerCase().startsWith(printableCharacters.current),
+      );
+
+      if (matchingValue) {
+        setTemporarySelectValue(matchingValue);
+      }
+      printableCharactersTimer.current = setTimeout(() => {
+        printableCharacters.current = '';
+      }, 200);
     }
   }
 
   const ref = useRef<HTMLDivElement>(null);
   useOutsideClick(ref, closeByOutsideClick);
+
+  const printableCharactersTimer = useRef<ReturnType<typeof setTimeout>>();
+  const printableCharacters = useRef('');
 
   return (
     <div

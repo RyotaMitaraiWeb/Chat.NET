@@ -213,7 +213,7 @@ describe('DropdownMenu', () => {
       expect(option).not.toBeInTheDocument();
     });
 
-    it('Opens with arrown down key correctly', async () => {
+    it('Opens with arrow down key correctly', async () => {
       const fn = jest.fn();
       render(
         <DropdownMenu
@@ -232,6 +232,27 @@ describe('DropdownMenu', () => {
 
       const selectedOption = document.querySelector('.focused');
       expect(selectedOption?.textContent?.includes('Bulgaria')).toBe(true);
+    });
+
+    it('Opens with printable characters correctly', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+          value="Bulgaria"
+        />,
+      );
+
+      const menu = await screen.findByRole('combobox');
+      act(() => menu.focus());
+
+      await userEvent.keyboard('mal');
+
+      const selectedOption = document.querySelector('.focused');
+      expect(selectedOption?.textContent?.includes('Malta')).toBe(true);
     });
   });
 });
