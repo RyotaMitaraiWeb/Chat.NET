@@ -165,6 +165,25 @@ describe('DropdownMenu', () => {
       expect(selectedItem?.textContent?.includes('Austria')).toBe(true);
     });
 
+    it('Opens with End key and correctly sets the temporary select value', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+        />,
+      );
+
+      const menu = await screen.findByRole('combobox');
+      act(() => menu.focus());
+      expect(menu).toHaveFocus();
+      await userEvent.keyboard('{End}');
+      const selectedItem = document.querySelector('.focused');
+      expect(selectedItem?.textContent?.includes('Sweden')).toBe(true);
+    });
+
     it('Opens with Arrow up key and correctly sets the temporary select value', async () => {
       const fn = jest.fn();
       render(
