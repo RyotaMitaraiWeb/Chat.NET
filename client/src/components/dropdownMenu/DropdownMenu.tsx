@@ -3,6 +3,8 @@ import { useRef, useState } from 'react';
 import './DropdownMenu.scss';
 import { DropdownMenuProps } from './types';
 import { useOutsideClick } from '@/hooks/useOutsideClick/useOutsideClick';
+import { _keyPressMapper } from './_keyPressMapper';
+import { useDebounce } from '@/hooks/useDebounce/useDebounce';
 
 function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   const {
@@ -45,6 +47,8 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
             onChange(value);
             setOpen(false);
             setTemporarySelectValue(value);
+
+            combobox.focus();
           }
         }}
       >
@@ -55,7 +59,6 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
 
   function toggleMenu() {
     setOpen((o) => !o);
-    ref.current?.focus();
   }
 
   function closeByOutsideClick() {
@@ -63,50 +66,52 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   }
 
   function handleKeyPress(event: React.KeyboardEvent) {
-    if (event.key === 'Enter' || event.code === 'Space') {
+    const keyboardEvent = _keyPressMapper(event, open);
+
+    if (keyboardEvent.toggleWithMenuAndSpace) {
       setOpen((o) => !o);
       if (open && onChange) {
         onChange(temporarySelectValue);
       }
-    } else if (event.key === 'Home' || (event.key === 'ArrowUp' && !open)) {
+    } else if (keyboardEvent.openWithArrowUp || keyboardEvent.openWithHome) {
       setOpen(true);
       setTemporarySelectValue(firstValue);
-      ref.current?.focus();
-    } else if (event.key === 'End' && !open) {
+    } else if (keyboardEvent.openWithEnd) {
       setOpen(true);
       setTemporarySelectValue(lastValue);
-      ref.current?.focus();
-    } else if (event.key === 'Tab' && open) {
+    } else if (keyboardEvent.closeWithTab) {
       if (onChange) {
         onChange(temporarySelectValue);
       }
 
       setOpen(false);
-    } else if (event.key === 'ArrowDown' && !open) {
+    } else if (keyboardEvent.openWithArrowDown || keyboardEvent.openWithAltArrowDown) {
       setOpen(true);
-      ref.current?.focus();
-    } else if (event.key.length === 1 && event.key.match(/[a-zA-Z0-9]/)) {
+    } else if (keyboardEvent.openWithPrintableCharacters) {
       setOpen(true);
-      clearTimeout(printableCharactersTimer.current);
+
       printableCharacters.current += event.key;
       const matchingValue = values.find((v) =>
-        v.toLowerCase().startsWith(printableCharacters.current),
+        v.toLowerCase().startsWith(printableCharacters.current.toLowerCase()),
       );
 
       if (matchingValue) {
         setTemporarySelectValue(matchingValue);
       }
-      printableCharactersTimer.current = setTimeout(() => {
-        printableCharacters.current = '';
-      }, 200);
+
+      debouncedClear();
     }
   }
 
   const ref = useRef<HTMLDivElement>(null);
+  const combobox = ref.current?.querySelector('.dropdown-menu-selected-value') as HTMLElement;
   useOutsideClick(ref, closeByOutsideClick);
 
-  const printableCharactersTimer = useRef<ReturnType<typeof setTimeout>>();
   const printableCharacters = useRef('');
+
+  const debouncedClear = useDebounce(() => {
+    printableCharacters.current = '';
+  }, 200);
 
   return (
     <div
