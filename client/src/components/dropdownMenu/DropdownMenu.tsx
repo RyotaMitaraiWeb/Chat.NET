@@ -68,9 +68,18 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
       if (open && onChange) {
         onChange(temporarySelectValue);
       }
-    } else if (event.key === 'Home') {
+    } else if (event.key === 'Home' || (event.key === 'ArrowUp' && !open)) {
       setOpen(true);
       setTemporarySelectValue(firstValue);
+      ref.current?.focus();
+    } else if (event.key === 'Tab' && open) {
+      if (onChange) {
+        onChange(temporarySelectValue);
+      }
+
+      setOpen(false);
+    } else if (event.key === 'ArrowDown' && !open) {
+      setOpen(true);
       ref.current?.focus();
     }
   }

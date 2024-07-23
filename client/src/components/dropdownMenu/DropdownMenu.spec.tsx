@@ -164,5 +164,74 @@ describe('DropdownMenu', () => {
       const selectedItem = document.querySelector('.focused');
       expect(selectedItem?.textContent?.includes('Austria')).toBe(true);
     });
+
+    it('Opens with Arrow up key and correctly sets the temporary select value', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+        />,
+      );
+
+      const menu = await screen.findByRole('combobox');
+      act(() => menu.focus());
+      expect(menu).toHaveFocus();
+      await userEvent.keyboard('{ArrowUp}');
+      const option = await screen.findByText('Bulgaria');
+      await userEvent.click(option);
+
+      act(() => menu.focus());
+
+      await userEvent.keyboard('{ArrowUp}');
+      const selectedItem = document.querySelector('.focused');
+      expect(selectedItem?.textContent?.includes('Austria')).toBe(true);
+    });
+
+    it('Closes with tab key and correctly sets the selected value', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+          value="Bulgaria"
+        />,
+      );
+
+      const menu = await screen.findByRole('combobox');
+      await userEvent.click(menu);
+
+      const option = await screen.findByText('Austria');
+
+      await userEvent.tab();
+
+      expect(fn).toHaveBeenCalledWith('Bulgaria');
+      expect(option).not.toBeInTheDocument();
+    });
+
+    it('Opens with arrown down key correctly', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+          value="Bulgaria"
+        />,
+      );
+
+      const menu = await screen.findByRole('combobox');
+      act(() => menu.focus());
+
+      await userEvent.keyboard('{ArrowDown}');
+
+      const selectedOption = document.querySelector('.focused');
+      expect(selectedOption?.textContent?.includes('Bulgaria')).toBe(true);
+    });
   });
 });
