@@ -1,10 +1,9 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import './DropdownMenu.scss';
 import { DropdownMenuProps } from './types';
 import { useOutsideClick } from '@/hooks/useOutsideClick/useOutsideClick';
-import { _keyPressMapper } from './_keyPressMapper';
-import { useDebounce } from '@/hooks/useDebounce/useDebounce';
+import { useCombobox } from '@/hooks/useCombobox/useCombobox';
 
 function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   const {
@@ -19,16 +18,16 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
     ...others
   } = props;
 
-  const [open, setOpen] = useState(false);
-  const disabledClass = disabled ? 'disabled' : '';
+  const { open, setOpen, focusedValue, setFocusedValue, handleKeyPress } = useCombobox({
+    value,
+    values,
+    onChange,
+  });
 
-  const [temporarySelectValue, setTemporarySelectValue] = useState(value || values[0]);
+  const disabledClass = disabled ? 'disabled' : '';
 
   const userDefinedElements = (values as never[]).map(renderOption);
   const valueIndex = value ? values.indexOf(value) : 0;
-
-  const firstValue = values[0];
-  const lastValue = values[values.length - 1];
 
   const selectedValueElement = userDefinedElements[valueIndex];
   const elementsToRender = values.map((value, index) => {
@@ -39,14 +38,14 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
         id={`option-${value}`}
         className={`dropdown-menu-option
           ${props.value === value ? 'selected' : 'not-selected'}
-          ${value === temporarySelectValue ? 'focused' : 'not-focused'}`}
+          ${value === focusedValue ? 'focused' : 'not-focused'}`}
         aria-selected={props.value === value}
         role="option"
         onClick={() => {
           if (onChange) {
             onChange(value);
             setOpen(false);
-            setTemporarySelectValue(value);
+            setFocusedValue(value);
 
             combobox.focus();
           }
@@ -65,83 +64,9 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
     setOpen(false);
   }
 
-  function handleKeyPress(event: React.KeyboardEvent) {
-    const keyboardEvent = _keyPressMapper(event, open);
-
-    if (keyboardEvent.toggleWithMenuAndSpace) {
-      setOpen((o) => !o);
-      if (open && onChange) {
-        onChange(temporarySelectValue);
-      }
-    } else if (keyboardEvent.openWithArrowUp || keyboardEvent.openWithHome) {
-      setOpen(true);
-      setTemporarySelectValue(firstValue);
-    } else if (keyboardEvent.openWithEnd) {
-      setOpen(true);
-      setTemporarySelectValue(lastValue);
-    } else if (keyboardEvent.closeWithTab) {
-      if (onChange) {
-        onChange(temporarySelectValue);
-      }
-
-      setOpen(false);
-    } else if (keyboardEvent.openWithArrowDown || keyboardEvent.openWithAltArrowDown) {
-      setOpen(true);
-    } else if (keyboardEvent.openWithPrintableCharacters) {
-      setOpen(true);
-
-      printableCharacters.current += event.key;
-      const matchingValue = values.find((v) =>
-        v.toLowerCase().startsWith(printableCharacters.current.toLowerCase()),
-      );
-
-      if (matchingValue) {
-        setTemporarySelectValue(matchingValue);
-      }
-
-      debouncedClear();
-    } else if (keyboardEvent.closeWithEscape) {
-      setOpen(false);
-    } else if (keyboardEvent.moveDown) {
-      const index = values.indexOf(temporarySelectValue);
-      if (index !== -1 && index < values.length - 1) {
-        setTemporarySelectValue(values[index + 1]);
-      }
-    } else if (keyboardEvent.moveUp) {
-      const index = values.indexOf(temporarySelectValue);
-      if (index > 0) {
-        setTemporarySelectValue(values[index - 1]);
-      }
-    } else if (keyboardEvent.moveToFirstValue) {
-      setTemporarySelectValue(firstValue);
-    } else if (keyboardEvent.moveToLastValue) {
-      setTemporarySelectValue(lastValue);
-    } else if (keyboardEvent.moveTenOptionsAhead) {
-      const index = values.indexOf(temporarySelectValue);
-      if (index + 10 >= values.length) {
-        setTemporarySelectValue(lastValue);
-      } else {
-        setTemporarySelectValue(values[index + 10]);
-      }
-    } else if (keyboardEvent.moveTenOptionsBehind) {
-      const index = values.indexOf(temporarySelectValue);
-      if (index < 10) {
-        setTemporarySelectValue(firstValue);
-      } else {
-        setTemporarySelectValue(values[index - 10]);
-      }
-    }
-  }
-
   const ref = useRef<HTMLDivElement>(null);
   const combobox = ref.current?.querySelector('.dropdown-menu-selected-value') as HTMLElement;
   useOutsideClick(ref, closeByOutsideClick);
-
-  const printableCharacters = useRef('');
-
-  const debouncedClear = useDebounce(() => {
-    printableCharacters.current = '';
-  }, 200);
 
   return (
     <div
