@@ -100,6 +100,8 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
       }
 
       debouncedClear();
+    } else if (keyboardEvent.closeWithEscape) {
+      setOpen(false);
     }
   }
 

@@ -8,5 +8,6 @@ export function _keyPressMapper(event: React.KeyboardEvent, open: boolean) {
     openWithEnd: event.key === 'End' && !open,
     closeWithTab: event.key === 'Tab' && open,
     openWithPrintableCharacters: event.key.length === 1 && event.key.match(/[a-zA-Z0-9]/),
+    closeWithEscape: event.key === 'Escape' && open,
   };
 }

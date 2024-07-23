@@ -273,5 +273,26 @@ describe('DropdownMenu', () => {
       const selectedOption = document.querySelector('.focused');
       expect(selectedOption?.textContent?.includes('Malta')).toBe(true);
     });
+
+    it('Closes with tab key and correctly sets the selected value', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+          value="Bulgaria"
+        />,
+      );
+
+      const menu = await screen.findByRole('combobox');
+      await userEvent.click(menu);
+      const option = await screen.findByText('Austria');
+
+      await userEvent.keyboard('{Escape}');
+
+      expect(option).not.toBeInTheDocument();
+    });
   });
 });
