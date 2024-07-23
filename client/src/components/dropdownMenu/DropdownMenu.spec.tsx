@@ -295,4 +295,71 @@ describe('DropdownMenu', () => {
       expect(option).not.toBeInTheDocument();
     });
   });
+
+  describe('Selecting an option', () => {
+    it('Correctly navigates with up and down arrows', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+        />,
+      );
+
+      const menu = await screen.findByRole('combobox');
+      await userEvent.click(menu);
+
+      await userEvent.keyboard('{ArrowDown>10/}');
+      await userEvent.keyboard('{ArrowUp>2/}');
+      const option = document.querySelector('.focused')!;
+      await userEvent.click(option);
+
+      expect(fn).toHaveBeenCalledWith('Finland');
+    });
+
+    it('Up arrow does not change the value if the first option is selected', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+        />,
+      );
+
+      const menu = await screen.findByRole('combobox');
+      await userEvent.click(menu);
+
+      await userEvent.keyboard('{ArrowUp>30/}');
+      const option = document.querySelector('.focused')!;
+      await userEvent.click(option);
+
+      expect(fn).toHaveBeenCalledWith('Austria');
+    });
+
+    it('Down arrow does not change the value if the last option is selected', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+          value="Sweden"
+        />,
+      );
+
+      const menu = await screen.findByRole('combobox');
+      await userEvent.click(menu);
+
+      await userEvent.keyboard('{ArrowDown>30/}');
+      const option = document.querySelector('.focused')!;
+      await userEvent.click(option);
+
+      expect(fn).toHaveBeenCalledWith('Sweden');
+    });
+  });
 });
