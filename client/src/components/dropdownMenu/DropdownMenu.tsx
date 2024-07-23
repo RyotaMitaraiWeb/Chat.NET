@@ -116,6 +116,20 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
       setTemporarySelectValue(firstValue);
     } else if (keyboardEvent.moveToLastValue) {
       setTemporarySelectValue(lastValue);
+    } else if (keyboardEvent.moveTenOptionsAhead) {
+      const index = values.indexOf(temporarySelectValue);
+      if (index + 10 >= values.length) {
+        setTemporarySelectValue(lastValue);
+      } else {
+        setTemporarySelectValue(values[index + 10]);
+      }
+    } else if (keyboardEvent.moveTenOptionsBehind) {
+      const index = values.indexOf(temporarySelectValue);
+      if (index < 10) {
+        setTemporarySelectValue(firstValue);
+      } else {
+        setTemporarySelectValue(values[index - 10]);
+      }
     }
   }
 

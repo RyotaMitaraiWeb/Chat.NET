@@ -405,5 +405,92 @@ describe('DropdownMenu', () => {
 
       expect(fn).toHaveBeenCalledWith('Sweden');
     });
+
+    it('Moves by ten values up when PageUp is pressed', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+          value="Ireland"
+        />,
+      );
+
+      const menu = await screen.findByRole('combobox');
+      await userEvent.click(menu);
+
+      await userEvent.keyboard('{PageUp}');
+      const option = document.querySelector('.focused')!;
+      await userEvent.click(option);
+
+      expect(fn).toHaveBeenCalledWith('Croatia');
+    });
+
+    it('Moves by ten values down when PageUp is pressed', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+          value={memberStates[13]}
+        />,
+      );
+
+      const menu = await screen.findByRole('combobox');
+      await userEvent.click(menu);
+
+      await userEvent.keyboard('{PageDown}');
+      const option = document.querySelector('.focused')!;
+      await userEvent.click(option);
+
+      expect(fn).toHaveBeenCalledWith('Slovakia');
+    });
+
+    it('Moves to the first value when PageUp is pressed and index < 10', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+          value={memberStates[9]}
+        />,
+      );
+
+      const menu = await screen.findByRole('combobox');
+      await userEvent.click(menu);
+
+      await userEvent.keyboard('{PageUp}');
+      const option = document.querySelector('.focused')!;
+      await userEvent.click(option);
+
+      expect(fn).toHaveBeenCalledWith('Austria');
+    });
+
+    it('Moves to the last value when PageDown is pressed and index + 10 > length', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+          value={memberStates[memberStates.length - 9]}
+        />,
+      );
+      const menu = await screen.findByRole('combobox');
+      await userEvent.click(menu);
+
+      await userEvent.keyboard('{PageDown}');
+      const option = document.querySelector('.focused')!;
+      await userEvent.click(option);
+
+      expect(fn).toHaveBeenCalledWith('Sweden');
+    });
   });
 });

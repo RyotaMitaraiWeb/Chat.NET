@@ -13,5 +13,7 @@ export function _keyPressMapper(event: React.KeyboardEvent, open: boolean) {
     moveUp: event.key === 'ArrowUp' && open && !event.altKey,
     moveToFirstValue: event.key === 'Home' && open,
     moveToLastValue: event.key === 'End' && open,
+    moveTenOptionsAhead: event.key === 'PageDown' && open,
+    moveTenOptionsBehind: event.key === 'PageUp' && open,
   };
 }
