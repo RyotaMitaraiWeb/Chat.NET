@@ -361,5 +361,49 @@ describe('DropdownMenu', () => {
 
       expect(fn).toHaveBeenCalledWith('Sweden');
     });
+
+    it('Home key moves to the first option', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+          value="Malta"
+        />,
+      );
+
+      const menu = await screen.findByRole('combobox');
+      await userEvent.click(menu);
+
+      await userEvent.keyboard('{Home}');
+      const option = document.querySelector('.focused')!;
+      await userEvent.click(option);
+
+      expect(fn).toHaveBeenCalledWith('Austria');
+    });
+
+    it('End key moves to the last option', async () => {
+      const fn = jest.fn();
+      render(
+        <DropdownMenu
+          renderOption={(value: string) => <span>{value}</span>}
+          values={memberStates}
+          onChange={fn}
+          labelId="eu-member-states"
+          value="Austria"
+        />,
+      );
+
+      const menu = await screen.findByRole('combobox');
+      await userEvent.click(menu);
+
+      await userEvent.keyboard('{End}');
+      const option = document.querySelector('.focused')!;
+      await userEvent.click(option);
+
+      expect(fn).toHaveBeenCalledWith('Sweden');
+    });
   });
 });

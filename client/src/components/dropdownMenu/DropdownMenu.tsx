@@ -112,6 +112,10 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
       if (index > 0) {
         setTemporarySelectValue(values[index - 1]);
       }
+    } else if (keyboardEvent.moveToFirstValue) {
+      setTemporarySelectValue(firstValue);
+    } else if (keyboardEvent.moveToLastValue) {
+      setTemporarySelectValue(lastValue);
     }
   }
 

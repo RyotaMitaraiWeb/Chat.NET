@@ -11,5 +11,7 @@ export function _keyPressMapper(event: React.KeyboardEvent, open: boolean) {
     closeWithEscape: event.key === 'Escape' && open,
     moveDown: event.key === 'ArrowDown' && open && !event.altKey,
     moveUp: event.key === 'ArrowUp' && open && !event.altKey,
+    moveToFirstValue: event.key === 'Home' && open,
+    moveToLastValue: event.key === 'End' && open,
   };
 }
