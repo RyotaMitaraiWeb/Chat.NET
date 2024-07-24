@@ -121,7 +121,7 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
         className={`dropdown-menu-selected-value ${open ? 'open' : 'closed'}`}
         aria-controls={`combobox-${labelId}`}
         aria-expanded={open}
-        tabIndex={0}
+        tabIndex={disabled ? -1 : 0}
         aria-activedescendant={value ? `option-${value}` : ''}
         role="combobox"
         onKeyDown={handleKeyDown}
