@@ -311,5 +311,31 @@ describe('useCombobox', () => {
 
       expect(fn).toHaveBeenCalledWith('Bulgaria');
     });
+
+    it('Selects the focused option when Enter is pressed', () => {
+      const fn = jest.fn();
+      const hook = renderHook(() =>
+        useCombobox({ value: 'Belgium', values: memberStates, onChange: fn }),
+      ).result;
+
+      act(() => hook.current.setOpen(true));
+      act(() => hook.current.setFocusedValue('Bulgaria'));
+      act(() => hook.current.handleKeyPress(enterEvent));
+
+      expect(fn).toHaveBeenCalledWith('Bulgaria');
+    });
+
+    it('Selects the focused option when Space is pressed', () => {
+      const fn = jest.fn();
+      const hook = renderHook(() =>
+        useCombobox({ value: 'Belgium', values: memberStates, onChange: fn }),
+      ).result;
+
+      act(() => hook.current.setOpen(true));
+      act(() => hook.current.setFocusedValue('Bulgaria'));
+      act(() => hook.current.handleKeyPress(spaceEvent));
+
+      expect(fn).toHaveBeenCalledWith('Bulgaria');
+    });
   });
 });
