@@ -9,6 +9,13 @@
     cursor: not-allowed;
   }
 
+  /* Label */
+  .dropdown-menu-label {
+    cursor: initial;
+    margin-bottom: 4px;
+    @include apply-theme-text();
+  }
+
   /* Combobox */
   .dropdown-menu-selected-value {
     border: 1px solid gray;
