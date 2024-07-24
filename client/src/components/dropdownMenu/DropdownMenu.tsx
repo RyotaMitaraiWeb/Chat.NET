@@ -49,14 +49,18 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
           ${value === focusedValue ? 'focused' : 'not-focused'}`}
         aria-selected={props.value === value}
         role="option"
-        onClick={() => {
+        onClick={(event: React.MouseEvent | React.TouchEvent) => {
           if (onChange) {
             onChange(value);
             setOpen(false);
             setFocusedValue(value);
-
-            combobox.focus();
           }
+
+          event.preventDefault();
+          const combobox = ref.current?.querySelector(
+            '.dropdown-menu-selected-value',
+          ) as HTMLElement | null;
+          combobox?.focus();
         }}
       >
         {element}
@@ -64,9 +68,20 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
     );
   });
 
-  function toggleMenu() {
+  function toggleMenu(event: React.MouseEvent) {
+    event.preventDefault();
+
     if (!disabled) {
+      if (open && onChange) {
+        onChange(focusedValue);
+      }
+
       setOpen((o) => !o);
+
+      const combobox = ref.current?.querySelector(
+        '.dropdown-menu-selected-value',
+      ) as HTMLElement | null;
+      combobox?.focus();
     }
   }
 
@@ -79,12 +94,11 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   }
 
   const ref = useRef<HTMLDivElement>(null);
-  const combobox = ref.current?.querySelector('.dropdown-menu-selected-value') as HTMLElement;
   useOutsideClick(ref, closeByOutsideClick);
 
-  function handleKeyDown(event: React.KeyboardEvent) {
+  function handleKeyDown(event: React.KeyboardEvent | React.TouchEvent) {
     if (!disabled) {
-      handleKeyPress(event);
+      handleKeyPress(event as React.KeyboardEvent);
     }
   }
 

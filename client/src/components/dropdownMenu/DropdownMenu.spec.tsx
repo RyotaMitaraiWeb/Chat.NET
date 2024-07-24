@@ -56,7 +56,7 @@ describe('DropdownMenu', () => {
       expect(option).not.toBeInTheDocument();
     });
 
-    it('Opens and closes when clicked by the label', async () => {
+    it('Opens and closes when clicked by the label and correctly sets the value', async () => {
       const fn = jest.fn();
       render(
         <DropdownMenu
@@ -74,8 +74,11 @@ describe('DropdownMenu', () => {
         name: 'Bulgaria',
       });
 
+      await userEvent.keyboard('{ArrowDown}');
+
       await userEvent.click(label);
       expect(option).not.toBeInTheDocument();
+      expect(fn).toHaveBeenCalledWith('Belgium');
     });
 
     it('Closes when clicked outside and sets correct value', async () => {
