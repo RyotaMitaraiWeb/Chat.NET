@@ -71,6 +71,10 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   }
 
   function closeByOutsideClick() {
+    if (onChange) {
+      onChange(focusedValue);
+    }
+
     setOpen(false);
   }
 

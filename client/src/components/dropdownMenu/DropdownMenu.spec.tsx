@@ -78,7 +78,7 @@ describe('DropdownMenu', () => {
       expect(option).not.toBeInTheDocument();
     });
 
-    it('Closes when clicked outside', async () => {
+    it('Closes when clicked outside and sets correct value', async () => {
       const fn = jest.fn();
       render(
         <>
@@ -99,10 +99,13 @@ describe('DropdownMenu', () => {
         name: 'Bulgaria',
       });
 
+      await userEvent.keyboard('{ArrowDown}');
       const button = await screen.findByText(/Off-topic/i);
       await userEvent.click(button);
 
       expect(option).not.toBeInTheDocument();
+
+      expect(fn).toHaveBeenCalledWith('Belgium');
     });
 
     it('Closes when disabled state is changed to true and restarts the focused value', async () => {
