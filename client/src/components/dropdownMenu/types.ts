@@ -1,6 +1,6 @@
 import { ElementProps } from '../types/Element';
 
-type RenderOption =
+export type RenderOption =
   | ((value: string) => React.ReactNode)
   | ((value: string, index: number) => React.ReactNode);
 

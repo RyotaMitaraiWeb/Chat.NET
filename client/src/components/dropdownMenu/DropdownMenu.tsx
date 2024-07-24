@@ -1,5 +1,5 @@
 'use client';
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import './DropdownMenu.scss';
 import { DropdownMenuProps } from './types';
 import { useOutsideClick } from '@/hooks/useOutsideClick/useOutsideClick';
@@ -23,6 +23,14 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
     values,
     onChange,
   });
+
+  // If disabled when listbox is opened, close and restart
+  useEffect(() => {
+    if (disabled) {
+      setOpen(false);
+      setFocusedValue(value || values[0]);
+    }
+  }, [disabled, setOpen, value, values, setFocusedValue]);
 
   const disabledClass = disabled ? 'disabled' : '';
 
@@ -57,7 +65,9 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   });
 
   function toggleMenu() {
-    setOpen((o) => !o);
+    if (!disabled) {
+      setOpen((o) => !o);
+    }
   }
 
   function closeByOutsideClick() {
@@ -67,6 +77,12 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   const ref = useRef<HTMLDivElement>(null);
   const combobox = ref.current?.querySelector('.dropdown-menu-selected-value') as HTMLElement;
   useOutsideClick(ref, closeByOutsideClick);
+
+  function handleKeyDown(event: React.KeyboardEvent) {
+    if (!disabled) {
+      handleKeyPress(event);
+    }
+  }
 
   return (
     <div
@@ -88,7 +104,7 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
         tabIndex={0}
         aria-activedescendant={value ? `option-${value}` : ''}
         role="combobox"
-        onKeyDown={handleKeyPress}
+        onKeyDown={handleKeyDown}
       >
         {selectedValueElement}
       </div>

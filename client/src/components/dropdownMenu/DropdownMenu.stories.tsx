@@ -88,3 +88,33 @@ export const WithALotOfItems: Story = {
     );
   },
 };
+
+export const Disabled: Story = {
+  render() {
+    const values = [
+      'Europe',
+      'Africa',
+      'Asia',
+      'North America',
+      'South America',
+      'Oceania',
+      'Antarctica',
+    ];
+
+    const [value, setValue] = useState(values[3]);
+    return (
+      <DropdownMenu
+        values={values}
+        renderOption={(value, index) => (
+          <strong>
+            {index + 1}. {value}
+          </strong>
+        )}
+        value={value}
+        onChange={setValue}
+        labelId="eu-member-state-label"
+        disabled
+      />
+    );
+  },
+};
