@@ -1,0 +1,24 @@
+@import '../../styles/effects.scss';
+@import '../../styles/util.scss';
+
+.component-dropdown-menu {
+  /* Combobox */
+  .dropdown-menu-selected-value {
+    border: 1px solid gray;
+    border-radius: 4px;
+    padding: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    gap: 8px;
+    @include apply-transition(border-color 0.2s);
+
+    .dropdown-value, .dropdown-icon {
+      display: flex;
+      align-items: center;
+    }
+
+    &:focus-visible, &.open {
+      border-color: $outline-color;
+    }
+  }
+}
