@@ -5,6 +5,7 @@ export function _keyPressMapper(event: React.KeyboardEvent, open: boolean) {
     openWithArrowUp: event.key === 'ArrowUp' && !open,
     openWithArrowDown: event.key === 'ArrowDown' && !open,
     openWithAltArrowDown: event.key === 'ArrowDown' && !open && event.altKey,
+    closeWithAltArrowUp: event.key === 'ArrowUp' && open && event.altKey,
     openWithEnd: event.key === 'End' && !open,
     closeWithTab: event.key === 'Tab' && open,
     openWithPrintableCharacters: event.key.length === 1 && event.key.match(/[a-zA-Z0-9]/),

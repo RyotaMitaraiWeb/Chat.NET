@@ -33,6 +33,11 @@ export const useCombobox = (params: ComboboxOptions) => {
       if (open && onChange) {
         onChange(focusedValue);
       }
+    } else if (keyboardEvent.closeWithAltArrowUp) {
+      setOpen(false);
+      if (onChange) {
+        onChange(focusedValue);
+      }
     } else if (keyboardEvent.openWithArrowUp || keyboardEvent.openWithHome) {
       setOpen(true);
       setFocusedValue(firstValue);
