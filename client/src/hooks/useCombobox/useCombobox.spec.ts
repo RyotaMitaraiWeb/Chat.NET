@@ -291,12 +291,19 @@ describe('useCombobox', () => {
       const l = createEvent('l');
       const u = createEvent('u');
 
+      const c = createEvent('c');
+
       act(() => hook.current.handleKeyPress(l));
       expect(hook.current.focusedValue).toBe('Latvia');
 
       act(() => hook.current.handleKeyPress(u));
       expect(hook.current.handleKeyPress(u));
       expect(hook.current.focusedValue).toBe('Luxembourg');
+
+      act(() => jest.advanceTimersByTime(201));
+
+      act(() => hook.current.handleKeyPress(c));
+      expect(hook.current.focusedValue).toBe('Croatia');
     });
 
     it('Selects the focused option when alt + ArrowUp is pressed', () => {
