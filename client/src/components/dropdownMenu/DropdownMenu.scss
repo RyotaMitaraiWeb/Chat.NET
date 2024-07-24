@@ -2,12 +2,18 @@
 @import '../../styles/util.scss';
 
 .component-dropdown-menu {
+  cursor: pointer;
+
+  &.disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+  }
+
   /* Combobox */
   .dropdown-menu-selected-value {
     border: 1px solid gray;
     border-radius: 4px;
     padding: 8px;
-    cursor: pointer;
     display: inline-flex;
     gap: 8px;
     @include apply-transition(border-color 0.2s);
