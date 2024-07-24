@@ -71,7 +71,7 @@ describe('useCombobox', () => {
       expect(hook.current.open).toBe(false);
     });
 
-    it('Opens and closes when Spacea is pressed', () => {
+    it('Opens and closes when Space is pressed', () => {
       const hook = renderHook(() =>
         useCombobox({ value: 'Austria', values: memberStates, onChange: fn }),
       ).result;
