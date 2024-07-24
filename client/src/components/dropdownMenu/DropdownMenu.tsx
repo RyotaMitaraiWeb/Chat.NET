@@ -108,16 +108,18 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
       >
         {selectedValueElement}
       </div>
-      {open ? (
-        <div
-          role="listbox"
-          aria-labelledby={labelId}
-          className="dropdown-menu-options"
-          id={`combobox-${labelId}`}
-        >
-          {elementsToRender}
-        </div>
-      ) : null}
+      <div className="listbox-container">
+        {open ? (
+          <div
+            role="listbox"
+            aria-labelledby={labelId}
+            className="dropdown-menu-options"
+            id={`combobox-${labelId}`}
+          >
+            {elementsToRender}
+          </div>
+        ) : null}
+      </div>
     </div>
   );
 }
