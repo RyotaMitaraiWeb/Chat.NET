@@ -104,6 +104,13 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
     }
   }
 
+  useEffect(() => {
+    if (open) {
+      const option = ref.current?.querySelector(`#option-${focusedValue}`);
+      option?.scrollIntoView({ block: 'nearest' });
+    }
+  }, [focusedValue, open]);
+
   return (
     <div
       aria-disabled={disabled}
