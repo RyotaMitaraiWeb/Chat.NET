@@ -107,7 +107,9 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   useEffect(() => {
     if (open) {
       const option = ref.current?.querySelector(`#option-${focusedValue}`);
-      option?.scrollIntoView({ block: 'nearest' });
+      if (option) {
+        option.scrollIntoView({ block: 'nearest' });
+      }
     }
   }, [focusedValue, open]);
 
