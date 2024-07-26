@@ -26,6 +26,7 @@ export const useCombobox = (params: ComboboxOptions) => {
   }, 200);
 
   function handleKeyPress(event: React.KeyboardEvent) {
+    event.preventDefault();
     const keyboardEvent = _keyPressMapper(event, open);
 
     if (keyboardEvent.toggleWithMenuAndSpace) {
