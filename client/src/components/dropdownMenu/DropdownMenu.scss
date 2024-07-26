@@ -62,11 +62,16 @@
     max-width: 500px;
     word-break: break-word;
 
+    @media screen and (max-width: 640px) {
+      max-width: 250px;
+    }
+
     .dropdown-menu-option {
       @include apply-accent-background();
       &:hover,
       &.focused {
-        background-color: rgba(255, 255, 255, 0.3);
+        background-color: rgb(159, 157, 157);
+        color: black;
       }
 
       padding: 16px 8px;
