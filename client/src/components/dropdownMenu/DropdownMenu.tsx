@@ -65,7 +65,7 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
           combobox?.focus();
         }}
       >
-        <div>{element}</div>
+        <div className="render-item">{element}</div>
       </div>
     );
   });
