@@ -7,7 +7,12 @@ type CreateEventOptions = {
 };
 
 function createEvent(key: string, options?: CreateEventOptions): React.KeyboardEvent {
-  return { key, code: options?.code || '', altKey: options?.altKey } as React.KeyboardEvent;
+  return {
+    key,
+    code: options?.code || '',
+    altKey: options?.altKey,
+    preventDefault: jest.fn(),
+  } as unknown as React.KeyboardEvent;
 }
 
 const enterEvent = createEvent('Enter');
@@ -297,7 +302,10 @@ describe('useCombobox', () => {
       expect(hook.current.focusedValue).toBe('Latvia');
 
       act(() => hook.current.handleKeyPress(u));
-      expect(hook.current.handleKeyPress(u));
+      expect(hook.current.focusedValue).toBe('Luxembourg');
+
+      // Ensure that the listbox stops searching if the value does not exist
+      act(() => hook.current.handleKeyPress(u));
       expect(hook.current.focusedValue).toBe('Luxembourg');
 
       act(() => jest.advanceTimersByTime(201));
