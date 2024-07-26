@@ -7,6 +7,10 @@ import { useCombobox } from '@/hooks/useCombobox/useCombobox';
 import Icon from '../icon/Icon';
 import { MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
 
+function parseValueIntoId(value: string) {
+  return value.replace(/ /g, '-');
+}
+
 function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   const {
     className = '',
@@ -45,7 +49,8 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
     return (
       <div
         key={value}
-        id={`option-${value}`}
+        id={`option-${parseValueIntoId(value)}`}
+        data-value={value}
         className={`dropdown-menu-option
           ${props.value === value ? 'selected' : 'not-selected'}
           ${value === focusedValue ? 'focused' : 'not-focused'}`}
@@ -106,7 +111,8 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
 
   useEffect(() => {
     if (open) {
-      const option = ref.current?.querySelector(`#option-${focusedValue}`);
+      const option = ref.current?.querySelector(`[data-value="${focusedValue}"]`);
+
       if (option) {
         option.scrollIntoView({ block: 'nearest' });
       }
