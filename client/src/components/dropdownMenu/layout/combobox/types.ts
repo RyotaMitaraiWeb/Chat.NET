@@ -8,4 +8,6 @@ export interface ComboboxProps extends ElementProps {
   onKeyDown: React.KeyboardEventHandler;
   selectedValueElement: React.ReactNode;
   labelId: string;
+  dropdownMenuRef: React.RefObject<HTMLElement>;
+  autoWidth?: boolean;
 }

@@ -5,7 +5,6 @@ import { DropdownMenuProps } from './types';
 import { useOutsideClick } from '@/hooks/useOutsideClick/useOutsideClick';
 import { useCombobox } from '@/hooks/useCombobox/useCombobox';
 import { useDropdownMenuScroll } from '../internal/dropdownMenu/useDropdownMenuScroll';
-import { useAdjustComboboxWidth } from '../internal/dropdownMenu/useAdjustComboboxWidth';
 import Combobox from './layout/combobox/Combobox';
 
 function parseValueIntoId(value: string) {
@@ -56,10 +55,7 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
           setFocusedValue(value);
 
           event.preventDefault();
-          const combobox = ref.current?.querySelector(
-            '.dropdown-menu-selected-value',
-          ) as HTMLElement | null;
-          combobox?.focus();
+          combobox.current?.focus();
         }}
       >
         <div className="render-item">{element}</div>
@@ -77,11 +73,7 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
 
       setOpen((o) => !o);
 
-      const combobox = ref.current?.querySelector(
-        '.dropdown-menu-selected-value',
-      ) as HTMLElement | null;
-
-      combobox?.focus();
+      combobox.current?.focus();
     }
   }
 
@@ -92,6 +84,7 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   }
 
   const ref = useRef<HTMLDivElement>(null);
+  const combobox = useRef<HTMLElement>(null);
   useOutsideClick(ref, closeByOutsideClick);
 
   function handleKeyDown(event: React.KeyboardEvent | React.TouchEvent) {
@@ -101,7 +94,6 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   }
 
   useDropdownMenuScroll({ open, focusedValue, ref });
-  useAdjustComboboxWidth({ values, ref, autoWidth });
 
   // If disabled when listbox is opened, close and restart
   useEffect(() => {
@@ -129,6 +121,9 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
         onKeyDown={handleKeyDown}
         selectedValueElement={selectedValueElement}
         labelId={labelId}
+        dropdownMenuRef={ref}
+        autoWidth={autoWidth}
+        ref={combobox}
       />
       <div className="listbox-container">
         <div

@@ -1,13 +1,14 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 type useAdjustComboboxWidthOptions = {
   ref: React.RefObject<HTMLElement>;
   autoWidth?: boolean;
-  values: string[];
 };
 
 export const useAdjustComboboxWidth = (options: useAdjustComboboxWidthOptions) => {
-  const { ref, autoWidth, values } = options;
+  const { ref, autoWidth } = options;
+  const [width, setWidth] = useState('auto');
+
   useEffect(() => {
     if (ref.current) {
       const combobox = ref.current.querySelector('[role="combobox"]') as HTMLElement | null;
@@ -19,13 +20,15 @@ export const useAdjustComboboxWidth = (options: useAdjustComboboxWidthOptions) =
         );
 
         if (combobox) {
-          combobox.style.width = `${highestWidth}px`;
+          setWidth(`${highestWidth}px`);
         }
       } else {
         if (combobox) {
-          combobox.style.width = 'auto';
+          setWidth('auto');
         }
       }
     }
-  }, [values, autoWidth, ref]);
+  }, [autoWidth, ref]);
+
+  return width;
 };

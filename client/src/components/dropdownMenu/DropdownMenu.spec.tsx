@@ -70,6 +70,7 @@ describe('DropdownMenu', () => {
 
       const label = await screen.findByText('Select an EU member state');
       await userEvent.click(label);
+
       const option = await screen.findByRole('option', {
         name: 'Bulgaria',
       });
