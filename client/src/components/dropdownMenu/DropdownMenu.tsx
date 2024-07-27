@@ -10,6 +10,28 @@ import DropdownMenuLabel from './layout/label/DropdownLabel';
 import DropdownListbox from './layout/listbox/DropdownListbox';
 import DropdownRenderItem from './layout/renderItem/DropdownRenderItem';
 
+/**
+ * The dropdown menu is a rough implementation of the ``select`` tag, styled
+ * for a better UX. The implementation follows most of the directions from
+ * [the W3C's
+ * APG website](https://www.w3.org/WAI/ARIA/apg/patterns/combobox/examples/combobox-select-only/)
+ *
+ * In particular, the following actions are possible with this dropdown:
+ * - navigation with various keys, including up/down arrow, page up, page down,
+ * home, end, and alphanumeric characters (for searching specific options).
+ * - other operations with the keyboard, such as Escape, Enter, and Space
+ * to open and/or close the listbox
+ * - automatic scrolling when the listbox is opened, as well as when navigating
+ * the box with the keyboard
+ *
+ * The dropdown currently has the following limitations:
+ * - it can only be used as a controlled component, as it does not use ``select`` at all.
+ * - it does not support multiple selections
+ * - it does not support option groups
+ * - it does not support disabling individual options
+ * - it does not support a ``required`` attribute, as there will always be
+ * a valid option selected
+ */
 function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   const {
     className = '',
