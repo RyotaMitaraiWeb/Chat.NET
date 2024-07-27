@@ -121,6 +121,7 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
         dropdownMenuRef={ref}
         autoWidth={autoWidth}
         ref={combobox}
+        disabled={disabled}
       />
       <div className="listbox-container">
         <div

@@ -26,7 +26,10 @@ const Combobox = forwardRef(function Combobox(props: ComboboxProps, ref): React.
   return (
     <div
       onClick={onClick}
-      className={`dropdown-menu-combobox ${open ? 'open' : 'closed'} ${className}`}
+      className={`dropdown-menu-combobox
+        ${disabled ? 'disabled' : 'enabled'}
+        ${open ? 'open' : 'closed'}
+        ${className}`}
       aria-controls={`combobox-${labelId}`}
       aria-expanded={open}
       tabIndex={disabled ? -1 : 0}

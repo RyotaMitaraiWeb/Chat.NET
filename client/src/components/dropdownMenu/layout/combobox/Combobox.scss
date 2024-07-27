@@ -12,6 +12,10 @@
   align-items: center;
   justify-content: space-between;
 
+  &.disabled {
+    cursor: not-allowed;
+  }
+
   .dropdown-value,
   .dropdown-icon {
     display: flex;

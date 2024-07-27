@@ -4,7 +4,7 @@
 .component-dropdown-menu {
   &.disabled {
     opacity: 0.7;
-    .dropdown-menu-selected-value, .dropdown-menu-options {
+    .dropdown-menu-options {
       cursor: not-allowed;
     }
   }
