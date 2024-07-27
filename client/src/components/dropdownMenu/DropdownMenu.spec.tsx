@@ -53,7 +53,7 @@ describe('DropdownMenu', () => {
       });
       await userEvent.click(option);
 
-      expect(option).not.toBeInTheDocument();
+      expect(option).not.toBeVisible();
     });
 
     it('Opens and closes when clicked by the label and correctly sets the value', async () => {
@@ -77,7 +77,7 @@ describe('DropdownMenu', () => {
       await userEvent.keyboard('{ArrowDown}');
 
       await userEvent.click(label);
-      expect(option).not.toBeInTheDocument();
+      expect(option).not.toBeVisible();
       expect(fn).toHaveBeenCalledWith('Belgium');
     });
 
@@ -106,7 +106,7 @@ describe('DropdownMenu', () => {
       const button = await screen.findByText(/Off-topic/i);
       await userEvent.click(button);
 
-      expect(option).not.toBeInTheDocument();
+      expect(option).not.toBeVisible();
 
       expect(fn).toHaveBeenCalledWith('Belgium');
     });
@@ -126,9 +126,9 @@ describe('DropdownMenu', () => {
       const disableButton = await screen.findByText('Disable');
       await userEvent.click(disableButton);
 
-      expect(option).not.toBeInTheDocument();
-      await screen.findByText('Malta');
-
+      expect(option).not.toBeVisible();
+      const values = await screen.findAllByText('Malta');
+      expect(values).toHaveLength(2);
       await userEvent.click(disableButton);
       await userEvent.click(menu);
 
@@ -153,7 +153,7 @@ describe('DropdownMenu', () => {
       await userEvent.click(menu);
 
       const option = document.querySelector('[role="option"]');
-      expect(option).not.toBeInTheDocument();
+      expect(option).not.toBeVisible();
     });
   });
 });
