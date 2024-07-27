@@ -2,6 +2,10 @@
 
 .dropdown-menu-option {
   @include apply-accent-background();
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
   &:hover,
   &.focused {
     background-color: rgb(159, 157, 157);

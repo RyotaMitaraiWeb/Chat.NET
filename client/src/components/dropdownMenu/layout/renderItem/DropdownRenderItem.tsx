@@ -1,5 +1,7 @@
 import { DropdownRenderItemProps } from './types';
 import './DropdownRenderItem.scss';
+import Icon from '@/components/icon/Icon';
+import { MdCheck } from 'react-icons/md';
 
 function parseValueIntoId(value: string) {
   return value.replace(/ /g, '-');
@@ -20,6 +22,9 @@ function DropdownRenderItem(props: DropdownRenderItemProps): React.JSX.Element {
       onClick={onClick}
     >
       <div className="render-item">{children}</div>
+      <Icon style={{ visibility: currentValue === value ? 'visible' : 'hidden' }} size="large">
+        <MdCheck />
+      </Icon>
     </div>
   );
 }
