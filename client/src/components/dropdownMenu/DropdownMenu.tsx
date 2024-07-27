@@ -6,6 +6,7 @@ import { useOutsideClick } from '@/hooks/useOutsideClick/useOutsideClick';
 import { useCombobox } from '@/hooks/useCombobox/useCombobox';
 import { useDropdownMenuScroll } from '../internal/dropdownMenu/useDropdownMenuScroll';
 import Combobox from './layout/combobox/Combobox';
+import DropdownMenuLabel from './layout/label/DropdownLabel';
 
 function parseValueIntoId(value: string) {
   return value.replace(/ /g, '-');
@@ -110,11 +111,7 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
       {...others}
       ref={ref}
     >
-      {label ? (
-        <div onClick={toggleMenu} id={labelId} className="dropdown-menu-label">
-          {label}
-        </div>
-      ) : null}
+      <DropdownMenuLabel label={label} labelId={labelId} onClick={toggleMenu} />
       <Combobox
         onClick={toggleMenu}
         open={open}

@@ -5,7 +5,7 @@ import { useAdjustComboboxWidth } from '@/components/internal/dropdownMenu/useAd
 import './Combobox.scss';
 import { forwardRef } from 'react';
 
-const Combobox = forwardRef(function Combobox(props: ComboboxProps, ref) {
+const Combobox = forwardRef(function Combobox(props: ComboboxProps, ref): React.JSX.Element {
   const {
     onClick,
     className = '',

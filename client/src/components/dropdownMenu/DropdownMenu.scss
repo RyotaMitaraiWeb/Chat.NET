@@ -9,13 +9,6 @@
     }
   }
 
-  /* Label */
-  .dropdown-menu-label {
-    cursor: initial;
-    margin-bottom: 4px;
-    @include apply-theme-text();
-  }
-
   /* Options */
   .listbox-container {
     position: relative;

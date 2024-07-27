@@ -114,6 +114,7 @@ export const Disabled: Story = {
         onChange={setValue}
         labelId="eu-member-state-label"
         disabled
+        label="Sorry, not available!"
       />
     );
   },
