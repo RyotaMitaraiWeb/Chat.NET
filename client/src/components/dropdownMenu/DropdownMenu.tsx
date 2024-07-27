@@ -8,10 +8,7 @@ import { useDropdownMenuScroll } from '../internal/dropdownMenu/useDropdownMenuS
 import Combobox from './layout/combobox/Combobox';
 import DropdownMenuLabel from './layout/label/DropdownLabel';
 import DropdownListbox from './layout/listbox/DropdownListbox';
-
-function parseValueIntoId(value: string) {
-  return value.replace(/ /g, '-');
-}
+import DropdownRenderItem from './layout/renderItem/DropdownRenderItem';
 
 function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   const {
@@ -42,15 +39,8 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   const elementsToRender = values.map((value, index) => {
     const element = renderOption(value, index);
     return (
-      <div
+      <DropdownRenderItem
         key={value}
-        id={`option-${parseValueIntoId(value)}`}
-        data-value={value}
-        className={`dropdown-menu-option
-          ${props.value === value ? 'selected' : 'not-selected'}
-          ${value === focusedValue ? 'focused' : 'not-focused'}`}
-        aria-selected={props.value === value}
-        role="option"
         onClick={(event: React.MouseEvent | React.TouchEvent) => {
           onChange(value);
           setOpen(false);
@@ -59,9 +49,12 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
           event.preventDefault();
           combobox.current?.focus();
         }}
+        value={value}
+        currentValue={props.value}
+        focusedValue={focusedValue}
       >
-        <div className="render-item">{element}</div>
-      </div>
+        {element}
+      </DropdownRenderItem>
     );
   });
 

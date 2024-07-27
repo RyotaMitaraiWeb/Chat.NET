@@ -1,0 +1,13 @@
+@import '../../../../styles/colors.scss';
+
+.dropdown-menu-option {
+  @include apply-accent-background();
+  &:hover,
+  &.focused {
+    background-color: rgb(159, 157, 157);
+    color: black;
+  }
+
+  width: 100%;
+  padding: 16px 8px;
+}
