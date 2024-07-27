@@ -119,6 +119,21 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
     }
   }, [focusedValue, open]);
 
+  useEffect(() => {
+    if (ref.current) {
+      const options = ref.current?.querySelectorAll('.dropdown-menu-option');
+      const highestWidth = Array.from(options).reduce(
+        (current, o) => Math.max(current, o.clientWidth),
+        0,
+      );
+
+      const combobox = ref.current.querySelector('[role="combobox"]') as HTMLElement | null;
+      if (combobox) {
+        combobox.style.width = `${highestWidth}px`;
+      }
+    }
+  }, [values]);
+
   return (
     <div
       aria-disabled={disabled}
@@ -147,16 +162,15 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
         </Icon>
       </div>
       <div className="listbox-container">
-        {open ? (
-          <div
-            role="listbox"
-            aria-labelledby={labelId}
-            className="dropdown-menu-options"
-            id={`combobox-${labelId}`}
-          >
-            {elementsToRender}
-          </div>
-        ) : null}
+        <div
+          role="listbox"
+          aria-labelledby={labelId}
+          className="dropdown-menu-options"
+          id={`combobox-${labelId}`}
+          style={{ visibility: open ? 'visible' : 'hidden' }}
+        >
+          {elementsToRender}
+        </div>
       </div>
     </div>
   );

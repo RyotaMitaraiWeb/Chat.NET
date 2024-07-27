@@ -26,6 +26,7 @@
     cursor: pointer;
     @include apply-transition(border-color 0.2s);
     align-items: center;
+    justify-content: space-between;
 
     .dropdown-value,
     .dropdown-icon {
@@ -51,11 +52,11 @@
     left: 0;
     height: 300px;
     overflow-x: visible;
-    display: flex;
+    display: inline-flex;
     flex-direction: column;
     cursor: pointer;
     overflow-y: auto;
-    width: max-content;
+    min-width: max-content;
 
     .dropdown-menu-option {
       @include apply-accent-background();
