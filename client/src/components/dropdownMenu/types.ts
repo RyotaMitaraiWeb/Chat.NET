@@ -12,4 +12,5 @@ export interface DropdownMenuProps extends ElementProps {
   disabled?: boolean;
   label?: React.ReactNode;
   labelId: string;
+  autoWidth?: boolean;
 }

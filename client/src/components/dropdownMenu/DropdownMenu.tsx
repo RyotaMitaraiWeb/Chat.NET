@@ -21,6 +21,7 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
     disabled,
     label = '',
     labelId = '',
+    autoWidth,
     ...others
   } = props;
 
@@ -121,18 +122,24 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
 
   useEffect(() => {
     if (ref.current) {
-      const options = ref.current?.querySelectorAll('.dropdown-menu-option');
-      const highestWidth = Array.from(options).reduce(
-        (current, o) => Math.max(current, o.clientWidth),
-        0,
-      );
-
       const combobox = ref.current.querySelector('[role="combobox"]') as HTMLElement | null;
-      if (combobox) {
-        combobox.style.width = `${highestWidth}px`;
+      if (!autoWidth) {
+        const options = ref.current?.querySelectorAll('.dropdown-menu-option');
+        const highestWidth = Array.from(options).reduce(
+          (current, o) => Math.max(current, o.clientWidth),
+          0,
+        );
+
+        if (combobox) {
+          combobox.style.width = `${highestWidth}px`;
+        }
+      } else {
+        if (combobox) {
+          combobox.style.width = 'auto';
+        }
       }
     }
-  }, [values]);
+  }, [values, autoWidth]);
 
   return (
     <div

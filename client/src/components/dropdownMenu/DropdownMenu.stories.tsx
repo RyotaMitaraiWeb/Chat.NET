@@ -149,3 +149,35 @@ export const VeryLongOptions: Story = {
     );
   },
 };
+
+export const AutoWidth: Story = {
+  render() {
+    const values = [
+      'Europe',
+      'Africa',
+      'Asia',
+      'North America',
+      'South America',
+      'Oceania',
+      'Antarctica',
+      'The super almighty continent, ruled by the Holy Britannian Empire',
+      'The super almighty continent, ruled by the Holy Britannian Empire'.replaceAll(' ', ''),
+    ];
+
+    const [value, setValue] = useState(values[0]);
+    return (
+      <DropdownMenu
+        values={values}
+        renderOption={(value, index) => (
+          <strong>
+            {index + 1}. {value}
+          </strong>
+        )}
+        value={value}
+        onChange={setValue}
+        labelId="eu-member-state-label"
+        autoWidth
+      />
+    );
+  },
+};
