@@ -6,6 +6,8 @@ import { useOutsideClick } from '@/hooks/useOutsideClick/useOutsideClick';
 import { useCombobox } from '@/hooks/useCombobox/useCombobox';
 import Icon from '../icon/Icon';
 import { MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
+import { useDropdownMenuScroll } from '../internal/dropdownMenu/useDropdownMenuScroll';
+import { useAdjustComboboxWidth } from '../internal/dropdownMenu/useAdjustComboboxWidth';
 
 function parseValueIntoId(value: string) {
   return value.replace(/ /g, '-');
@@ -30,14 +32,6 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
     values,
     onChange,
   });
-
-  // If disabled when listbox is opened, close and restart
-  useEffect(() => {
-    if (disabled) {
-      setOpen(false);
-      setFocusedValue(value || values[0]);
-    }
-  }, [disabled, setOpen, value, values, setFocusedValue]);
 
   const disabledClass = disabled ? 'disabled' : '';
 
@@ -78,7 +72,7 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
     event.preventDefault();
 
     if (!disabled) {
-      if (open && onChange) {
+      if (open) {
         onChange(focusedValue);
       }
 
@@ -87,6 +81,7 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
       const combobox = ref.current?.querySelector(
         '.dropdown-menu-selected-value',
       ) as HTMLElement | null;
+
       combobox?.focus();
     }
   }
@@ -106,36 +101,16 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
     }
   }
 
+  useDropdownMenuScroll({ open, focusedValue, ref });
+  useAdjustComboboxWidth({ values, ref, autoWidth });
+
+  // If disabled when listbox is opened, close and restart
   useEffect(() => {
-    if (open) {
-      const option = ref.current?.querySelector(`[data-value="${focusedValue}"]`);
-
-      if (option) {
-        option.scrollIntoView({ block: 'nearest' });
-      }
+    if (disabled) {
+      setOpen(false);
+      setFocusedValue(value || values[0]);
     }
-  }, [focusedValue, open]);
-
-  useEffect(() => {
-    if (ref.current) {
-      const combobox = ref.current.querySelector('[role="combobox"]') as HTMLElement | null;
-      if (!autoWidth) {
-        const options = ref.current?.querySelectorAll('.dropdown-menu-option');
-        const highestWidth = Array.from(options).reduce(
-          (current, o) => Math.max(current, o.clientWidth),
-          0,
-        );
-
-        if (combobox) {
-          combobox.style.width = `${highestWidth}px`;
-        }
-      } else {
-        if (combobox) {
-          combobox.style.width = 'auto';
-        }
-      }
-    }
-  }, [values, autoWidth]);
+  }, [disabled, setOpen, value, values, setFocusedValue]);
 
   return (
     <div
