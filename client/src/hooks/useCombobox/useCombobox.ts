@@ -5,7 +5,7 @@ import { _keyPressMapper } from './_keyPressMapper';
 export type ComboboxOptions = {
   value?: string;
   values: string[];
-  onChange?: (value: string) => void;
+  onChange: (value: string) => void;
 };
 
 export const useCombobox = (params: ComboboxOptions) => {
@@ -36,9 +36,7 @@ export const useCombobox = (params: ComboboxOptions) => {
       }
     } else if (keyboardEvent.closeWithAltArrowUp) {
       setOpen(false);
-      if (onChange) {
-        onChange(focusedValue);
-      }
+      onChange(focusedValue);
     } else if (keyboardEvent.openWithArrowUp || keyboardEvent.openWithHome) {
       setOpen(true);
       setFocusedValue(firstValue);
@@ -46,9 +44,7 @@ export const useCombobox = (params: ComboboxOptions) => {
       setOpen(true);
       setFocusedValue(lastValue);
     } else if (keyboardEvent.closeWithTab) {
-      if (onChange) {
-        onChange(focusedValue);
-      }
+      onChange(focusedValue);
 
       setOpen(false);
     } else if (keyboardEvent.openWithArrowDown || keyboardEvent.openWithAltArrowDown) {

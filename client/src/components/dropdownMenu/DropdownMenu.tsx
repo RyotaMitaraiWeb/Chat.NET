@@ -58,11 +58,9 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
         aria-selected={props.value === value}
         role="option"
         onClick={(event: React.MouseEvent | React.TouchEvent) => {
-          if (onChange) {
-            onChange(value);
-            setOpen(false);
-            setFocusedValue(value);
-          }
+          onChange(value);
+          setOpen(false);
+          setFocusedValue(value);
 
           event.preventDefault();
           const combobox = ref.current?.querySelector(
@@ -94,9 +92,7 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   }
 
   function closeByOutsideClick() {
-    if (onChange) {
-      onChange(focusedValue);
-    }
+    onChange(focusedValue);
 
     setOpen(false);
   }

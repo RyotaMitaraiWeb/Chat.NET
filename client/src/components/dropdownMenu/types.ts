@@ -8,9 +8,9 @@ export interface DropdownMenuProps extends ElementProps {
   values: string[];
   renderOption: RenderOption;
   value?: string;
-  onChange?: (value: string) => void;
+  onChange: (value: string) => void;
   disabled?: boolean;
   label?: React.ReactNode;
-  labelId: string;
+  labelId?: string;
   autoWidth?: boolean;
 }
