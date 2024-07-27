@@ -4,10 +4,9 @@ import './DropdownMenu.scss';
 import { DropdownMenuProps } from './types';
 import { useOutsideClick } from '@/hooks/useOutsideClick/useOutsideClick';
 import { useCombobox } from '@/hooks/useCombobox/useCombobox';
-import Icon from '../icon/Icon';
-import { MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
 import { useDropdownMenuScroll } from '../internal/dropdownMenu/useDropdownMenuScroll';
 import { useAdjustComboboxWidth } from '../internal/dropdownMenu/useAdjustComboboxWidth';
+import Combobox from './layout/combobox/Combobox';
 
 function parseValueIntoId(value: string) {
   return value.replace(/ /g, '-');
@@ -124,21 +123,13 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
           {label}
         </div>
       ) : null}
-      <div
+      <Combobox
         onClick={toggleMenu}
-        className={`dropdown-menu-selected-value ${open ? 'open' : 'closed'}`}
-        aria-controls={`combobox-${labelId}`}
-        aria-expanded={open}
-        tabIndex={disabled ? -1 : 0}
-        aria-activedescendant={value ? `option-${value}` : ''}
-        role="combobox"
+        open={open}
         onKeyDown={handleKeyDown}
-      >
-        <div className="dropdown-value">{selectedValueElement}</div>
-        <Icon size="large" className="dropdown-icon" aria-hidden={true}>
-          {!open ? <MdArrowDropDown /> : <MdArrowDropUp />}
-        </Icon>
-      </div>
+        selectedValueElement={selectedValueElement}
+        labelId={labelId}
+      />
       <div className="listbox-container">
         <div
           role="listbox"
