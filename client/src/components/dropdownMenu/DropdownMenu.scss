@@ -9,24 +9,7 @@
     }
   }
 
-  /* Options */
-  .listbox-container {
-    position: relative;
-    margin: 0;
-    padding: 0;
-  }
-
   .dropdown-menu-options {
-    position: absolute;
-    left: 0;
-    height: 300px;
-    overflow-x: visible;
-    display: inline-flex;
-    flex-direction: column;
-    cursor: pointer;
-    overflow-y: auto;
-    min-width: max-content;
-
     .dropdown-menu-option {
       @include apply-accent-background();
       &:hover,
@@ -35,7 +18,7 @@
         color: black;
       }
  
-      width: calc(100%);
+      width: 100%;
       padding: 16px 8px;
     }
   }

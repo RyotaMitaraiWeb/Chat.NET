@@ -7,6 +7,7 @@ import { useCombobox } from '@/hooks/useCombobox/useCombobox';
 import { useDropdownMenuScroll } from '../internal/dropdownMenu/useDropdownMenuScroll';
 import Combobox from './layout/combobox/Combobox';
 import DropdownMenuLabel from './layout/label/DropdownLabel';
+import DropdownListbox from './layout/listbox/DropdownListbox';
 
 function parseValueIntoId(value: string) {
   return value.replace(/ /g, '-');
@@ -123,17 +124,7 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
         ref={combobox}
         disabled={disabled}
       />
-      <div className="listbox-container">
-        <div
-          role="listbox"
-          aria-labelledby={labelId}
-          className="dropdown-menu-options"
-          id={`combobox-${labelId}`}
-          style={{ visibility: open ? 'visible' : 'hidden' }}
-        >
-          {elementsToRender}
-        </div>
-      </div>
+      <DropdownListbox elementsToRender={elementsToRender} labelId={labelId} open={open} />
     </div>
   );
 }
