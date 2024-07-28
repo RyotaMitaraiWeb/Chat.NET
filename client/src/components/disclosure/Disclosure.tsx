@@ -4,7 +4,17 @@ import Icon from '../icon/Icon';
 import { MdOutlineArrowRight, MdOutlineArrowDropDown } from 'react-icons/md';
 
 function Disclosure(props: DisclosureProps): React.JSX.Element {
-  const { open, onClose, label, children, className = '', padded, ...others } = props;
+  const {
+    open,
+    onClose,
+    label,
+    children,
+    openLabel,
+    closedLabel,
+    className = '',
+    padded,
+    ...others
+  } = props;
 
   const paddedClass = padded ? 'padded' : '';
   return (
@@ -15,7 +25,13 @@ function Disclosure(props: DisclosureProps): React.JSX.Element {
       {...others}
     >
       <summary>
-        <span className="disclosure-label">{label}</span>
+        {label && !(closedLabel && openLabel) ? (
+          <span className="disclosure-label persistent">{label}</span>
+        ) : null}
+        {openLabel && !label ? <span className="disclosure-label open">{openLabel}</span> : null}
+        {closedLabel && !label ? (
+          <span className="disclosure-label closed">{closedLabel}</span>
+        ) : null}
         <span className="disclosure-icon closed">
           <Icon size="large">
             <MdOutlineArrowRight />

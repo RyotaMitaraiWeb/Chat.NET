@@ -6,4 +6,6 @@ export interface DisclosureProps extends ElementProps {
   onClose?: () => void;
   children: React.ReactNode;
   padded?: boolean;
+  openLabel?: string;
+  closedLabel?: string;
 }

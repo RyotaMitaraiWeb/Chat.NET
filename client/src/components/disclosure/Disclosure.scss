@@ -9,23 +9,30 @@
    }
 
   &[open] {
-    .disclosure-icon.open {
+    .open {
       display: inline;
     }
 
-    .disclosure-icon.closed {
+    .closed {
       display: none;
     }
   }
 
-  .disclosure-icon {
+  .open {
     display: none;
-    &.closed {
-      display: inline;
-    }
+  }
 
-    svg {
-      display: flex;
+  .closed {
+    display: inline;
+  }
+
+  svg {
+    display: flex;
+  }
+
+  &.padded {
+    .disclosure-body {
+      padding-left: 8px;
     }
   }
 }
