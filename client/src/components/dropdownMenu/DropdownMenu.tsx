@@ -138,6 +138,7 @@ function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
         autoWidth={autoWidth}
         ref={combobox}
         disabled={disabled}
+        focusedValue={focusedValue}
       />
       <DropdownListbox elementsToRender={elementsToRender} labelId={labelId} open={open} />
     </div>

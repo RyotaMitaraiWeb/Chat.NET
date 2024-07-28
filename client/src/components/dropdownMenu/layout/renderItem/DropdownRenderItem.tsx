@@ -2,17 +2,14 @@ import { DropdownRenderItemProps } from './types';
 import './DropdownRenderItem.scss';
 import Icon from '@/components/icon/Icon';
 import { MdCheck } from 'react-icons/md';
-
-function parseValueIntoId(value: string) {
-  return value.replace(/ /g, '-');
-}
+import { _parseValueIntoId } from '../_parseValueIntoId';
 
 function DropdownRenderItem(props: DropdownRenderItemProps): React.JSX.Element {
   const { children, onClick, value, currentValue, focusedValue } = props;
   return (
     <div
       key={value}
-      id={`option-${parseValueIntoId(value)}`}
+      id={`option-${_parseValueIntoId(value)}`}
       data-value={value}
       className={`dropdown-menu-option
         ${currentValue === value ? 'selected' : 'not-selected'}

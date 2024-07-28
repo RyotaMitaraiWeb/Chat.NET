@@ -4,6 +4,7 @@ import { MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
 import { useAdjustComboboxWidth } from '@/components/internal/dropdownMenu/useAdjustComboboxWidth';
 import './Combobox.scss';
 import { forwardRef } from 'react';
+import { _parseValueIntoId } from '../_parseValueIntoId';
 
 const Combobox = forwardRef(function Combobox(props: ComboboxProps, ref): React.JSX.Element {
   const {
@@ -14,9 +15,9 @@ const Combobox = forwardRef(function Combobox(props: ComboboxProps, ref): React.
     disabled,
     labelId,
     selectedValueElement,
-    value,
     dropdownMenuRef,
     autoWidth,
+    focusedValue,
     style = {},
     ...others
   } = props;
@@ -33,7 +34,8 @@ const Combobox = forwardRef(function Combobox(props: ComboboxProps, ref): React.
       aria-controls={`combobox-${labelId}`}
       aria-expanded={open}
       tabIndex={disabled ? -1 : 0}
-      aria-activedescendant={value ? `option-${value}` : ''}
+      aria-activedescendant={open ? `option-${_parseValueIntoId(focusedValue)}` : ''}
+      aria-haspopup="listbox"
       role="combobox"
       onKeyDown={onKeyDown}
       style={{ width, ...style }}

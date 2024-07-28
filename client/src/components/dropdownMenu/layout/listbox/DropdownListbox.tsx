@@ -11,6 +11,7 @@ function DropdownListbox(props: DropdownListboxProps): React.JSX.Element {
         className={`dropdown-menu-options ${className}`}
         id={`combobox-${labelId} ${id}`}
         style={{ visibility: open ? 'visible' : 'hidden', ...style }}
+        tabIndex={-1}
         {...others}
       >
         {elementsToRender}
