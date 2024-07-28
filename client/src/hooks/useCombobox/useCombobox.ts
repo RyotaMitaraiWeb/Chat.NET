@@ -8,6 +8,16 @@ export type ComboboxOptions = {
   onChange: (value: string) => void;
 };
 
+/**
+ * A hook to manage a combobox (such as one part of a dropdown menu).
+ *
+ * The hook provides the following tools:
+ * - the state of the combobox in regards to whether it's open or not
+ * - a method to handle keyboard events (for opening, closing, and navigating the combobox)
+ * - the state of the "focused" value (the "focused" value is the temporarily
+ * selected value that will be definitively selected if the user presses Enter or
+ * performs a similar action)
+ */
 export const useCombobox = (params: ComboboxOptions) => {
   const { value: selectedValue, values, onChange } = params;
 
