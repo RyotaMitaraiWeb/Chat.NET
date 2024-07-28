@@ -31,6 +31,9 @@ import DropdownRenderItem from './layout/renderItem/DropdownRenderItem';
  * - it does not support disabling individual options
  * - it does not support a ``required`` attribute, as there will always be
  * a valid option selected
+ *
+ * if any of these features is very important, consider using a native ``select``
+ * instead.
  */
 function DropdownMenu(props: DropdownMenuProps): React.JSX.Element {
   const {
