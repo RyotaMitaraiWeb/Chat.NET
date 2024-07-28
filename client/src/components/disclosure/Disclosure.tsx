@@ -1,9 +1,24 @@
+'use client';
 import { DisclosureProps } from './types';
 import './Disclosure.scss';
 import Icon from '../icon/Icon';
 import { MdOutlineArrowRight, MdOutlineArrowDropDown } from 'react-icons/md';
 import { useRef } from 'react';
 
+/**
+ * The disclosure is a component implementing the ``details`` tag with
+ * a few added tools to make it easier to work with. Notable features:
+ * - the arrow is now at the end of the summary, rather than at the beginning
+ * - you can specify via props what the labels will be depending
+ * on whether the disclosure is open or closed. Alternatively, you can
+ * provide a persistent one that is shown in both cases.
+ * - listen in on specific events (on open and on close)
+ *
+ * Note that, while the component exposes props like ``open``, ``onOpen``,
+ * and ``onClose``, the disclosure does not provide a way to make it controlled
+ * out of the box. Thus, those props do not prevent state change.
+ *
+ */
 function Disclosure(props: DisclosureProps): React.JSX.Element {
   const {
     open,
