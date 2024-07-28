@@ -2,10 +2,12 @@ import { DisclosureProps } from './types';
 import './Disclosure.scss';
 import Icon from '../icon/Icon';
 import { MdOutlineArrowRight, MdOutlineArrowDropDown } from 'react-icons/md';
+import { useRef } from 'react';
 
 function Disclosure(props: DisclosureProps): React.JSX.Element {
   const {
     open,
+    onOpen,
     onClose,
     label,
     children,
@@ -16,12 +18,24 @@ function Disclosure(props: DisclosureProps): React.JSX.Element {
     ...others
   } = props;
 
+  function handleToggle() {
+    const open = details.current?.open;
+    if (open === true && onOpen) {
+      onOpen();
+    } else if (open === false && onClose) {
+      onClose();
+    }
+  }
+
+  const details = useRef<HTMLDetailsElement>(null);
+
   const paddedClass = padded ? 'padded' : '';
   return (
     <details
       open={open}
-      onClick={onClose}
+      onToggle={handleToggle}
       className={`component-disclosure ${paddedClass} ${className}`}
+      ref={details}
       {...others}
     >
       <summary>

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Disclosure from './Disclosure';
+import { useState } from 'react';
 
 const meta: Meta<typeof Disclosure> = {
   title: 'Example/Disclosure',
@@ -39,5 +40,31 @@ export const Padded: Story = {
       hic aperiam molestiae totam quasi. Quo, obcaecati laboriosam, 
       veniam beatae est atque porro a libero quisquam, tempora neque non?`,
     padded: true,
+  },
+};
+
+export const DefaultOpenAndEventListeners: Story = {
+  render() {
+    const [text1, setText1] = useState('closed');
+    const [text2, setText2] = useState('this should be opened by default');
+    return (
+      <>
+        <Disclosure
+          label={`State: ${text1}`}
+          onOpen={() => setText1('opened')}
+          onClose={() => setText1('closed')}
+        >
+          Hello1
+        </Disclosure>
+        <Disclosure
+          label={text2}
+          onOpen={() => setText2('this should be opened by default')}
+          onClose={() => setText2('closed text')}
+          open
+        >
+          Hello2
+        </Disclosure>
+      </>
+    );
   },
 };
