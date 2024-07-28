@@ -1,0 +1,17 @@
+.listbox-container {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.dropdown-menu-options {
+  position: absolute;
+  left: 0;
+  height: 300px;
+  overflow-x: visible;
+  display: inline-flex;
+  flex-direction: column;
+  cursor: pointer;
+  overflow-y: auto;
+  min-width: max-content;
+}
