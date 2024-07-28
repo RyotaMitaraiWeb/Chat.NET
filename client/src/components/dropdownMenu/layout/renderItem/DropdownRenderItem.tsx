@@ -19,7 +19,7 @@ function DropdownRenderItem(props: DropdownRenderItemProps): React.JSX.Element {
       onClick={onClick}
     >
       <div className="render-item">{children}</div>
-      <Icon style={{ visibility: currentValue === value ? 'visible' : 'hidden' }} size="large">
+      <Icon style={{ opacity: currentValue === value ? 1 : 0 }} size="large">
         <MdCheck />
       </Icon>
     </div>
