@@ -1,6 +1,5 @@
 function prefersAnimations(): boolean {
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: no-preference)');
   return prefersReducedMotion && prefersReducedMotion.matches;
 }
 
