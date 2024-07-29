@@ -1,0 +1,30 @@
+@use 'sass:map';
+@import '../../styles/viewports.scss';
+
+$breakpoints: (
+  'extra-small': 0px,
+  'small': $small,
+  'medium': $medium,
+  'large': $large,
+  'extra-large': $extra-large,
+);
+
+@each $current-viewport, $current-value in $breakpoints {
+  .screen-#{$current-viewport} {
+    display: none;
+    @media screen and (min-width: $current-value) {
+      display: initial;
+    }
+  }
+
+  @each $viewport, $value in $breakpoints {
+    @if $value > $current-value {
+      .screen-#{$current-viewport}-to-#{$viewport} {
+        display: none;
+        @media (min-width: $current-value) and (max-width: calc($value - 0.1px)) {
+          display: initial;
+        }
+      }
+    }
+  }
+}
