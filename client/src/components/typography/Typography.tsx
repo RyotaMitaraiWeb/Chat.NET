@@ -1,4 +1,3 @@
-import React, { createElement } from 'react';
 import { TypographyProps } from './types';
 import './Typography.scss';
 
@@ -18,10 +17,15 @@ function Typography(props: TypographyProps): React.JSX.Element {
   const textColorClass = color ? `text-${color}` : '';
   const emphasisClass = emphasis ? 'emphasis' : 'normal';
 
-  return createElement(selector, {
-    className: `component-typography ${emphasisClass} size-${size} ${textColorClass} ${className}`,
-    ...others,
-  });
+  const TypographyTag = selector;
+
+  return (
+    <TypographyTag
+      className={`component-typography ${emphasisClass} 
+      size-${size} ${textColorClass} ${className}`}
+      {...others}
+    />
+  );
 }
 
 export default Typography;
