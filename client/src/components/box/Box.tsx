@@ -1,4 +1,3 @@
-import { createElement } from 'react';
 import { BoxProps } from './types';
 import './Box.scss';
 
@@ -7,12 +6,10 @@ import './Box.scss';
  */
 function Box(props: BoxProps): React.JSX.Element {
   const { className = '', selector = 'div', ...others } = props;
-  const element = createElement(selector as string, {
-    className: 'component-box ' + className,
-    ...others,
-  });
 
-  return element;
+  const Parent = selector;
+
+  return <Parent className={`component-box ${className}`} {...others} />;
 }
 
 export default Box;

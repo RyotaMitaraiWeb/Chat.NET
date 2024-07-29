@@ -1,4 +1,3 @@
-import { createElement } from 'react';
 import { HeadingProps } from './types';
 import './Heading.scss';
 
@@ -7,12 +6,10 @@ import './Heading.scss';
  */
 function Heading(props: HeadingProps): React.JSX.Element {
   const { level, className = '', ...others } = props;
-  const heading = createElement(`h${level}`, {
-    className: 'component-heading ' + className,
-    ...others,
-  });
 
-  return heading;
+  const HeadingTag = `h${level}` as keyof HTMLElementTagNameMap;
+
+  return <HeadingTag className={`component-heading ${className}`} {...others} />;
 }
 
 export default Heading;
