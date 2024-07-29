@@ -1,0 +1,39 @@
+.component-disclosure {
+  summary {
+    display: flex; // remove default marker
+    align-items: center;
+    cursor: pointer;
+
+    .disclosure-label {
+      height: 100%;
+    }
+  }
+
+  &[open] {
+    .open {
+      display: inline;
+    }
+
+    .closed {
+      display: none;
+    }
+  }
+
+  .open {
+    display: none;
+  }
+
+  .closed {
+    display: inline;
+  }
+
+  svg {
+    display: flex;
+  }
+
+  &.padded {
+    .disclosure-body {
+      padding-left: 8px;
+    }
+  }
+}
