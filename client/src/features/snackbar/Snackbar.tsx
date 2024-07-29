@@ -6,6 +6,7 @@ import { SnackbarProps } from './types';
 import './Snackbar.scss';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { isBrowser } from '@/util/isBrowser/isBrowser';
+import { performAnimation } from '@/util/performAnimation/performAnimation';
 
 const titles: Record<severity, string> = {
   success: 'Success!',
@@ -57,10 +58,13 @@ function Snackbar(props: SnackbarProps): JSX.Element {
   const close = useCallback(() => {
     if (onClose) {
       setDisappear('disappear');
-      setTimeout(() => {
-        setDisappear('');
-        onClose();
-      }, 500);
+      performAnimation(
+        () => {
+          setDisappear('');
+          onClose();
+        },
+        { timeout: 500 },
+      );
     }
   }, [onClose]);
 
