@@ -1,5 +1,6 @@
 @import '../../styles/animations.scss';
 @import '../../styles/util.scss';
+@import '../../styles/viewports.scss';
 
 .component-dialog {
   @include fadeInFromTransparentToSemiTransparent(0.1s);
@@ -26,9 +27,9 @@
     z-index: 100;
     border-radius: 5px;
 
-    @media screen and (max-width: 1023px) {
+    @media screen and (max-width: calc($large - 1px)) {
       width: 90%;
-      height: 90%;
+      max-height: 90%;
     }
   }
 }
