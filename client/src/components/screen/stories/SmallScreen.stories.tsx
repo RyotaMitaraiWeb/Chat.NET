@@ -11,6 +11,7 @@ const meta: Meta<typeof SmallScreen> = {
 };
 
 export default meta;
+
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
