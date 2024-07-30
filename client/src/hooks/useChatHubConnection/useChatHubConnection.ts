@@ -60,6 +60,20 @@ export const useChatHubConnection = (options?: useChatHubConnectionOptions) => {
     chatHubConnection.on(event, callback);
   }
 
+  /**
+   * Establishes a connection with the server
+   */
+  function startConnection() {
+    return chatHubConnection.start();
+  }
+
+  /**
+   * Cuts the connection with the server
+   */
+  function stopConnection() {
+    return chatHubConnection.stop();
+  }
+
   function _removeEventListener(
     event: chatHubClientMethods,
     callback: EventListenerCallback<unknown>,
@@ -136,6 +150,8 @@ export const useChatHubConnection = (options?: useChatHubConnectionOptions) => {
   }, [eventListeners, removeAllEventListenersOnDestroy]);
 
   return {
+    startConnection,
+    stopConnection,
     startSession,
     endSession,
     onSendSessionData,
