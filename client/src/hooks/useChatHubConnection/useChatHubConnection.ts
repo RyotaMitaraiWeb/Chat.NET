@@ -1,12 +1,12 @@
 import { chatHubClientMethods, chatHubConnection } from '@/signalr/ChatHubConnection';
-import { useEffect, useReducer } from 'react';
+import { useCallback, useEffect, useReducer } from 'react';
 
 type eventListener = {
-  event: chatHubClientMethods;
-  callback: unknown;
+  event?: chatHubClientMethods;
+  callback?: unknown;
 };
 
-type reducerAction = eventListener & { type: 'add' | 'remove' };
+type reducerAction = eventListener & { type: 'add' | 'remove' | 'restart' };
 
 function reducer(state: eventListener[], action: reducerAction) {
   const { event, callback } = action;
@@ -18,6 +18,8 @@ function reducer(state: eventListener[], action: reducerAction) {
       return [...state].filter(
         (eventListener) => eventListener.callback === callback && eventListener.event,
       );
+    case 'restart':
+      return [];
   }
 }
 
@@ -52,102 +54,133 @@ export const useChatHubConnection = (options?: useChatHubConnectionOptions) => {
   const removeAllEventListenersOnDestroy = options?.removeAllEventListenersOnDestroy || false;
   const [eventListeners, dispatch] = useReducer(reducer, []);
 
-  function _addEventListener(
-    event: chatHubClientMethods,
-    callback: EventListenerCallback<unknown>,
-  ) {
-    dispatch({ type: 'add', event, callback });
-    chatHubConnection.on(event, callback);
-  }
+  const _addEventListener = useCallback(
+    (event: chatHubClientMethods, callback: EventListenerCallback<unknown>) => {
+      dispatch({ type: 'add', event, callback });
+      chatHubConnection.on(event, callback);
+    },
+    [dispatch],
+  );
 
   /**
    * Establishes a connection with the server
    */
-  function startConnection() {
+  const startConnection = useCallback(() => {
     return chatHubConnection.start();
-  }
+  }, []);
 
   /**
    * Cuts the connection with the server
    */
-  function stopConnection() {
+  const stopConnection = useCallback(() => {
+    dispatch({ type: 'restart' });
     return chatHubConnection.stop();
-  }
+  }, [dispatch]);
 
-  function _removeEventListener(
-    event: chatHubClientMethods,
-    callback: EventListenerCallback<unknown>,
-  ) {
-    dispatch({ type: 'remove', event, callback });
-    chatHubConnection.off(event, callback);
-  }
+  const _removeEventListener = useCallback(
+    (event: chatHubClientMethods, callback: EventListenerCallback<unknown>) => {
+      dispatch({ type: 'remove', event, callback });
+      chatHubConnection.off(event, callback);
+    },
+    [dispatch],
+  );
 
-  function onUpdateUser(callback: EventListenerCallback<unknown>) {
-    _addEventListener('UpdateUser', callback);
-  }
+  const onUpdateUser = useCallback(
+    (callback: EventListenerCallback<unknown>) => {
+      _addEventListener('UpdateUser', callback);
+    },
+    [_addEventListener],
+  );
 
-  function offUpdateUser(callback: EventListenerCallback<unknown>) {
-    _removeEventListener('UpdateUser', callback);
-  }
+  const offUpdateUser = useCallback(
+    (callback: EventListenerCallback<unknown>) => {
+      _removeEventListener('UpdateUser', callback);
+    },
+    [_removeEventListener],
+  );
 
-  async function startSession() {
+  const startSession = useCallback(async () => {
     await chatHubConnection.invoke('StartSession');
-  }
+  }, []);
 
-  function onSendSessionData(callback: EventListenerCallback<unknown>) {
-    _addEventListener('SendSessionData', callback);
-  }
+  const onSendSessionData = useCallback(
+    (callback: EventListenerCallback<unknown>) => {
+      _addEventListener('SendSessionData', callback);
+    },
+    [_addEventListener],
+  );
 
-  function onEndSession(callback: EventListenerCallback<unknown>) {
-    _addEventListener('EndSession', callback);
-  }
+  const onEndSession = useCallback(
+    (callback: EventListenerCallback<unknown>) => {
+      _addEventListener('EndSession', callback);
+    },
+    [_addEventListener],
+  );
 
-  function offEndSession(callback: EventListenerCallback<unknown>) {
-    _removeEventListener('EndSession', callback);
-  }
+  const offEndSession = useCallback(
+    (callback: EventListenerCallback<unknown>) => {
+      _removeEventListener('EndSession', callback);
+    },
+    [_removeEventListener],
+  );
 
-  function offSendSessionData(callback: EventListenerCallback<unknown>) {
-    _removeEventListener('SendSessionData', callback);
-  }
+  const offSendSessionData = useCallback(
+    (callback: EventListenerCallback<unknown>) => {
+      _removeEventListener('SendSessionData', callback);
+    },
+    [_removeEventListener],
+  );
 
-  async function endSession() {
+  const endSession = useCallback(async () => {
     await chatHubConnection.invoke('EndSession');
-  }
+  }, []);
 
-  function onRoleUpdateSucceeded(callback: EventListenerCallback<unknown>) {
-    _addEventListener('RoleUpdateSucceeded', callback);
-  }
+  const onRoleUpdateSucceeded = useCallback(
+    (callback: EventListenerCallback<unknown>) => {
+      _addEventListener('RoleUpdateSucceeded', callback);
+    },
+    [_addEventListener],
+  );
 
-  function offRoleUpdateSucceeded(callback: EventListenerCallback<unknown>) {
-    _removeEventListener('RoleUpdateFailed', callback);
-  }
+  const offRoleUpdateSucceeded = useCallback(
+    (callback: EventListenerCallback<unknown>) => {
+      _removeEventListener('RoleUpdateFailed', callback);
+    },
+    [_removeEventListener],
+  );
 
-  function onRoleUpdateFailed(callback: EventListenerCallback<unknown>) {
-    _addEventListener('RoleUpdateFailed', callback);
-  }
+  const onRoleUpdateFailed = useCallback(
+    (callback: EventListenerCallback<unknown>) => {
+      _addEventListener('RoleUpdateFailed', callback);
+    },
+    [_addEventListener],
+  );
 
-  function offRoleUpdateFailed(callback: EventListenerCallback<unknown>) {
-    _removeEventListener('RoleUpdateFailed', callback);
-  }
+  const offRoleUpdateFailed = useCallback(
+    (callback: EventListenerCallback<unknown>) => {
+      _removeEventListener('RoleUpdateFailed', callback);
+    },
+    [_removeEventListener],
+  );
 
-  async function addRoleToUser(data: unknown) {
+  const addRoleToUser = useCallback(async (data: unknown) => {
     await chatHubConnection.invoke('AddRoleToUser', data);
-  }
+  }, []);
 
-  async function removeRoleFromUser(data: unknown) {
+  const removeRoleFromUser = useCallback(async (data: unknown) => {
     await chatHubConnection.invoke('RemoveRoleFromUser', data);
-  }
+  }, []);
 
   useEffect(() => {
     return () => {
       if (removeAllEventListenersOnDestroy) {
         for (const eventListener of eventListeners) {
           const { event, callback } = eventListener;
-          _removeEventListener(event, callback as never);
+          _removeEventListener(event as chatHubClientMethods, callback as never);
         }
       }
     };
-  }, [eventListeners, removeAllEventListenersOnDestroy]);
+  }, [eventListeners, removeAllEventListenersOnDestroy, _removeEventListener]);
 
   return {
     startConnection,
