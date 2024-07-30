@@ -6,6 +6,7 @@ import { SnackbarProps } from './types';
 import './Snackbar.scss';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { isBrowser } from '@/util/isBrowser/isBrowser';
+import { performAnimation } from '@/util/performAnimation/performAnimation';
 
 const titles: Record<severity, string> = {
   success: 'Success!',
@@ -29,10 +30,6 @@ const titles: Record<severity, string> = {
  *
  * Changing the snackbar's title, severity, or its content while it is still up
  * will restart the timeout.
- *
- * **Note:** if the user does not allow animations on their system,
- * the snackbar will be transparent for less than a second when closed.
- * However, this has virtually no effect for the user.
  */
 function Snackbar(props: SnackbarProps): JSX.Element {
   const {
@@ -57,10 +54,13 @@ function Snackbar(props: SnackbarProps): JSX.Element {
   const close = useCallback(() => {
     if (onClose) {
       setDisappear('disappear');
-      setTimeout(() => {
-        setDisappear('');
-        onClose();
-      }, 500);
+      performAnimation(
+        () => {
+          setDisappear('');
+          onClose();
+        },
+        { timeout: 500 },
+      );
     }
   }, [onClose]);
 

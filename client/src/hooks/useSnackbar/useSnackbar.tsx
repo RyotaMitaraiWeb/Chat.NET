@@ -4,6 +4,7 @@ import type { SnackbarContext, SnackbarState } from './types';
 import { severities } from '@/constants/severity';
 import { severity } from '@/components/types/options';
 import GlobalSnackbar from './GlobalSnackbar';
+import { performAnimation } from '@/util/performAnimation/performAnimation';
 
 const SnackbarContext = createContext({} as SnackbarContext);
 
@@ -28,9 +29,12 @@ export function SnackbarContextProvider({ children }: { children: React.ReactNod
     (snackbarInput: SnackbarState, severity: severity, open: boolean, duration?: number) => {
       if (open) {
         closeSnackbar();
-        setTimeout(() => {
-          displaySnackbar(snackbarInput, severity, !open, duration);
-        }, 200);
+        performAnimation(
+          () => {
+            displaySnackbar(snackbarInput, severity, !open, duration);
+          },
+          { timeout: 200 },
+        );
       } else {
         setSnackbar(snackbarInput);
         setDuration(duration);

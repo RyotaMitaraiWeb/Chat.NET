@@ -5,6 +5,7 @@ import Overlay from '../overlay/Overlay';
 import { createPortal } from 'react-dom';
 import { useCallback, useEffect, useState } from 'react';
 import { isBrowser } from '@/util/isBrowser/isBrowser';
+import { performAnimation } from '@/util/performAnimation/performAnimation';
 
 /**
  * A base component for implementing modal components. Each modal:
@@ -15,9 +16,7 @@ import { isBrowser } from '@/util/isBrowser/isBrowser';
  * is opened.
  * * animates the opening and closing in a consistent manner regardless
  * of the method of opening or closing. The animations occur only
- * if the user's system allows it. For users that do not want animations,
- * there will be a small delay that lasts less than a second where they will be unable
- * to interact with the browser despite the modal and overlay having closed abruptly.
+ * if the user's system allows it.
  *
  * * * The animation for the overlay consists of fading in and fading out, wheres
  * the animation of the model itself is left to a more specific component. The
@@ -39,13 +38,16 @@ function BaseModal(props: BaseModalProps): React.JSX.Element {
   const close = useCallback(() => {
     document.body.classList.remove('locked');
     setOverlayOpen(false);
-    setTimeout(() => {
-      if (onClose) {
-        onClose();
-      }
-      setOpen(false);
-      setOverlayOpen(true);
-    }, 200);
+    performAnimation(
+      () => {
+        if (onClose) {
+          onClose();
+        }
+        setOpen(false);
+        setOverlayOpen(true);
+      },
+      { timeout: 200 },
+    );
   }, [onClose]);
 
   const handleEscape = useCallback(
