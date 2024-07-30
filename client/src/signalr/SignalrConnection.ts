@@ -9,8 +9,9 @@ import { ISignalrConnection } from './types';
 export abstract class SignalrConnection<TC extends string, TS extends string>
   implements ISignalrConnection<TC, TS>
 {
-  protected connection: signalr.HubConnection;
+  private connection?: signalr.HubConnection;
   private connectionIsActive = false;
+  private hub;
 
   /**
    * @param hub A relative path to the hub (e.g. ``chat``). If the path
@@ -21,24 +22,25 @@ export abstract class SignalrConnection<TC extends string, TS extends string>
       hub = hub.slice(1);
     }
 
-    this.connection = new signalr.HubConnectionBuilder()
-      .withUrl(`http://localhost:5000/${hub}`, {
-        accessTokenFactory() {
-          return localStorage.getItem('access_token') || '';
-        },
-        skipNegotiation: true,
-        transport: signalr.HttpTransportType.WebSockets,
-        withCredentials: true,
-      })
-      .withAutomaticReconnect()
-      .build();
+    this.hub = hub;
   }
 
   /**
    * Establishes a connection to the hub if one has not been established already
    */
-  start() {
+  start(): Promise<void> {
     if (!this.connectionIsActive) {
+      this.connection = new signalr.HubConnectionBuilder()
+        .withUrl(`http://localhost:5000/${this.hub}`, {
+          accessTokenFactory() {
+            return localStorage.getItem('access_token') || '';
+          },
+          skipNegotiation: true,
+          transport: signalr.HttpTransportType.WebSockets,
+          withCredentials: true,
+        })
+        .withAutomaticReconnect()
+        .build();
       this.connectionIsActive = true;
       return this.connection.start();
     }
@@ -49,21 +51,21 @@ export abstract class SignalrConnection<TC extends string, TS extends string>
   /**
    * Disconnects from the hub if there is an active connection to it.
    */
-  stop() {
+  async stop(): Promise<void> {
     if (this.connectionIsActive) {
       this.connectionIsActive = false;
-      return this.connection.stop();
+      return await this.connection?.stop();
     }
 
     return Promise.resolve(undefined);
   }
 
-  invoke(event: TS, ...args: unknown[]): Promise<void> {
-    return this.connection.invoke(event, ...args);
+  async invoke(event: TS, ...args: unknown[]): Promise<void> {
+    return await this.connection?.invoke(event, ...args);
   }
 
   on(event: TC, callback: (...args: never[]) => void): void {
-    this.connection.on(event, callback);
+    this.connection?.on(event, callback);
   }
 
   /**
@@ -78,9 +80,9 @@ export abstract class SignalrConnection<TC extends string, TS extends string>
    */
   off(event: TC, method?: (...args: unknown[]) => void) {
     if (method) {
-      this.connection.off(event, method);
+      this.connection?.off(event, method);
     } else {
-      this.connection.off(event);
+      this.connection?.off(event);
     }
   }
 }
