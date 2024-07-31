@@ -1,6 +1,11 @@
 import * as signalr from '@microsoft/signalr';
 import { ISignalrConnection } from './types';
 
+type EventListener<T extends string> = {
+  event: T;
+  callback: (...args: never[]) => void | Promise<void>;
+};
+
 /**
  * Encapsulates the ``signalr`` connection and provides
  * support for strong typing. For each hub on the .NET backend,
@@ -9,8 +14,11 @@ import { ISignalrConnection } from './types';
 export abstract class SignalrConnection<TC extends string, TS extends string>
   implements ISignalrConnection<TC, TS>
 {
-  protected connection: signalr.HubConnection;
+  private connection?: signalr.HubConnection;
   private connectionIsActive = false;
+  private hub;
+
+  private events: EventListener<TC>[] = [];
 
   /**
    * @param hub A relative path to the hub (e.g. ``chat``). If the path
@@ -21,26 +29,28 @@ export abstract class SignalrConnection<TC extends string, TS extends string>
       hub = hub.slice(1);
     }
 
-    this.connection = new signalr.HubConnectionBuilder()
-      .withUrl(`http://localhost:5000/${hub}`, {
-        accessTokenFactory() {
-          return localStorage.getItem('access_token') || '';
-        },
-        skipNegotiation: true,
-        transport: signalr.HttpTransportType.WebSockets,
-        withCredentials: true,
-      })
-      .withAutomaticReconnect()
-      .build();
+    this.hub = hub;
   }
 
   /**
    * Establishes a connection to the hub if one has not been established already
    */
-  start() {
+  async start(): Promise<void> {
     if (!this.connectionIsActive) {
-      this.connectionIsActive = true;
-      return this.connection.start();
+      this.connection = new signalr.HubConnectionBuilder()
+        .withUrl(`http://localhost:5000/${this.hub}`, {
+          accessTokenFactory() {
+            return localStorage.getItem('access_token') || '';
+          },
+          skipNegotiation: true,
+          transport: signalr.HttpTransportType.WebSockets,
+          withCredentials: true,
+        })
+        .withAutomaticReconnect()
+        .build();
+      return this.connection.start().then(() => {
+        this.connectionIsActive = true;
+      });
     }
 
     return Promise.resolve(undefined);
@@ -49,21 +59,26 @@ export abstract class SignalrConnection<TC extends string, TS extends string>
   /**
    * Disconnects from the hub if there is an active connection to it.
    */
-  stop() {
+  async stop(): Promise<void> {
     if (this.connectionIsActive) {
-      this.connectionIsActive = false;
-      return this.connection.stop();
+      return this.connection?.stop().then(() => {
+        this.connectionIsActive = false;
+        this.events = [];
+      });
     }
 
     return Promise.resolve(undefined);
   }
 
-  invoke(event: TS, ...args: unknown[]): Promise<void> {
-    return this.connection.invoke(event, ...args);
+  async invoke(event: TS, ...args: unknown[]): Promise<void> {
+    return await this.connection?.invoke(event, ...args);
   }
 
   on(event: TC, callback: (...args: never[]) => void): void {
-    this.connection.on(event, callback);
+    if (this.connection && !this.events.find((e) => e.callback === callback && e.event === event)) {
+      this.connection.on(event, callback);
+      this.events.push({ event, callback });
+    }
   }
 
   /**
@@ -78,9 +93,15 @@ export abstract class SignalrConnection<TC extends string, TS extends string>
    */
   off(event: TC, method?: (...args: unknown[]) => void) {
     if (method) {
-      this.connection.off(event, method);
+      if (this.connection) {
+        this.connection.off(event, method);
+        this.events = this.events.filter((e) => e.event !== event && e.callback === method);
+      }
     } else {
-      this.connection.off(event);
+      if (this.connection) {
+        this.connection.off(event);
+        this.events = this.events.filter((e) => e.event !== event);
+      }
     }
   }
 }
