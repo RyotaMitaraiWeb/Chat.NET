@@ -205,3 +205,19 @@ $shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 @mixin shadow() {
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
+
+@mixin apply-palette-bg($color) {
+  @include apply-values-for-modes(
+    background-color,
+    map.get($palette, $color, 'dark'),
+    map.get($palette, $color, 'light')
+  );
+}
+
+@mixin apply-palette-txt($color) {
+  @include apply-values-for-modes(
+    color,
+    map.get($palette, $color, 'contrast-text-dark'),
+    map.get($palette, $color, 'contrast-text-light')
+  );
+}
