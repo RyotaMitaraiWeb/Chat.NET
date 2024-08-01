@@ -1,5 +1,6 @@
 import IconButton from '@/components/button/iconButton/IconButton';
 import { ExtraSmallScreen, LargeScreen } from '@/components/screen/Screen';
+import './ToolbarIcon.scss';
 
 type ToolbarIconProps = {
   children: React.ReactNode;
