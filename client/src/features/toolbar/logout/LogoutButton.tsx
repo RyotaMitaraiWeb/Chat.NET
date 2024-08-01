@@ -3,7 +3,7 @@ import ToolbarIcon from '../toolbarIcon/ToolbarIcon';
 
 function LogoutButton(): React.JSX.Element {
   return (
-    <ToolbarIcon>
+    <ToolbarIcon label="Logout">
       <MdExitToApp />
     </ToolbarIcon>
   );

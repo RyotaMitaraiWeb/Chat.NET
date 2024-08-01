@@ -7,7 +7,7 @@ function ToolbarHome(): React.JSX.Element {
   return (
     <>
       <SmallScreen to="medium">
-        <ToolbarIcon href="/">
+        <ToolbarIcon href="/" label="Go to home page">
           <MdHome />
         </ToolbarIcon>
       </SmallScreen>

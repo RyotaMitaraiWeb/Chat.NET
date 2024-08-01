@@ -8,7 +8,7 @@ function MenuButton(): React.JSX.Element {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <ToolbarIcon onClick={() => setOpen(true)}>
+      <ToolbarIcon label="Open navigation menu" onClick={() => setOpen(true)}>
         <MdMenu />
       </ToolbarIcon>
       <SideNavigation open={open} onClose={() => setOpen(false)} />

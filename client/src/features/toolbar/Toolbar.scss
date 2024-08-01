@@ -11,8 +11,13 @@
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
 
-  display: flex;
-  align-items: center;
+  ul {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  }
 
   .spacing {
     flex: 1 1 auto;

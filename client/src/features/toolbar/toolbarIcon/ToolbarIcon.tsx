@@ -6,6 +6,7 @@ type ToolbarIconProps = {
   children: React.ReactNode;
   onClick?: () => void;
   href?: string;
+  label?: string;
 };
 
 function ToolbarIcon(props: ToolbarIconProps): React.JSX.Element {
@@ -18,6 +19,8 @@ function ToolbarIcon(props: ToolbarIconProps): React.JSX.Element {
           href={props.href}
           variant="text"
           size="medium"
+          aria-label={props.label}
+          title={props.label}
         >
           {props.children}
         </IconButton>
@@ -29,6 +32,8 @@ function ToolbarIcon(props: ToolbarIconProps): React.JSX.Element {
           href={props.href}
           variant="text"
           size="large"
+          aria-label={props.label}
+          title={props.label}
         >
           {props.children}
         </IconButton>

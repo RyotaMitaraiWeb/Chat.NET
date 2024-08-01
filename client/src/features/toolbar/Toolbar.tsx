@@ -8,11 +8,21 @@ import LogoutButton from './logout/LogoutButton';
 function Toolbar(): React.JSX.Element {
   return (
     <nav className="toolbar">
-      <MenuButton />
-      <ToolbarHome />
-      <div aria-hidden={true} className="spacing"></div>
-      <SettingsButton />
-      <LogoutButton />
+      <ul>
+        <li>
+          <MenuButton />
+        </li>
+        <li>
+          <ToolbarHome />
+        </li>
+        <div role="banner" aria-hidden={true} className="spacing"></div>
+        <li>
+          <SettingsButton />
+        </li>
+        <li>
+          <LogoutButton />
+        </li>
+      </ul>
     </nav>
   );
 }
