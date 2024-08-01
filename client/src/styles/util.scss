@@ -7,9 +7,23 @@
 }
 
 @mixin apply-values-for-modes($property, $dark-mode-value, $light-mode-value) {
-  #{$property}: $dark-mode-value;
+  @at-root {
+    body.light & {
+      #{$property}: $light-mode-value;
+    }
+
+    body.dark &,
+    body.sb-show-main & {
+      #{$property}: $dark-mode-value;
+    }
+  }
 
   @media (prefers-color-scheme: light) {
-    #{$property}: $light-mode-value;
+    @at-root {
+      body.system &,
+      body.sb-show-main & {
+        #{$property}: $light-mode-value;
+      }
+    }
   }
 }
