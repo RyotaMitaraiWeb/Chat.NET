@@ -13,7 +13,8 @@
     }
 
     body.dark &,
-    body.sb-show-main & {
+    body.sb-show-main &,
+    body.system & {
       #{$property}: $dark-mode-value;
     }
   }
