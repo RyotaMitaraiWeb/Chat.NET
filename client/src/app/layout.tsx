@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }): JSX.Element {
-  const theme = cookies().get('theme') || 'system';
+  const theme = cookies().get('theme')?.value || 'system';
   return (
     <html lang="en">
       <body className={`${inter.className} ${theme}`}>
