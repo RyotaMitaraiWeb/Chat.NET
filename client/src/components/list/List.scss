@@ -14,4 +14,8 @@
       border: none;
     }
   }
+
+  &.outlined.size-large > li {
+    border-bottom: 2px solid gray;
+  }
 }

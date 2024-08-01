@@ -1,0 +1,10 @@
+@import '../../../styles/font.scss';
+@import '../../../styles/viewports.scss';
+
+.toolbar-header {
+  @include apply-font-size('large');
+
+  @media (max-width: calc($large - 0.1px)) {
+    @include apply-font-size('medium');
+  }
+}

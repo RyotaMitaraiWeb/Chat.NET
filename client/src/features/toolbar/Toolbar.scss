@@ -1,0 +1,26 @@
+@import '../../styles/colors.scss';
+@import '../../styles/viewports.scss';
+
+.toolbar {
+  @include apply-palette-bg('primary');
+  @include apply-palette-txt('primary');
+
+  width: 100%;
+  padding: 16px;
+
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+
+  ul {
+    display: flex;
+    list-style: none;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  .spacing {
+    flex: 1 1 auto;
+    width: auto;
+  }
+}
