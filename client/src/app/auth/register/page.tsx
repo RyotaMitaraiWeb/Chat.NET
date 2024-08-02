@@ -9,9 +9,10 @@ import { MdLogin } from 'react-icons/md';
 import AuthField from '@/features/authField/AuthField';
 import { api } from '@/constants/api';
 import { useRouter } from 'next/navigation';
+import { AuthRequest, type AuthResponse } from '@/types/auth';
 
 export default function Page() {
-  const [data, setData] = useState({ username: '', password: '' });
+  const [data, setData] = useState<AuthRequest>({ username: '', password: '' });
   const router = useRouter();
 
   async function handleSubmit(event: React.FormEvent) {
@@ -25,7 +26,7 @@ export default function Page() {
     });
 
     if (res.ok) {
-      const data = await res.json();
+      const data: AuthResponse = await res.json();
       localStorage.setItem('access_token', data.token);
       router.push('/');
     }
