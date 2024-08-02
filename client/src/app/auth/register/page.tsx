@@ -46,6 +46,7 @@ export default function Page() {
             label="Username"
             value={data.password}
             onChange={(password) => setData({ ...data, password })}
+            type="password"
           />
         </div>
         <Typography className="hint">

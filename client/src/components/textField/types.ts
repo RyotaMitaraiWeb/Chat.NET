@@ -6,7 +6,7 @@ export interface TextFieldProps extends BaseInputProps {
    * Defaults to ``text`` if not passed. Turns the field
    * into a ``<textarea>`` if ``autoresize`` is ``true``
    */
-  type?: 'text' | 'number';
+  type?: 'text' | 'number' | 'password';
   required?: boolean;
   list?: string;
   placeholder?: string;

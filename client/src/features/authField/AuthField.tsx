@@ -7,9 +7,12 @@ type RegisterFieldProps = {
   value: string;
   onChange: (value: string) => void;
   label: string;
+  type?: 'text' | 'password';
 };
 
 function AuthField(props: RegisterFieldProps): React.JSX.Element {
+  const type = props.type || 'text';
+
   return (
     <>
       <ExtraSmallScreen to="large">
@@ -22,6 +25,7 @@ function AuthField(props: RegisterFieldProps): React.JSX.Element {
             props.onChange(e.target.value);
           }}
           helperText={`(${props.value.length} / 500)`}
+          type={type}
         />
       </ExtraSmallScreen>
       <LargeScreen>
@@ -35,6 +39,7 @@ function AuthField(props: RegisterFieldProps): React.JSX.Element {
             props.onChange(e.target.value);
           }}
           helperText={`(${props.value.length} / 500)`}
+          type={type}
         />
       </LargeScreen>
     </>
