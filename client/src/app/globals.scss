@@ -46,6 +46,11 @@ body {
   }
 }
 
+main {
+  width: 90%;
+  margin: 1em auto;
+}
+
 body.locked {
   overflow: hidden;
 }
