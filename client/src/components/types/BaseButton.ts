@@ -11,6 +11,7 @@ export interface BaseButtonProps extends ElementProps {
   href?: string;
   target?: React.HTMLAttributeAnchorTarget;
   onKeyUp?: (event: React.KeyboardEvent) => void;
+  type?: 'button' | 'submit';
 }
 
 export interface BaseButtonWithIconProps extends BaseButtonProps {

@@ -1,4 +1,5 @@
 @import '../styles/colors.scss';
+@import '../styles/util.scss';
 
 * {
   box-sizing: border-box;
@@ -7,8 +8,30 @@
 html,
 body {
   height: 100%;
-  @include apply-theme-background();
-  @include apply-theme-text();
+}
+
+body {
+  &.dark,
+  &.sb-show-main,
+  &.system {
+    background-color: $background-dark;
+    color: $text-medium-dark;
+  }
+
+  &.light {
+    background-color: $background-light;
+    color: $text-medium-light;
+  }
+
+  @include apply-transition(background-color 0.2s, color 0.2s);
+
+  @media (prefers-color-scheme: light) {
+    &.system,
+    &.sb-show-main {
+      background-color: $background-light;
+      color: $text-medium-light;
+    }
+  }
 }
 
 body.locked {
