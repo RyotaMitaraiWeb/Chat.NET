@@ -31,12 +31,17 @@ body {
   }
 
   &.animations-on {
-    transition: background-color 0.2s, color 0.2s;
+    transition:
+      background-color 0.2s,
+      color 0.2s;
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    &.system, &.sb-show-main {
-      transition: background-color 0.2s, color 0.2s;
+    &.system,
+    &.sb-show-main {
+      transition:
+        background-color 0.2s,
+        color 0.2s;
     }
   }
 }
