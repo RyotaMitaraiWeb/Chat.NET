@@ -3,7 +3,7 @@ import ToolbarIcon from '../toolbarIcon/ToolbarIcon';
 
 function SettingsButton(): React.JSX.Element {
   return (
-    <ToolbarIcon label="Open settings menu">
+    <ToolbarIcon href="/settings" label="Go to settings page">
       <MdSettings />
     </ToolbarIcon>
   );
