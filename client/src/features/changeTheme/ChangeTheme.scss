@@ -1,0 +1,8 @@
+.change-theme-form {
+  display: flex;
+  flex-direction: column;
+
+  .theme-option {
+    width: max-content;
+  }
+}
