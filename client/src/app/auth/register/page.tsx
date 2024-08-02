@@ -31,7 +31,7 @@ export default function Page() {
             onChange={(password) => setData({ ...data, password })}
           />
         </div>
-        <Typography>
+        <Typography className="hint">
           If you already have an account, you can sign in from the{' '}
           <Link href="/auth/login">login page</Link>.
         </Typography>
