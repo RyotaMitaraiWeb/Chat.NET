@@ -9,7 +9,7 @@ import { MdLogin } from 'react-icons/md';
 import AuthField from '@/features/authField/AuthField';
 import { api } from '@/constants/api';
 import { useRouter } from 'next/navigation';
-import { AuthRequest, type AuthResponse } from '@/types/auth';
+import { type AuthRequest, type AuthResponse } from '@/types/auth';
 
 export default function Page() {
   const [data, setData] = useState<AuthRequest>({ username: '', password: '' });
