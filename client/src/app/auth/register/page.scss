@@ -1,0 +1,27 @@
+.register {
+  h1 {
+    text-align: center;
+    margin-bottom: 1em;
+  }
+
+  .hint {
+    text-align: center;
+  }
+
+  .register-form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .fields .auth-field {
+    margin: 1.25em auto;
+    width: auto;
+    max-width: 595px;
+  }
+
+  .register-button {
+    width: max-content;
+    margin: 0 auto;
+  }
+}
