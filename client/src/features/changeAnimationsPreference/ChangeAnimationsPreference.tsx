@@ -34,7 +34,7 @@ function ChangeAnimationsPreference(props: { preference: string }): React.JSX.El
   }
 
   return (
-    <form onSubmit={handleSubmit} method="POST" className="settings-form">
+    <form onSubmit={handleSubmit} className="settings-form">
       <div className="change-animations-form">
         {preferences.map((t) => (
           <Radio

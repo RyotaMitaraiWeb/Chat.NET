@@ -31,7 +31,7 @@ function ChangeTheme(props: { theme: string }): React.JSX.Element {
   }
 
   return (
-    <form onSubmit={handleSubmit} method="POST" action="/api/settings" className="settings-form">
+    <form onSubmit={handleSubmit} className="settings-form">
       <div className="change-theme-form">
         {themes.map((t) => (
           <Radio

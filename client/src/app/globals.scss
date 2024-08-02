@@ -1,5 +1,4 @@
 @import '../styles/colors.scss';
-@import '../styles/util.scss';
 
 * {
   box-sizing: border-box;
@@ -23,13 +22,21 @@ body {
     color: $text-medium-light;
   }
 
-  @include apply-transition(background-color 0.2s, color 0.2s);
-
   @media (prefers-color-scheme: light) {
     &.system,
     &.sb-show-main {
       background-color: $background-light;
       color: $text-medium-light;
+    }
+  }
+
+  &.animations-on {
+    transition: background-color 0.2s, color 0.2s;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &.system, &.sb-show-main {
+      transition: background-color 0.2s, color 0.2s;
     }
   }
 }
