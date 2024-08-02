@@ -1,8 +1,17 @@
 @use 'sass:list';
 
 @mixin apply-transition($properties-and-times...) {
+  @at-root {
+    body.animations-on & {
+      transition: $properties-and-times;
+    }
+  }
+
   @media (prefers-reduced-motion: no-preference) {
-    transition: $properties-and-times;
+    body.system &,
+    body.sb-show-main & {
+      transition: $properties-and-times;
+    }
   }
 }
 

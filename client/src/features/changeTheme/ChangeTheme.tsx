@@ -24,14 +24,14 @@ function ChangeTheme(props: { theme: string }): React.JSX.Element {
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    fetch('/api/settings', { method: 'post', body: JSON.stringify({ theme }) });
+    fetch('/api/settings/theme', { method: 'post', body: JSON.stringify({ theme }) });
 
     document.body.classList.remove('light', 'dark', 'system');
     document.body.classList.add(theme);
   }
 
   return (
-    <form onSubmit={handleSubmit} method="POST" action="/api/settings" className="settings-form">
+    <form onSubmit={handleSubmit} className="settings-form">
       <div className="change-theme-form">
         {themes.map((t) => (
           <Radio

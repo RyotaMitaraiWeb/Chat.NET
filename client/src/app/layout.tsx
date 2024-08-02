@@ -15,9 +15,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }): JSX.Element {
   const theme = cookies().get('theme')?.value || 'system';
+  const animations = cookies().get('animations')?.value || 'system';
+
   return (
     <html lang="en">
-      <body className={`${inter.className} ${theme}`}>
+      <body className={`${inter.className} ${theme} animations-${animations}`}>
         <SnackbarContextProvider>
           <Toolbar />
           <main>{children}</main>
