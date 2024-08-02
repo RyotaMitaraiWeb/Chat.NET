@@ -7,12 +7,26 @@ import Link from '@/components/link/Link';
 import Button from '@/components/button/Button';
 import { MdLogin } from 'react-icons/md';
 import AuthField from '@/features/authField/AuthField';
+import { api } from '@/constants/api';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
   const [data, setData] = useState({ username: '', password: '' });
+  const router = useRouter();
 
-  function handleSubmit(event: React.FormEvent) {
+  async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+    const res = await fetch(api.auth.register, {
+      body: JSON.stringify(data),
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (res.ok) {
+      router.push('/');
+    }
   }
 
   return (
