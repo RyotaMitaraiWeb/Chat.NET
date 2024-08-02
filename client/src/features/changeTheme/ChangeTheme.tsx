@@ -24,7 +24,7 @@ function ChangeTheme(props: { theme: string }): React.JSX.Element {
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    fetch('/api/settings', { method: 'post', body: JSON.stringify({ theme }) });
+    fetch('/api/settings/theme', { method: 'post', body: JSON.stringify({ theme }) });
 
     document.body.classList.remove('light', 'dark', 'system');
     document.body.classList.add(theme);
