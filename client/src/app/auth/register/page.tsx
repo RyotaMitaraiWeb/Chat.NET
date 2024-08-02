@@ -1,12 +1,12 @@
 'use client';
 import Heading from '@/components/heading/Heading';
 import './page.scss';
-import TextField from '@/components/textField/client/TextField';
 import { useState } from 'react';
 import Typography from '@/components/typography/Typography';
 import Link from '@/components/link/Link';
 import Button from '@/components/button/Button';
 import { MdLogin } from 'react-icons/md';
+import AuthField from '@/features/authField/AuthField';
 
 export default function Page() {
   const [data, setData] = useState({ username: '', password: '' });
@@ -18,25 +18,17 @@ export default function Page() {
   return (
     <div className="register">
       <Heading level={1}>Create a Chat.NET profile</Heading>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="register-form">
         <div className="fields">
-          <TextField
+          <AuthField
             label="Username"
             value={data.username}
-            onChange={(e) => {
-              e.preventDefault();
-              setData({ ...data, username: e.target.value });
-            }}
-            helperText={`(${data.username.length} / 500)`}
+            onChange={(username) => setData({ ...data, username })}
           />
-          <TextField
-            label="Password"
+          <AuthField
+            label="Username"
             value={data.password}
-            onChange={(e) => {
-              e.preventDefault();
-              setData({ ...data, password: e.target.value });
-            }}
-            helperText={`(${data.username.length} / 500)`}
+            onChange={(password) => setData({ ...data, password })}
           />
         </div>
         <Typography>
@@ -49,6 +41,7 @@ export default function Page() {
           icon={<MdLogin />}
           type="submit"
           color="primary"
+          className="register-button"
         >
           Sign up
         </Button>
