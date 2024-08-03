@@ -17,7 +17,7 @@ export default function Page() {
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    const res = await fetch(api.auth.register, {
+    const res = await fetch(api.auth.login, {
       body: JSON.stringify(data),
       method: 'post',
       headers: {
@@ -34,7 +34,7 @@ export default function Page() {
 
   return (
     <div className="register">
-      <Heading level={1}>Create a Chat.NET profile</Heading>
+      <Heading level={1}>Log in to your Chat.NET profile</Heading>
       <form onSubmit={handleSubmit} className="register-form">
         <div className="fields">
           <AuthField
@@ -50,8 +50,7 @@ export default function Page() {
           />
         </div>
         <Typography className="hint">
-          If you already have an account, you can sign in from the{' '}
-          <Link href="/auth/login">login page</Link>.
+          If you do not have an account, you can <Link href="/auth/login">register for free</Link>.
         </Typography>
         <Button
           disabled={!data.password || !data.username}
@@ -61,7 +60,7 @@ export default function Page() {
           color="primary"
           className="register-button"
         >
-          Sign up
+          Sign in
         </Button>
       </form>
     </div>
