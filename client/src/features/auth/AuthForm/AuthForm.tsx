@@ -9,6 +9,8 @@ import { useState } from 'react';
 import { MdLogin } from 'react-icons/md';
 import AuthField from '../AuthField';
 import './AuthForm.scss';
+import { useSnackbar } from '@/hooks/useSnackbar/useSnackbar';
+import { snackbarMessages } from '@/constants/snackbarMessages';
 
 type AuthFormProps = {
   page: 'login' | 'register';
@@ -17,6 +19,8 @@ type AuthFormProps = {
 function AuthForm(props: AuthFormProps): React.JSX.Element {
   const [data, setData] = useState<AuthRequest>({ username: '', password: '' });
   const router = useRouter();
+
+  const snackbar = useSnackbar();
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -31,6 +35,7 @@ function AuthForm(props: AuthFormProps): React.JSX.Element {
     if (res.ok) {
       const data: AuthResponse = await res.json();
       localStorage.setItem('access_token', data.token);
+      snackbar.success(snackbarMessages.success[props.page], 10_000);
       router.push('/');
     }
   }
