@@ -8,8 +8,8 @@ function Loader(props: LoaderProps): React.JSX.Element {
   const Text = LoaderText(text);
 
   return (
-    <div className={`component-loader ${color || 'colorless'} ${className}`} {...others}>
-      <div className="spinner"></div>
+    <div className={`component-loader ${className}`} {...others}>
+      <div className={`spinner ${color || 'colorless'}`}></div>
       <div className="spinner-text">{Text}</div>
     </div>
   );

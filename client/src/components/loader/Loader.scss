@@ -3,32 +3,42 @@
 @import '../../styles/util.scss';
 
 .component-loader {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  position: relative;
-  animation: rotate 1s linear infinite;
-
-  @each $palette, $value in $palette {
-    &.#{$palette}::before {
-      @include apply-values-for-modes(
-        border-color,
-        map.get($value, 'dark'),
-        map.get($value, 'light')
-      );
-    }
+  .spinner-text {
+    text-align: center;
   }
 
-  &::before {
-    content: '';
-    box-sizing: border-box;
-    position: absolute;
-    inset: 0px;
+  .spinner {
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
-    animation: prixClipFix 2s linear infinite;
-    border-width: 5px;
-    border-style: solid;
-    @include apply-values-for-modes(border-color, white, black);
+    position: relative;
+    animation: rotate 1s linear infinite;
+    margin: 0 auto;
+
+    @each $palette, $value in $palette {
+      &.#{$palette}::before {
+        @include apply-values-for-modes(
+          border-color,
+          map.get($value, 'dark'),
+          map.get($value, 'light')
+        );
+      }
+    }
+
+    &.colorless::before {
+      @include apply-values-for-modes(border-color, white, black);
+    }
+
+    &::before {
+      content: '';
+      box-sizing: border-box;
+      position: absolute;
+      inset: 0px;
+      border-radius: 50%;
+      animation: prixClipFix 2s linear infinite;
+      border-width: 5px;
+      border-style: solid;
+    }
   }
 }
 
