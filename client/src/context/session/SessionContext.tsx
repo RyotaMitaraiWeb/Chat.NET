@@ -11,5 +11,13 @@ export function SessionContextProvider({
   children: React.ReactNode;
 }): React.JSX.Element {
   const [user, setUser] = useState<UserClaims>({ id: '', username: '', roles: [] });
-  return <SessionContext.Provider value={{ user, setUser }}>{children}</SessionContext.Provider>;
+
+  function restartUser() {
+    setUser({ id: '', username: '', roles: [] });
+  }
+  return (
+    <SessionContext.Provider value={{ user, setUser, restartUser }}>
+      {children}
+    </SessionContext.Provider>
+  );
 }

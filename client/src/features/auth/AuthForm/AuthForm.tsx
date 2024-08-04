@@ -38,14 +38,11 @@ function AuthForm(props: AuthFormProps): React.JSX.Element {
 
     if (res.ok) {
       const data: AuthResponse = await res.json();
-      authService.startSession(setUser);
       localStorage.setItem('access_token', data.token);
-
-      snackbar.success(snackbarMessages.success[props.page], 10_000);
-
-      router.push('/');
-
-      authService.startSession(setUser);
+      authService.startSession(setUser).then(() => {
+        snackbar.success(snackbarMessages.success[props.page], 10_000);
+        router.push('/');
+      });
     }
   }
 
