@@ -58,3 +58,15 @@ export const ColorsWithText: Story = {
     );
   },
 };
+
+export const Sizes: Story = {
+  render() {
+    return (
+      <>
+        <Loader size="small" text="Small" />
+        <Loader size="medium" text="Medium" />
+        <Loader size="large" text="Large" />
+      </>
+    );
+  },
+};
