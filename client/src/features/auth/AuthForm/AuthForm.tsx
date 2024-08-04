@@ -11,6 +11,7 @@ import AuthField from '../AuthField';
 import './AuthForm.scss';
 import { useSnackbar } from '@/hooks/useSnackbar/useSnackbar';
 import { snackbarMessages } from '@/constants/snackbarMessages';
+import { authService } from '@/services/authService';
 
 type AuthFormProps = {
   page: 'login' | 'register';
@@ -37,6 +38,9 @@ function AuthForm(props: AuthFormProps): React.JSX.Element {
       localStorage.setItem('access_token', data.token);
       snackbar.success(snackbarMessages.success[props.page], 10_000);
       router.push('/');
+
+      // TO-DO: register an actual event handler
+      authService.startSession((data) => console.log(data));
     }
   }
 
