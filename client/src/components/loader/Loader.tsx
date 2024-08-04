@@ -7,7 +7,7 @@ function Loader(props: LoaderProps): React.JSX.Element {
   return (
     <div className={`component-loader ${className}`} {...others}>
       <div className={`spinner ${color || 'colorless'} size-${size}`}></div>
-      <div className={`spinner-text size-${size}`}>{text}</div>
+      {text ? <div className={`spinner-text size-${size}`}>{text}</div> : null}
     </div>
   );
 }
