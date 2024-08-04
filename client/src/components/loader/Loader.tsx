@@ -4,11 +4,11 @@ import Typography from '../typography/Typography';
 import './Loader.scss';
 
 function Loader(props: LoaderProps): React.JSX.Element {
-  const { text, color = 'primary', className = '', ...others } = props;
+  const { text, color, className = '', ...others } = props;
   const Text = LoaderText(text);
 
   return (
-    <div className={`component-loader background-${color} ${className}`} {...others}>
+    <div className={`component-loader ${color || 'colorless'} ${className}`} {...others}>
       <div className="spinner"></div>
       <div className="spinner-text">{Text}</div>
     </div>
