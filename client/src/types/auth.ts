@@ -12,3 +12,5 @@ export type User = {
   id: string;
   username: string;
 };
+
+export type UserClaims = User & { roles: string[] };

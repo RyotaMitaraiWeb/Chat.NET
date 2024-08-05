@@ -5,6 +5,8 @@ import 'normalize.css';
 import { SnackbarContextProvider } from '@/hooks/useSnackbar/useSnackbar';
 import Toolbar from '@/features/toolbar/Toolbar';
 import { cookies } from 'next/headers';
+import App from './App';
+import { SessionContextProvider } from '@/context/session/SessionContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,10 +22,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
   return (
     <html lang="en">
       <body className={`${inter.className} ${theme} animations-${animations}`}>
-        <SnackbarContextProvider>
-          <Toolbar />
-          <main>{children}</main>
-        </SnackbarContextProvider>
+        <SessionContextProvider>
+          <SnackbarContextProvider>
+            <Toolbar />
+            <App>{children}</App>
+          </SnackbarContextProvider>
+        </SessionContextProvider>
       </body>
     </html>
   );

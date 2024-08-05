@@ -2,6 +2,7 @@ import Heading from '@/components/heading/Heading';
 import '../page.scss';
 import AuthForm from '@/features/auth/AuthForm/AuthForm';
 import { Suspense } from 'react';
+import Loader from '@/components/loader/Loader';
 
 export default function Page() {
   return (
@@ -9,7 +10,16 @@ export default function Page() {
       <Heading className="auth-heading" level={1}>
         Create a Chat.NET profile
       </Heading>
-      <Suspense fallback={<h1>Loading</h1>}>
+      <Suspense
+        fallback={
+          <Loader
+            className="auth-loader"
+            color="primary"
+            size="large"
+            text="Loading the form, please wait a moment!"
+          />
+        }
+      >
         <AuthForm page="register" />
       </Suspense>
     </div>

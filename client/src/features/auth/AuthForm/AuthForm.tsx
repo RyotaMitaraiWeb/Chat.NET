@@ -5,10 +5,14 @@ import { api } from '@/constants/api';
 import { AuthRequest, AuthResponse } from '@/types/auth';
 import Link from '@/components/link/Link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { use, useState } from 'react';
 import { MdLogin } from 'react-icons/md';
 import AuthField from '../AuthField';
 import './AuthForm.scss';
+import { useSnackbar } from '@/hooks/useSnackbar/useSnackbar';
+import { snackbarMessages } from '@/constants/snackbarMessages';
+import { authService } from '@/services/authService';
+import { SessionContext } from '@/context/session/SessionContext';
 
 type AuthFormProps = {
   page: 'login' | 'register';
@@ -17,6 +21,10 @@ type AuthFormProps = {
 function AuthForm(props: AuthFormProps): React.JSX.Element {
   const [data, setData] = useState<AuthRequest>({ username: '', password: '' });
   const router = useRouter();
+
+  const { setUser } = use(SessionContext);
+
+  const snackbar = useSnackbar();
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -31,7 +39,20 @@ function AuthForm(props: AuthFormProps): React.JSX.Element {
     if (res.ok) {
       const data: AuthResponse = await res.json();
       localStorage.setItem('access_token', data.token);
-      router.push('/');
+      authService.startSession(setUser).then(() => {
+        snackbar.success(snackbarMessages.success[props.page], 10_000);
+        router.push('/');
+      });
+    } else if (res.status === 401) {
+      if (props.page === 'login') {
+        snackbar.error(
+          {
+            snackbarTitle: snackbarMessages.error.login,
+            snackbarContent: 'Check your spelling and feel free to try again',
+          },
+          5_000,
+        );
+      }
     }
   }
 
@@ -58,7 +79,8 @@ function AuthForm(props: AuthFormProps): React.JSX.Element {
         </Typography>
       ) : (
         <Typography className="hint">
-          If you do not have an account, you can <Link href="/auth/login">register for free</Link>.
+          If you do not have an account, you can{' '}
+          <Link href="/auth/register">register for free</Link>.
         </Typography>
       )}
       <Button
