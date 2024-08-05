@@ -3,6 +3,7 @@ import Drawer from '@/components/drawer/Drawer';
 import List from '@/components/list/List';
 import ListItemButton from '@/components/list/listItemButton/ListItemButton';
 import { SessionContext } from '@/context/session/SessionContext';
+import { useSession } from '@/hooks/useSession/useSession';
 import { use } from 'react';
 import {
   MdAdminPanelSettings,
@@ -33,6 +34,7 @@ type SideNavigationProps = {
 
 function SideNavigation(props: SideNavigationProps): React.JSX.Element {
   const { user } = use(SessionContext);
+  const { endSession } = useSession();
 
   const links: SideNavigationLink[] = [
     {
@@ -72,6 +74,7 @@ function SideNavigation(props: SideNavigationProps): React.JSX.Element {
     {
       text: 'Sign out',
       icon: <MdExitToApp />,
+      onClick: endSession,
       shouldRender: () => user.id !== '',
     },
   ];
