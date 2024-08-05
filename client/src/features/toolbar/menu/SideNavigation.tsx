@@ -2,6 +2,8 @@
 import Drawer from '@/components/drawer/Drawer';
 import List from '@/components/list/List';
 import ListItemButton from '@/components/list/listItemButton/ListItemButton';
+import { SessionContext } from '@/context/session/SessionContext';
+import { use } from 'react';
 import {
   MdAdminPanelSettings,
   MdExitToApp,
@@ -17,6 +19,11 @@ type SideNavigationLink = {
   onClick?: () => void;
   icon: React.ReactNode;
   text: string;
+
+  /**
+   * If not specified, this will always render
+   */
+  shouldRender?: () => boolean;
 };
 
 type SideNavigationProps = {
@@ -25,6 +32,8 @@ type SideNavigationProps = {
 };
 
 function SideNavigation(props: SideNavigationProps): React.JSX.Element {
+  const { user } = use(SessionContext);
+
   const links: SideNavigationLink[] = [
     {
       href: '/',
@@ -35,6 +44,7 @@ function SideNavigation(props: SideNavigationProps): React.JSX.Element {
       href: '/admin',
       text: 'Admin panel',
       icon: <MdAdminPanelSettings />,
+      shouldRender: () => user.roles.includes('Administrator'),
     },
     {
       href: '/chat/search',
@@ -42,23 +52,27 @@ function SideNavigation(props: SideNavigationProps): React.JSX.Element {
       icon: <MdSearch />,
     },
     {
-      href: '/profile/admin',
+      href: `/profile/${user.username}`,
       text: 'My profile',
       icon: <MdPersonOutline />,
+      shouldRender: () => user.id !== '',
     },
     {
       href: '/auth/login',
       text: 'Login',
       icon: <MdLogin />,
+      shouldRender: () => user.id === '',
     },
     {
       href: '/auth/register',
       text: 'Register',
       icon: <MdPersonAdd />,
+      shouldRender: () => user.id === '',
     },
     {
       text: 'Sign out',
       icon: <MdExitToApp />,
+      shouldRender: () => user.id !== '',
     },
   ];
 
@@ -66,15 +80,7 @@ function SideNavigation(props: SideNavigationProps): React.JSX.Element {
     <Drawer side="left" open={props.open} onClose={props.onClose}>
       <List outlined size="large">
         {links.map((l) => (
-          <ListItemButton
-            className="side-navigation-button side-navigation-link"
-            key={l.text}
-            icon={l.icon}
-            href={l.href}
-            onClick={l.onClick}
-          >
-            {l.text}
-          </ListItemButton>
+          <LinkItem key={l.text} {...l} />
         ))}
         <ListItemButton inset className="side-navigation-button" onClick={props.onClose}>
           Close menu
@@ -82,6 +88,26 @@ function SideNavigation(props: SideNavigationProps): React.JSX.Element {
       </List>
     </Drawer>
   );
+}
+
+function LinkItem(props: SideNavigationLink) {
+  const item = (
+    <ListItemButton
+      className="side-navigation-button side-navigation-link"
+      key={props.text}
+      icon={props.icon}
+      href={props.href}
+      onClick={props.onClick}
+    >
+      {props.text}
+    </ListItemButton>
+  );
+
+  if (props.shouldRender === undefined) {
+    return item;
+  }
+
+  return props.shouldRender() ? item : <></>;
 }
 
 export default SideNavigation;
