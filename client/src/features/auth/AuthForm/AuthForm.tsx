@@ -43,6 +43,16 @@ function AuthForm(props: AuthFormProps): React.JSX.Element {
         snackbar.success(snackbarMessages.success[props.page], 10_000);
         router.push('/');
       });
+    } else if (res.status === 401) {
+      if (props.page === 'login') {
+        snackbar.error(
+          {
+            snackbarTitle: snackbarMessages.error.login,
+            snackbarContent: 'Check your spelling and feel free to try again',
+          },
+          5_000,
+        );
+      }
     }
   }
 
