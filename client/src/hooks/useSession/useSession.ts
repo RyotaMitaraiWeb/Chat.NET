@@ -21,10 +21,13 @@ export const useSession = () => {
   }
 
   async function endSession() {
-    chatHubConnection.stop().then(() => {
-      restartUser();
-      router.push('/auth/login');
-    });
+    chatHubConnection
+      .invoke('EndSession')
+      .then(() => chatHubConnection.stop())
+      .then(() => {
+        restartUser();
+        router.push('/auth/login');
+      });
   }
 
   return { startSession, endSession };
