@@ -12,7 +12,12 @@ export default function Page() {
       </Heading>
       <Suspense
         fallback={
-          <Loader color="primary" size="large" text="Loading the form, please wait a moment!" />
+          <Loader
+            className="auth-loader"
+            color="primary"
+            size="large"
+            text="Loading the form, please wait a moment!"
+          />
         }
       >
         <AuthForm page="register" />
