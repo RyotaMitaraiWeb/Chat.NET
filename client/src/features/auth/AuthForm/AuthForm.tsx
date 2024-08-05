@@ -79,7 +79,8 @@ function AuthForm(props: AuthFormProps): React.JSX.Element {
         </Typography>
       ) : (
         <Typography className="hint">
-          If you do not have an account, you can <Link href="/auth/login">register for free</Link>.
+          If you do not have an account, you can{' '}
+          <Link href="/auth/register">register for free</Link>.
         </Typography>
       )}
       <Button
