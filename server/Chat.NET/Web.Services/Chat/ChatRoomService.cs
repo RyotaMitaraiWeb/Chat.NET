@@ -40,9 +40,34 @@ namespace Web.Services.Chat
             return ChatRoomDeleteResult.Success;
         }
 
-        public Task<GetChatRoomMessageViewModel> GetById(int chatRoomId)
+        public async Task<GetChatRoomViewModel?> GetById(int chatRoomId)
         {
-            throw new NotImplementedException();
+            var room = await this.repository.AllReadonly<ChatRoom>()
+                .Where(cr => cr.Id == chatRoomId && !cr.IsDeleted)
+                .Select(cr => new GetChatRoomViewModel()
+                {
+                    Id = cr.Id,
+                    Title = cr.Title,
+                    Description = cr.Description,
+                })
+                .FirstOrDefaultAsync();
+
+            return room;
+        }
+
+        public async Task<IEnumerable<GetChatRoomsViewModel>> Search(string title = "")
+        {
+            var rooms = await this.repository.AllReadonly<ChatRoom>()
+                .Where(cr => cr.Title.Contains(title) && !cr.IsDeleted)
+                .Select(cr => new GetChatRoomsViewModel()
+                {
+                    Id = cr.Id,
+                    Title = cr.Title,
+                    Description = cr.Description,
+                })
+                .ToListAsync();
+
+            return rooms;
         }
 
         public async Task<ChatRoomUpdateResult> Update(UpdateChatRoomViewModel chatRoom, int chatRoomId)
