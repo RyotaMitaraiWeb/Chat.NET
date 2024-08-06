@@ -5,10 +5,10 @@ namespace Contracts
 {
     public interface IChatRoomService
     {
-        public GetChatRoomMessageViewModel GetById(int chatRoomId);
-        public int Create(CreateChatRoomViewModel chatRoom);
-        public ChatRoomUpdateResult Update(UpdateChatRoomViewModel chatRoom);
-        public ChatRoomDeleteResult Delete(int chatRoomId);
+        public Task<GetChatRoomMessageViewModel> GetById(int chatRoomId);
+        public Task<int> Create(CreateChatRoomViewModel chatRoom);
+        public Task<ChatRoomUpdateResult> Update(UpdateChatRoomViewModel chatRoom, int chatRoomId);
+        public Task<ChatRoomDeleteResult> Delete(int chatRoomId);
 
     }
 }

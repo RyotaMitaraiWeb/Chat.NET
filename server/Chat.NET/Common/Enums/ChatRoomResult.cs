@@ -3,12 +3,12 @@
     public enum ChatRoomUpdateResult
     {
         Success,
-        Fail,
+        DoesNotExist,
     }
 
     public enum ChatRoomDeleteResult
     {
         Success,
-        Fail,
+        DoesNotExist,
     }
 }
