@@ -36,45 +36,56 @@ function SideNavigation(props: SideNavigationProps): React.JSX.Element {
   const { user } = use(SessionContext);
   const { endSession } = useSession();
 
+  function onClick(callback: () => void) {
+    props.onClose();
+    callback();
+  }
+
   const links: SideNavigationLink[] = [
     {
       href: '/',
       text: 'Home',
       icon: <MdHome />,
+      onClick: props.onClose,
     },
     {
       href: '/admin',
       text: 'Admin panel',
       icon: <MdAdminPanelSettings />,
       shouldRender: () => user.roles.includes('Administrator'),
+      onClick: props.onClose,
     },
     {
       href: '/chat/search',
       text: 'Search chat rooms',
       icon: <MdSearch />,
+      onClick: props.onClose,
     },
     {
       href: `/profile/${user.username}`,
       text: 'My profile',
       icon: <MdPersonOutline />,
       shouldRender: () => user.id !== '',
+      onClick: props.onClose,
     },
     {
       href: '/auth/login',
       text: 'Login',
       icon: <MdLogin />,
       shouldRender: () => user.id === '',
+      onClick: props.onClose,
     },
     {
       href: '/auth/register',
       text: 'Register',
       icon: <MdPersonAdd />,
       shouldRender: () => user.id === '',
+      onClick: props.onClose,
     },
     {
       text: 'Sign out',
       icon: <MdExitToApp />,
-      onClick: endSession,
+      onClick: onClick.bind(null, endSession),
       shouldRender: () => user.id !== '',
     },
   ];
