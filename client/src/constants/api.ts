@@ -5,5 +5,6 @@ export const api = {
   auth: {
     register: `${auth}/register`,
     login: `${auth}/login`,
+    usernameExists: (username: string) => `${auth}/username-exists/${username}`,
   },
 };

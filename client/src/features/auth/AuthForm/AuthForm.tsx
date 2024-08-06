@@ -12,6 +12,7 @@ import './AuthForm.scss';
 import { useSnackbar } from '@/hooks/useSnackbar/useSnackbar';
 import { snackbarMessages } from '@/constants/snackbarMessages';
 import { useSession } from '@/hooks/useSession/useSession';
+import { registerValidator } from '@/validators/registerValidator';
 
 type AuthFormProps = {
   page: 'login' | 'register';
@@ -19,37 +20,54 @@ type AuthFormProps = {
 
 function AuthForm(props: AuthFormProps): React.JSX.Element {
   const [data, setData] = useState<AuthRequest>({ username: '', password: '' });
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [pending, setPending] = useState(false);
   const router = useRouter();
   const { startSession } = useSession();
   const snackbar = useSnackbar();
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    const res = await fetch(api.auth[props.page], {
-      body: JSON.stringify(data),
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    setPending(true);
+    if (props.page === 'register') {
+      const errors = await registerValidator(data);
+      setValidationErrors(errors);
+      setPending(false);
 
-    if (res.ok) {
-      const data: AuthResponse = await res.json();
-      localStorage.setItem('access_token', data.token);
-      startSession().then(() => {
-        snackbar.success(snackbarMessages.success[props.page], 10_000);
-        router.push('/');
-      });
-    } else if (res.status === 401) {
-      if (props.page === 'login') {
-        snackbar.error(
-          {
-            snackbarTitle: snackbarMessages.error.login,
-            snackbarContent: 'Check your spelling and feel free to try again',
-          },
-          5_000,
-        );
+      if (errors.length) {
+        return;
       }
+    }
+
+    try {
+      const res = await fetch(api.auth[props.page], {
+        body: JSON.stringify(data),
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (res.ok) {
+        const data: AuthResponse = await res.json();
+        localStorage.setItem('access_token', data.token);
+        startSession().then(() => {
+          snackbar.success(snackbarMessages.success[props.page], 10_000);
+          router.push('/');
+        });
+      } else if (res.status === 401) {
+        if (props.page === 'login') {
+          snackbar.error(
+            {
+              snackbarTitle: snackbarMessages.error.login,
+              snackbarContent: 'Check your spelling and feel free to try again',
+            },
+            5_000,
+          );
+        }
+      }
+    } finally {
+      setPending(false);
     }
   }
 
@@ -80,8 +98,17 @@ function AuthForm(props: AuthFormProps): React.JSX.Element {
           <Link href="/auth/register">register for free</Link>.
         </Typography>
       )}
+      {validationErrors.length ? (
+        <ul className="auth-validation-errors">
+          {validationErrors.map((ve) => (
+            <Typography color="error" selector="li" key={ve} className="auth-validation-error">
+              {ve}
+            </Typography>
+          ))}
+        </ul>
+      ) : null}
       <Button
-        disabled={!data.password || !data.username}
+        disabled={!data.password || !data.username || pending}
         size="large"
         icon={<MdLogin />}
         type="submit"
