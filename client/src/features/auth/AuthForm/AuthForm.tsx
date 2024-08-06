@@ -12,6 +12,7 @@ import './AuthForm.scss';
 import { useSnackbar } from '@/hooks/useSnackbar/useSnackbar';
 import { snackbarMessages } from '@/constants/snackbarMessages';
 import { useSession } from '@/hooks/useSession/useSession';
+import { registerValidator } from '@/validators/registerValidator';
 
 type AuthFormProps = {
   page: 'login' | 'register';
@@ -19,12 +20,22 @@ type AuthFormProps = {
 
 function AuthForm(props: AuthFormProps): React.JSX.Element {
   const [data, setData] = useState<AuthRequest>({ username: '', password: '' });
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const router = useRouter();
   const { startSession } = useSession();
   const snackbar = useSnackbar();
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+    if (props.page === 'register') {
+      const errors = await registerValidator(data);
+      setValidationErrors(errors);
+
+      if (errors.length) {
+        return;
+      }
+    }
+
     const res = await fetch(api.auth[props.page], {
       body: JSON.stringify(data),
       method: 'post',
@@ -80,6 +91,15 @@ function AuthForm(props: AuthFormProps): React.JSX.Element {
           <Link href="/auth/register">register for free</Link>.
         </Typography>
       )}
+      {validationErrors.length ? (
+        <ul className="auth-validation-errors">
+          {validationErrors.map((ve) => (
+            <Typography color="error" selector="li" key={ve} className="auth-validation-error">
+              {ve}
+            </Typography>
+          ))}
+        </ul>
+      ) : null}
       <Button
         disabled={!data.password || !data.username}
         size="large"
