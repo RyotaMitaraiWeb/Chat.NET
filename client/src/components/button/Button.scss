@@ -6,10 +6,13 @@
 
 .component-button {
   /* General */
-  border-radius: 5px;
   border: 0;
   display: inline-flex;
   text-align: center;
+
+  &:not(.component-icon-button) {
+    border-radius: 5px;
+  }
 
   /* in case a color is not provided */
   background-color: transparent;

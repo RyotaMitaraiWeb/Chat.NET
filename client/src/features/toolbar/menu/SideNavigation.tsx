@@ -2,8 +2,10 @@
 import Drawer from '@/components/drawer/Drawer';
 import List from '@/components/list/List';
 import ListItemButton from '@/components/list/listItemButton/ListItemButton';
+import { snackbarMessages } from '@/constants/snackbarMessages';
 import { SessionContext } from '@/context/session/SessionContext';
 import { useSession } from '@/hooks/useSession/useSession';
+import { useSnackbar } from '@/hooks/useSnackbar/useSnackbar';
 import { use } from 'react';
 import {
   MdAdminPanelSettings,
@@ -35,46 +37,61 @@ type SideNavigationProps = {
 function SideNavigation(props: SideNavigationProps): React.JSX.Element {
   const { user } = use(SessionContext);
   const { endSession } = useSession();
+  const snackbar = useSnackbar();
+
+  function logout() {
+    props.onClose();
+    endSession().then(() => {
+      localStorage.removeItem('access_token');
+      snackbar.success(snackbarMessages.success.logout);
+    });
+  }
 
   const links: SideNavigationLink[] = [
     {
       href: '/',
       text: 'Home',
       icon: <MdHome />,
+      onClick: props.onClose,
     },
     {
       href: '/admin',
       text: 'Admin panel',
       icon: <MdAdminPanelSettings />,
       shouldRender: () => user.roles.includes('Administrator'),
+      onClick: props.onClose,
     },
     {
       href: '/chat/search',
       text: 'Search chat rooms',
       icon: <MdSearch />,
+      onClick: props.onClose,
     },
     {
       href: `/profile/${user.username}`,
       text: 'My profile',
       icon: <MdPersonOutline />,
       shouldRender: () => user.id !== '',
+      onClick: props.onClose,
     },
     {
       href: '/auth/login',
       text: 'Login',
       icon: <MdLogin />,
       shouldRender: () => user.id === '',
+      onClick: props.onClose,
     },
     {
       href: '/auth/register',
       text: 'Register',
       icon: <MdPersonAdd />,
       shouldRender: () => user.id === '',
+      onClick: props.onClose,
     },
     {
       text: 'Sign out',
       icon: <MdExitToApp />,
-      onClick: endSession,
+      onClick: logout,
       shouldRender: () => user.id !== '',
     },
   ];
