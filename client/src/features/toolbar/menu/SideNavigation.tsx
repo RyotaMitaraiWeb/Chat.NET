@@ -2,8 +2,10 @@
 import Drawer from '@/components/drawer/Drawer';
 import List from '@/components/list/List';
 import ListItemButton from '@/components/list/listItemButton/ListItemButton';
+import { snackbarMessages } from '@/constants/snackbarMessages';
 import { SessionContext } from '@/context/session/SessionContext';
 import { useSession } from '@/hooks/useSession/useSession';
+import { useSnackbar } from '@/hooks/useSnackbar/useSnackbar';
 import { use } from 'react';
 import {
   MdAdminPanelSettings,
@@ -35,10 +37,14 @@ type SideNavigationProps = {
 function SideNavigation(props: SideNavigationProps): React.JSX.Element {
   const { user } = use(SessionContext);
   const { endSession } = useSession();
+  const snackbar = useSnackbar();
 
-  function onClick(callback: () => void) {
+  function logout() {
     props.onClose();
-    callback();
+    endSession().then(() => {
+      localStorage.removeItem('access_token');
+      snackbar.success(snackbarMessages.success.logout);
+    });
   }
 
   const links: SideNavigationLink[] = [
@@ -85,7 +91,7 @@ function SideNavigation(props: SideNavigationProps): React.JSX.Element {
     {
       text: 'Sign out',
       icon: <MdExitToApp />,
-      onClick: onClick.bind(null, endSession),
+      onClick: logout,
       shouldRender: () => user.id !== '',
     },
   ];
