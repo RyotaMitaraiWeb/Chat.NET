@@ -21,46 +21,53 @@ type AuthFormProps = {
 function AuthForm(props: AuthFormProps): React.JSX.Element {
   const [data, setData] = useState<AuthRequest>({ username: '', password: '' });
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [pending, setPending] = useState(false);
   const router = useRouter();
   const { startSession } = useSession();
   const snackbar = useSnackbar();
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
+    setPending(true);
     if (props.page === 'register') {
       const errors = await registerValidator(data);
       setValidationErrors(errors);
+      setPending(false);
 
       if (errors.length) {
         return;
       }
     }
 
-    const res = await fetch(api.auth[props.page], {
-      body: JSON.stringify(data),
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    if (res.ok) {
-      const data: AuthResponse = await res.json();
-      localStorage.setItem('access_token', data.token);
-      startSession().then(() => {
-        snackbar.success(snackbarMessages.success[props.page], 10_000);
-        router.push('/');
+    try {
+      const res = await fetch(api.auth[props.page], {
+        body: JSON.stringify(data),
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
-    } else if (res.status === 401) {
-      if (props.page === 'login') {
-        snackbar.error(
-          {
-            snackbarTitle: snackbarMessages.error.login,
-            snackbarContent: 'Check your spelling and feel free to try again',
-          },
-          5_000,
-        );
+
+      if (res.ok) {
+        const data: AuthResponse = await res.json();
+        localStorage.setItem('access_token', data.token);
+        startSession().then(() => {
+          snackbar.success(snackbarMessages.success[props.page], 10_000);
+          router.push('/');
+        });
+      } else if (res.status === 401) {
+        if (props.page === 'login') {
+          snackbar.error(
+            {
+              snackbarTitle: snackbarMessages.error.login,
+              snackbarContent: 'Check your spelling and feel free to try again',
+            },
+            5_000,
+          );
+        }
       }
+    } finally {
+      setPending(false);
     }
   }
 
@@ -101,7 +108,7 @@ function AuthForm(props: AuthFormProps): React.JSX.Element {
         </ul>
       ) : null}
       <Button
-        disabled={!data.password || !data.username}
+        disabled={!data.password || !data.username || pending}
         size="large"
         icon={<MdLogin />}
         type="submit"

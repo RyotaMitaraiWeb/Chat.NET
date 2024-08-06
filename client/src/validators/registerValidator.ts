@@ -13,9 +13,12 @@ export async function registerValidator(user: AuthRequest): Promise<string[]> {
     headers: {
       'Content-Type': 'application/json',
     },
+    next: {
+      revalidate: false,
+    },
   });
 
-  if (res.ok) {
+  if (!res.ok) {
     return [];
   } else {
     return [registerValidationErrorMessages.username.exists];
