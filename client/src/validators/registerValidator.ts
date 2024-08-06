@@ -13,9 +13,7 @@ export async function registerValidator(user: AuthRequest): Promise<string[]> {
     headers: {
       'Content-Type': 'application/json',
     },
-    next: {
-      revalidate: false,
-    },
+    cache: 'no-cache',
   });
 
   if (!res.ok) {
