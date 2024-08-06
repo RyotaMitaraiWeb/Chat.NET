@@ -1,10 +1,14 @@
 ﻿namespace Common.Enums
 {
-    public enum ChatRoomResult
+    public enum ChatRoomUpdateResult
     {
-        UpdateSucceeded,
-        UpdateFailed,
-        DeleteSucceeded,
-        DeleteFailed,
+        Success,
+        Fail,
+    }
+
+    public enum ChatRoomDeleteResult
+    {
+        Success,
+        Fail,
     }
 }
