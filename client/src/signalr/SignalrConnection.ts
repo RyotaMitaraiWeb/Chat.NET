@@ -40,7 +40,6 @@ export abstract class SignalrConnection<TC extends string, TS extends string>
       this.connection = new signalr.HubConnectionBuilder()
         .withUrl(`http://localhost:5000/${this.hub}`, {
           accessTokenFactory() {
-            console.log(localStorage.getItem('access_token'));
             return localStorage.getItem('access_token') || '';
           },
           skipNegotiation: true,
