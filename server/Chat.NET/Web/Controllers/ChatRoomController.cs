@@ -15,6 +15,7 @@ namespace Web.Controllers
 
         [HttpGet]
         [Route("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> FindById(int id)
         {
             var room = await this.chatRoomService.GetById(id);
@@ -28,7 +29,8 @@ namespace Web.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> Search([FromQuery] string title)
+        [AllowAnonymous]
+        public async Task<IActionResult> Search([FromQuery] string title = "")
         {
             var rooms = await this.chatRoomService.Search(title: title);
             return Ok(rooms);
