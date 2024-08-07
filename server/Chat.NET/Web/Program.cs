@@ -20,6 +20,7 @@ using Web.Policy.HasRole;
 using Web.Policy.IsAuthenticated;
 using Web.Services.Admin;
 using Web.Services.Authentication;
+using Web.Services.Chat;
 using Web.Services.Session;
 
 namespace Chat.NET
@@ -68,6 +69,7 @@ namespace Chat.NET
             builder.Services.AddScoped<IAuthorizationHandler, IsAuthenticatedHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, HasRoleHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, HasRoleSignalRHandler>();
+            builder.Services.AddScoped<IChatRoomService, ChatRoomService>();
 
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
@@ -108,9 +110,11 @@ namespace Chat.NET
                     {
                         var accessToken = context.Request.Query["access_token"];
                         var path = context.HttpContext.Request.Path;
+                        Console.WriteLine(accessToken);
                         if (!string.IsNullOrEmpty(accessToken) &&
                             (path.StartsWithSegments($"/{HubURLs.ChatURL}")))
                         {
+                            Console.WriteLine("Read token");
                             context.Token = accessToken;
                         }
                         return Task.CompletedTask;
@@ -186,6 +190,15 @@ namespace Chat.NET
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
+            app.UseCors(options =>
+            {
+                string? origin = builder.Configuration["ALLOWED_ORIGINS"];
+                origin ??= "localhost";
+                options.WithOrigins(origin);
+                options.WithMethods("GET", "POST", "PUT", "DELETE", "PATCH");
+                options.AllowAnyHeader();
+                options.AllowCredentials();
+            });
 
             app.MapHub<ChatHub>($"/{HubURLs.ChatURL}");
 
@@ -200,15 +213,7 @@ namespace Chat.NET
 
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseCors(options =>
-            {
-                string? origin = builder.Configuration["ALLOWED_ORIGINS"];
-                origin ??= "localhost";
-                options.WithOrigins(origin);
-                options.WithMethods("GET", "POST", "PUT", "DELETE", "PATCH");
-                options.AllowAnyHeader();
-                options.AllowCredentials();
-            });
+            
 
 
             app.MapControllers();

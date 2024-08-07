@@ -14,7 +14,7 @@ export type chatHubServerMethods =
 
 class ChatHubConnection extends SignalrConnection<chatHubClientMethods, chatHubServerMethods> {
   constructor() {
-    super('chat');
+    super('chat-hub');
   }
 }
 
