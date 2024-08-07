@@ -30,7 +30,6 @@ namespace Web.Policy.HasRole
         {
             var claims = this.jwtService.ExtractUserFromJWT(bearer);
             var user = (await this.userSessionStore.GetUser(claims))!;
-            Console.WriteLine(user);
 
             bool hasRole = HasRole(user.Roles, requirement.RequiredRoles);
             if (!hasRole)
