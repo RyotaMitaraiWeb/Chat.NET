@@ -50,6 +50,7 @@ namespace Infrastructure.Extensions
 
                 await userManager.CreateAsync(admin);
                 await userManager.AddToRoleAsync(admin, Roles.Admin);
+                await userManager.AddToRoleAsync(admin, Roles.Moderator);
                 await userManager.AddToRoleAsync(admin, Roles.ChatModerator);
                 await userManager.AddToRoleAsync(admin, Roles.User);
             })
