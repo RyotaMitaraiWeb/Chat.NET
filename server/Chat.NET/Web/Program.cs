@@ -2,6 +2,7 @@
 using Common.Authentication;
 using Common.Hubs;
 using Contracts;
+using Infrastructure.Extensions;
 using Infrastructure.Postgres;
 using Infrastructure.Postgres.Entities;
 using Infrastructure.Postgres.Repository;
@@ -217,6 +218,7 @@ namespace Chat.NET
 
 
             app.MapControllers();
+            app.SeedAdministrator("admin", "admin");
 
             app.Run();
         }
