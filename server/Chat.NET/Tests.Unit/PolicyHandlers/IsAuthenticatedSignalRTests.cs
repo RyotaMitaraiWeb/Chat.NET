@@ -18,23 +18,23 @@ using Common.Authentication;
 
 namespace Tests.Unit.PolicyHandlers
 {
-    public class IsAuthenticatedTests
+    public class IsAuthenticatedSignalRTests
     {
         private readonly IHttpContextAccessor httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         private readonly IJwtService jwtService = Substitute.For<IJwtService>();
         private readonly IUserSessionStore userSessionStore = Substitute.For<IUserSessionStore>();
-        public IsAuthenticatedHandler IsAuthenticatedHandler { get; set; }
+        public IsAuthenticatedSignalRHandler IsAuthenticatedHandler { get; set; }
 
         [SetUp]
         public void Setup()
         {
-            this.IsAuthenticatedHandler = new IsAuthenticatedHandler(this.httpContextAccessor, this.jwtService, this.userSessionStore);
+            this.IsAuthenticatedHandler = new IsAuthenticatedSignalRHandler(this.httpContextAccessor, this.jwtService, this.userSessionStore);
         }
 
         [Test]
         public async Task Test_WorksWhenAValidTokenIsFound()
         {
-            var requirement = new IsAuthenticatedRequirement();
+            var requirement = new IsAuthenticatedSignalRRequirement();
             string bearer = "valid_token";
 
             var claims = new UserClaimsViewModel()
@@ -65,7 +65,7 @@ namespace Tests.Unit.PolicyHandlers
         [Test]
         public async Task Test_WorksWhenTheTokenIsInvalid()
         {
-            var requirement = new IsAuthenticatedRequirement();
+            var requirement = new IsAuthenticatedSignalRRequirement();
             string bearer = "invalid_token";
 
             var authorizationHandlerContextFactory = new DefaultAuthorizationHandlerContextFactory();
@@ -81,7 +81,7 @@ namespace Tests.Unit.PolicyHandlers
         [Test]
         public async Task Test_WorksWhenTheUserDoesNotHaveAnActiveSession()
         {
-            var requirement = new IsAuthenticatedRequirement();
+            var requirement = new IsAuthenticatedSignalRRequirement();
             string bearer = "invalid_token";
             var claims = new UserClaimsViewModel()
             {

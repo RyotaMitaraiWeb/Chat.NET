@@ -2,7 +2,7 @@
 
 namespace Web.Policy.IsAuthenticated
 {
-    public class IsAuthenticatedRequirement : IAuthorizationRequirement
+    public class IsAuthenticatedSignalRRequirement : IAuthorizationRequirement
     {
     }
 }
