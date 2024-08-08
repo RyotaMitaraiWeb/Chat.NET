@@ -16,7 +16,7 @@ namespace Web.Services.Authentication
         public UserClaimsViewModel ExtractUserFromJWT(string jwt)
         {
             var handler = new JsonWebTokenHandler();
-            var token = handler.ReadJsonWebToken(jwt);
+            var token = handler.ReadJsonWebToken(RemoveBearer(jwt));
 
             var user = new UserClaimsViewModel()
             {
@@ -50,7 +50,6 @@ namespace Web.Services.Authentication
                 Expires = DateTime.Now.AddDays(2),
                 SigningCredentials = credentials,
                 Claims = claims,
-                
             });
 
             return token;
@@ -89,6 +88,7 @@ namespace Web.Services.Authentication
 
         private static string RemoveBearer(string? jwt)
         {
+            Console.WriteLine("BEARER: " + jwt);
             if (jwt == null)
             {
                 return string.Empty;

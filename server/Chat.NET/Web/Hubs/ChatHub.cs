@@ -17,6 +17,11 @@ namespace Web.Hubs
 {
     public class ChatHub : Hub<IChatHubClient>
     {
+        public override Task OnConnectedAsync()
+        {
+            Console.WriteLine("CONNECTED");
+            return base.OnConnectedAsync();
+        }
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task StartSession(
             [FromServices] IUserService userService,
