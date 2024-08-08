@@ -2,6 +2,7 @@
 using Common.Authentication;
 using Common.Hubs;
 using Contracts;
+using Infrastructure.Extensions;
 using Infrastructure.Postgres;
 using Infrastructure.Postgres.Entities;
 using Infrastructure.Postgres.Repository;
@@ -110,11 +111,9 @@ namespace Chat.NET
                     {
                         var accessToken = context.Request.Query["access_token"];
                         var path = context.HttpContext.Request.Path;
-                        Console.WriteLine(accessToken);
                         if (!string.IsNullOrEmpty(accessToken) &&
                             (path.StartsWithSegments($"/{HubURLs.ChatURL}")))
                         {
-                            Console.WriteLine("Read token");
                             context.Token = accessToken;
                         }
                         return Task.CompletedTask;
@@ -217,6 +216,7 @@ namespace Chat.NET
 
 
             app.MapControllers();
+            app.SeedAdministrator(builder.Configuration["ADMIN_USERNAME"] ?? "admin", builder.Configuration["ADMIN_PASSWORD"] ?? "admin");
 
             app.Run();
         }

@@ -88,7 +88,6 @@ namespace Web.Services.Authentication
 
         private static string RemoveBearer(string? jwt)
         {
-            Console.WriteLine("BEARER: " + jwt);
             if (jwt == null)
             {
                 return string.Empty;
