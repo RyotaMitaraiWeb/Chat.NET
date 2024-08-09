@@ -35,11 +35,9 @@ namespace Web.Policy.HasRole
             if (!hasRole)
             {
                 context.Fail();
-                await Console.Out.WriteLineAsync("HELLO!!!!!!!!!!!!!");
                 return;
             }
 
-            await Console.Out.WriteLineAsync("hi");
             context.Succeed(requirement);
         }
 

@@ -23,8 +23,7 @@ namespace Web.Policy.IsAuthenticated
         {
             string bearer = this.http.HttpContext?.Request.Headers.Authorization.FirstOrDefault()
                 ?? string.Empty;
-            await Console.Out.WriteLineAsync(bearer);
-            await Console.Out.WriteLineAsync("HELLO");
+
             await this.Authorize(context, requirement, bearer);
         }
 
@@ -41,7 +40,6 @@ namespace Web.Policy.IsAuthenticated
             bool tokenIsValid = await this.jwtService.ValidateJwt(bearer);
             if (!tokenIsValid)
             {
-                await Console.Out.WriteLineAsync("Token is invalid");
                 context.Fail();
                 return;
             }
@@ -51,17 +49,10 @@ namespace Web.Policy.IsAuthenticated
 
             if (user == null)
             {
-                await Console.Out.WriteLineAsync("User is null");
-
-                if (claims is null)
-                {
-                    await Console.Out.WriteLineAsync("And so are claims");
-                }
-            context.Fail();
+                context.Fail();
                 return;
             }
 
-            await Console.Out.WriteLineAsync("authenticated");
             context.Succeed(requirement);
         }
     }
