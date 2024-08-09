@@ -10,12 +10,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Web.ViewModels.Authentication;
+using Web.ViewModels.ChatRoom;
 using Web.ViewModels.Role;
 using Web.ViewModels.User;
 
 namespace Web.Hubs
 {
-    public class ChatHub : Hub<IChatHubClient>
+    public class ChatHub() : Hub<IChatHubClient>
     {
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task StartSession(
@@ -116,6 +117,16 @@ namespace Web.Hubs
             }
 
             await Clients.Caller.RoleUpdateSucceeded(updateRole);
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task JoinChatRoom(JoinChatRoomViewModel roomToJoin, [FromServices] IJwtService jwtService)
+        {
+            var claims = this.ExtractClaims(jwtService)!;
+
+            await this.Groups.AddToGroupAsync(this.Context.ConnectionId, HubPrefixes.ChatRoomGroupPrefix(roomToJoin.Id));
+
+            await this.Clients.Groups(HubPrefixes.ChatRoomGroupPrefix(roomToJoin.Id)).UserJoin(claims);
         }
 
         private async Task NotifyCallerThatRoleUpdateFailed(UpdateRoleViewModel roleData, RoleUpdateResult result)

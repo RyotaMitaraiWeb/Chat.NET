@@ -1,4 +1,5 @@
-﻿using Web.ViewModels.Role;
+﻿using Web.ViewModels.Authentication;
+using Web.ViewModels.Role;
 using Web.ViewModels.User;
 
 namespace Contracts.Hubs
@@ -12,5 +13,8 @@ namespace Contracts.Hubs
 
         Task RoleUpdateSucceeded(UpdateRoleViewModel role);
         Task RoleUpdateFailed(string error);
+
+        Task MessageSent();
+        Task UserJoin(UserClaimsViewModel user);
     }
 }

@@ -14,5 +14,10 @@
         {
             return $"{ChatRoomId}-{chatRoomId}";
         }
+
+        public static string ChatRoomGroupPrefix(int chatRoomId)
+        {
+            return ChatRoomGroupPrefix(chatRoomId.ToString());
+        }
     }
 }

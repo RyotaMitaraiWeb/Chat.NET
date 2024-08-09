@@ -152,7 +152,7 @@ namespace Chat.NET
             });
 
             builder.Services.AddAuthorizationBuilder()
-                .AddPolicy(Policies.IsAuthenticated, policy => policy.Requirements.Add(
+                .AddPolicy(Policies.IsAuthenticatedSignalR, policy => policy.Requirements.Add(
                     new IsAuthenticatedSignalRRequirement()))
                 .AddPolicy(Policies.IsModeratorSignalR, policy =>
                 {
