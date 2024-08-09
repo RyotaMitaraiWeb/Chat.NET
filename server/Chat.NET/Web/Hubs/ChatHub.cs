@@ -120,13 +120,26 @@ namespace Web.Hubs
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task JoinChatRoom(JoinChatRoomViewModel roomToJoin, [FromServices] IJwtService jwtService)
+        public async Task JoinChatRoom(JoinChatRoomViewModel roomToJoin, [FromServices] IJwtService jwtService, [FromServices] IChatRoomManager chatRoomManager)
         {
             var claims = this.ExtractClaims(jwtService)!;
 
-            await this.Groups.AddToGroupAsync(this.Context.ConnectionId, HubPrefixes.ChatRoomGroupPrefix(roomToJoin.Id));
+            await Groups.AddToGroupAsync(Context.ConnectionId, HubPrefixes.ChatRoomGroupPrefix(roomToJoin.Id));
+            bool userIsNew = await chatRoomManager.AddUserToRoom(Context.ConnectionId, claims, roomToJoin.Id);
 
-            await this.Clients.Groups(HubPrefixes.ChatRoomGroupPrefix(roomToJoin.Id)).UserJoin(claims);
+            if (userIsNew)
+            {
+                await Clients.Groups(HubPrefixes.ChatRoomGroupPrefix(roomToJoin.Id)).UserJoin(claims);
+            }
+
+            var users = await chatRoomManager.GetUsersOnline(roomToJoin.Id);
+
+            var initialState = new InitialChatRoomStateViewModel()
+            {
+                Users = users,
+            };
+
+            await Clients.Caller.SendInitialChatRoomState(initialState);
         }
 
         private async Task NotifyCallerThatRoleUpdateFailed(UpdateRoleViewModel roleData, RoleUpdateResult result)

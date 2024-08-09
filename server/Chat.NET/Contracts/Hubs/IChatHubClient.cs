@@ -1,4 +1,5 @@
 ﻿using Web.ViewModels.Authentication;
+using Web.ViewModels.ChatRoom;
 using Web.ViewModels.Role;
 using Web.ViewModels.User;
 
@@ -16,5 +17,6 @@ namespace Contracts.Hubs
 
         Task MessageSent();
         Task UserJoin(UserClaimsViewModel user);
+        Task SendInitialChatRoomState(InitialChatRoomStateViewModel state);
     }
 }

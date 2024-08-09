@@ -2,17 +2,16 @@
 using Contracts;
 using Microsoft.AspNetCore.SignalR;
 using NSubstitute;
-using Web.Controllers.Areas.Authentication;
 using Web.Hubs;
 using Common.Authentication;
 using Web.ViewModels.Authentication;
 using Web.ViewModels.User;
 using Web.ViewModels.Role;
-using NSubstitute.ExceptionExtensions;
-using Common.Exceptions;
 using Common.Hubs;
 using Common.Enums;
 using Common.ErrorMessages;
+using Web.ViewModels.ChatRoom;
+using System.Security.Claims;
 
 namespace Tests.Unit.Hubs
 {
@@ -254,5 +253,30 @@ namespace Tests.Unit.Hubs
 
             await this.Hub.Clients.Caller.Received().RoleUpdateFailed(error);
         }
+
+        //[Test]
+        //public async Task Test_JoinRoomWorksWhenTheUserIsAuthenticated()
+        //{
+        //    var room = new JoinChatRoomViewModel()
+        //    {
+        //        Id = 1,
+        //    };
+
+        //    var user = new UserClaimsViewModel()
+        //    {
+        //        Username = "a",
+        //        Id = "a",
+        //    };
+
+        //    this.JwtService.ExtractUserFromJWT("a").Returns(user);
+        //    this.HubCallerContext.ConnectionId.Returns("connection");
+
+        //    await this.Hub.JoinChatRoom(this.JwtService, room);
+
+        //    await this.Hub.Clients.Group(HubPrefixes.ChatRoomGroupPrefix(room.Id))
+        //        .Received()
+        //        .UserJoin(Arg.Is<UserClaimsViewModel>(u => 
+        //            u.Id == user.Id && u.Username == user.Username));
+        //}
     }
 }

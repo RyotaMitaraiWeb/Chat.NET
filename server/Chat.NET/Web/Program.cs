@@ -62,6 +62,7 @@ namespace Chat.NET
 
             builder.Services.AddSingleton(new RedisConnectionProvider(options));
             builder.Services.AddHostedService<UserSessionCreationService>();
+            builder.Services.AddHostedService<ChatRoomsCreationService>();
             builder.Services.AddSingleton<IUserSessionStore, UserSessionStore>();
             builder.Services.AddScoped<IRepository, Repository>();
             builder.Services.AddScoped<IUserService, UserService>();
@@ -72,6 +73,7 @@ namespace Chat.NET
             builder.Services.AddScoped<IAuthorizationHandler, HasRoleHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, HasRoleSignalRHandler>();
             builder.Services.AddScoped<IChatRoomService, ChatRoomService>();
+            builder.Services.AddSingleton<IChatRoomManager, ChatRoomManager>();
 
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
