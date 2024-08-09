@@ -13,7 +13,7 @@ namespace Web.Policy.HasRole
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, HasRoleRequirement requirement)
         {
-            string bearer = http.HttpContext?.Request.Headers.Authorization.First()
+            string bearer = http.HttpContext?.Request.Headers.Authorization.FirstOrDefault()
                 ?? string.Empty;
 
             await this.Authorize(context, requirement, bearer);

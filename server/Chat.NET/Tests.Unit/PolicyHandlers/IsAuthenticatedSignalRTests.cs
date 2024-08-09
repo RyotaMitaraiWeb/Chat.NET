@@ -18,7 +18,7 @@ using Common.Authentication;
 
 namespace Tests.Unit.PolicyHandlers
 {
-    public class IsAuthenticatedTests
+    public class IsAuthenticatedSignalRTests
     {
         private readonly IHttpContextAccessor httpContextAccessor = Substitute.For<IHttpContextAccessor>();
         private readonly IJwtService jwtService = Substitute.For<IJwtService>();
@@ -72,7 +72,7 @@ namespace Tests.Unit.PolicyHandlers
             var context = authorizationHandlerContextFactory.CreateContext(new[] { requirement }, new ClaimsPrincipal(), "a");
 
             this.jwtService.ValidateJwt(bearer).Returns(false);
-
+            
             await this.IsAuthenticatedHandler.Authorize(context, requirement, bearer);
 
             Assert.That(context.HasSucceeded, Is.False);

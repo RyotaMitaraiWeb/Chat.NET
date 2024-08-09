@@ -67,6 +67,7 @@ namespace Chat.NET
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IRoleService, RoleService>();
             builder.Services.AddSingleton<IJwtService, JwtService>();
+            builder.Services.AddScoped<IAuthorizationHandler, IsAuthenticatedSignalRHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, IsAuthenticatedHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, HasRoleHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, HasRoleSignalRHandler>();
@@ -152,20 +153,20 @@ namespace Chat.NET
 
             builder.Services.AddAuthorizationBuilder()
                 .AddPolicy(Policies.IsAuthenticated, policy => policy.Requirements.Add(
-                    new IsAuthenticatedRequirement()))
+                    new IsAuthenticatedSignalRRequirement()))
                 .AddPolicy(Policies.IsModeratorSignalR, policy =>
                 {
-                    policy.Requirements.Add(new IsAuthenticatedRequirement());
+                    policy.Requirements.Add(new IsAuthenticatedSignalRRequirement());
                     policy.Requirements.Add(new HasRoleSignalRRequirement(Roles.Moderator));
                 })
                 .AddPolicy(Policies.IsAdminSignalR, policy =>
                 {
-                    policy.Requirements.Add(new IsAuthenticatedRequirement());
+                    policy.Requirements.Add(new IsAuthenticatedSignalRRequirement());
                     policy.Requirements.Add(new HasRoleSignalRRequirement(Roles.Admin));
                 })
                 .AddPolicy(Policies.IsChatModeratorSignalR, policy =>
                 {
-                    policy.Requirements.Add(new IsAuthenticatedRequirement());
+                    policy.Requirements.Add(new IsAuthenticatedSignalRRequirement());
                     policy.Requirements.Add(new HasRoleSignalRRequirement(Roles.ChatModerator));
                 })
                 .AddPolicy(Policies.IsChatModerator, policy =>

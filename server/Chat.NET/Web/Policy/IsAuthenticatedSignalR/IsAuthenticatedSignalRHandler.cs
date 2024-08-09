@@ -10,8 +10,8 @@ namespace Web.Policy.IsAuthenticated
     /// <param name="http"></param>
     /// <param name="jwtService"></param>
     /// <param name="sessionStore"></param>
-    public class IsAuthenticatedHandler(IJwtService jwtService, IUserSessionStore sessionStore, IHttpContextAccessor http)
-        : AuthorizationHandler<IsAuthenticatedRequirement>
+    public class IsAuthenticatedSignalRHandler(IHttpContextAccessor http, IJwtService jwtService, IUserSessionStore sessionStore)
+        : AuthorizationHandler<IsAuthenticatedSignalRRequirement, HubInvocationContext>
     {
         private readonly IHttpContextAccessor http = http;
         private readonly IJwtService jwtService = jwtService;
@@ -19,11 +19,11 @@ namespace Web.Policy.IsAuthenticated
 
         protected override async Task HandleRequirementAsync(
             AuthorizationHandlerContext context,
-            IsAuthenticatedRequirement requirement)
+            IsAuthenticatedSignalRRequirement requirement,
+            HubInvocationContext hubContext)
         {
-            string bearer = this.http.HttpContext?.Request.Headers.Authorization.FirstOrDefault()
+            string bearer = hubContext.Context.GetHttpContext()?.Request.Query["access_token"].ToString()
                 ?? string.Empty;
-
             await this.Authorize(context, requirement, bearer);
         }
 
@@ -34,9 +34,10 @@ namespace Web.Policy.IsAuthenticated
         /// <param name="requirement"></param>
         /// <param name="bearer"></param>
         /// <returns></returns>
-        public async Task Authorize(AuthorizationHandlerContext context, IsAuthenticatedRequirement requirement,
+        public async Task Authorize(AuthorizationHandlerContext context, IsAuthenticatedSignalRRequirement requirement,
             string bearer)
         {
+            
             bool tokenIsValid = await this.jwtService.ValidateJwt(bearer);
             if (!tokenIsValid)
             {
