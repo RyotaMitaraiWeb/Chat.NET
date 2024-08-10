@@ -15,9 +15,10 @@ namespace Contracts.Hubs
         Task RoleUpdateSucceeded(UpdateRoleViewModel role);
         Task RoleUpdateFailed(string error);
 
-        Task MessageSent();
+        Task MessageSent(GetChatRoomMessageViewModel message);
         Task UserJoin(UserClaimsViewModel user);
         Task UserLeave(UserClaimsViewModel user);
         Task SendInitialChatRoomState(InitialChatRoomStateViewModel state);
+        Task RoomDoesNotExist();
     }
 }

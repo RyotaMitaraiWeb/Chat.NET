@@ -73,6 +73,7 @@ namespace Chat.NET
             builder.Services.AddScoped<IAuthorizationHandler, HasRoleHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, HasRoleSignalRHandler>();
             builder.Services.AddScoped<IChatRoomService, ChatRoomService>();
+            builder.Services.AddScoped<IChatRoomMessageService, ChatRoomMessageService>();
             builder.Services.AddSingleton<IChatRoomManager, ChatRoomManager>();
 
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>

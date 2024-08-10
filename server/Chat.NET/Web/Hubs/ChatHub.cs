@@ -21,7 +21,8 @@ namespace Web.Hubs
             IUserSessionStore userSessionStore,
             IUserService userService,
             IRoleService roleService,
-            IChatRoomManager chatRoomManager
+            IChatRoomManager chatRoomManager,
+            IChatRoomMessageService chatRoomMessageService
         ) : Hub<IChatHubClient>
     {
         private readonly IJwtService jwtService = jwtService;
@@ -29,6 +30,7 @@ namespace Web.Hubs
         private readonly IUserService userService = userService;
         private readonly IRoleService roleService = roleService;
         private readonly IChatRoomManager chatRoomManager = chatRoomManager;
+        private readonly IChatRoomMessageService chatRoomMessageService = chatRoomMessageService;
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task StartSession()
@@ -155,6 +157,26 @@ namespace Web.Hubs
             };
 
             await Clients.Caller.SendInitialChatRoomState(initialState);
+        }
+
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task SendMessage(SendChatRoomMessageViewModel messageToSend)
+        {
+            var claims = ExtractClaims();
+            if (claims is null)
+            {
+                return;
+            }
+
+            var message = await this.chatRoomMessageService.CreateMessage(messageToSend, claims, DateTime.UtcNow);
+
+            if (message is null)
+            {
+                await Clients.Caller.RoomDoesNotExist();
+                return;
+            }
+
+            await Clients.Group(HubPrefixes.ChatRoomGroupPrefix(messageToSend.ChatRoomId)).MessageSent(message);
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

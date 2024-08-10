@@ -25,12 +25,20 @@ namespace Tests.Unit.Hubs
         public HubCallerContext HubCallerContext { get; set; } = Substitute.For<HubCallerContext>();
         public IGroupManager Groups { get; set; } = Substitute.For<IGroupManager>();
         public IChatRoomManager ChatRoomManager { get; set; } = Substitute.For<IChatRoomManager>();
+        public IChatRoomMessageService ChatRoomMessageService { get; set; } = Substitute.For<IChatRoomMessageService>();
         public ChatHub Hub { get; set; }
 
         [SetUp]
         public void Setup()
         {
-            this.Hub = new ChatHub(this.JwtService, this.UserSessionStore, this.UserService, this.RoleService, this.ChatRoomManager)
+            this.Hub = new ChatHub(
+                    this.JwtService,
+                    this.UserSessionStore,
+                    this.UserService,
+                    this.RoleService,
+                    this.ChatRoomManager,
+                    this.ChatRoomMessageService
+                )
             {
                 Clients = this.Clients,
                 Context = this.HubCallerContext,
