@@ -62,7 +62,7 @@ namespace Web.Services.Chat
             });
         }
 
-        public async Task<bool> RemoveUserFromRoom(string connectionId, UserClaimsViewModel claims, int chatRoomId)
+        public async Task<bool> RemoveConnectionIdFromRoom(string connectionId, UserClaimsViewModel claims, int chatRoomId)
         {
             var room = await rooms.FirstOrDefaultAsync(r => r.Id == chatRoomId);
             if (room is null)

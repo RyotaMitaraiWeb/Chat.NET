@@ -155,7 +155,7 @@ namespace Web.Hubs
             var claims = ExtractClaims()!;
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, HubPrefixes.ChatRoomGroupPrefix(roomToLeave.Id));
-            bool userIsCompletelyGone = await chatRoomManager.RemoveUserFromRoom(Context.ConnectionId, claims, roomToLeave.Id);
+            bool userIsCompletelyGone = await chatRoomManager.RemoveConnectionIdFromRoom(Context.ConnectionId, claims, roomToLeave.Id);
 
             if (userIsCompletelyGone)
             {
