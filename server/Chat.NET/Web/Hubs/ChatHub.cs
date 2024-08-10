@@ -142,6 +142,20 @@ namespace Web.Hubs
             await Clients.Caller.SendInitialChatRoomState(initialState);
         }
 
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task LeaveChatRoom(JoinChatRoomViewModel roomToLeave, [FromServices] IJwtService jwtService, [FromServices] IChatRoomManager chatRoomManager)
+        {
+            var claims = this.ExtractClaims(jwtService)!;
+
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, HubPrefixes.ChatRoomGroupPrefix(roomToLeave.Id));
+            bool userIsCompletelyGone = await chatRoomManager.RemoveUserFromRoom(Context.ConnectionId, claims, roomToLeave.Id);
+
+            if (userIsCompletelyGone)
+            {
+                await Clients.Groups(HubPrefixes.ChatRoomGroupPrefix(roomToLeave.Id)).UserLeave(claims);
+            }
+        }
+
         private async Task NotifyCallerThatRoleUpdateFailed(UpdateRoleViewModel roleData, RoleUpdateResult result)
         {
             string error = RoleErrorMessages.GenerateErrorMessage(roleData.Role, result);

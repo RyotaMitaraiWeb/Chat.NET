@@ -17,6 +17,7 @@ namespace Contracts.Hubs
 
         Task MessageSent();
         Task UserJoin(UserClaimsViewModel user);
+        Task UserLeave(UserClaimsViewModel user);
         Task SendInitialChatRoomState(InitialChatRoomStateViewModel state);
     }
 }

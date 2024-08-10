@@ -56,9 +56,31 @@ namespace Web.Services.Chat
             });
         }
 
-        public Task<bool> RemoveUserFromRoom(string connectionId, UserClaimsViewModel claims, int chatRoomId)
+        public async Task<bool> RemoveUserFromRoom(string connectionId, UserClaimsViewModel claims, int chatRoomId)
         {
-            throw new NotImplementedException();
+            var room = await rooms.FirstOrDefaultAsync(r => r.Id == chatRoomId);
+            if (room is null)
+            {
+                return false;
+            }
+
+            var user = room.Users.FirstOrDefault(u => u.UserId == claims.Id);
+
+            if (user is null)
+            {
+                return false;
+            }
+
+            var connectionIds = user.Users;
+            bool result = connectionIds.Remove(connectionId);
+
+            if (connectionIds.Count == 0)
+            {
+                room.Users.Remove(user);
+            }
+
+            await rooms.SaveAsync();
+            return result && connectionIds.Count == 0;
         }
     }
 }
