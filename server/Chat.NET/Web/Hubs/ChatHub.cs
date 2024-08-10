@@ -165,6 +165,13 @@ namespace Web.Hubs
 
         public async override Task OnDisconnectedAsync(Exception? exception)
         {
+            await RemoveConnectionIdFromAllRooms();
+
+            await base.OnDisconnectedAsync(exception);
+        }
+
+        private async Task RemoveConnectionIdFromAllRooms()
+        {
             var claims = ExtractClaims();
             if (claims is null)
             {
@@ -178,8 +185,6 @@ namespace Web.Hubs
                 var roomToLeave = new JoinChatRoomViewModel() { Id = roomId };
                 await this.LeaveChatRoom(roomToLeave);
             }
-
-            await base.OnDisconnectedAsync(exception);
         }
 
         private async Task NotifyCallerThatRoleUpdateFailed(UpdateRoleViewModel roleData, RoleUpdateResult result)
