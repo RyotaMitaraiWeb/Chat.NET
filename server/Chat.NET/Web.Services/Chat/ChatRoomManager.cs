@@ -41,6 +41,12 @@ namespace Web.Services.Chat
             return userIsNew;
         }
 
+        public async Task<IEnumerable<int>> GetRoomsOfUser(string userId)
+        {
+            var userRooms = await rooms.AsNoTracking().ToListAsync();
+            return userRooms.Where(ur => ur.Users.Select(u => u.UserId).Contains(userId)).Select(ur => ur.Id);
+        }
+
         public async Task<IEnumerable<UserOnUserListViewModel>> GetUsersOnline(int chatRoomId)
         {
             var room = await rooms.FirstOrDefaultAsync(r => r.Id == chatRoomId);

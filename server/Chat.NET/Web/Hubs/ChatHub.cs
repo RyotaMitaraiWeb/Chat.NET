@@ -16,15 +16,24 @@ using Web.ViewModels.User;
 
 namespace Web.Hubs
 {
-    public class ChatHub() : Hub<IChatHubClient>
+    public class ChatHub(
+            IJwtService jwtService,
+            IUserSessionStore userSessionStore,
+            IUserService userService,
+            IRoleService roleService,
+            IChatRoomManager chatRoomManager
+        ) : Hub<IChatHubClient>
     {
+        private readonly IJwtService jwtService = jwtService;
+        private readonly IUserSessionStore userSessionStore = userSessionStore;
+        private readonly IUserService userService = userService;
+        private readonly IRoleService roleService = roleService;
+        private readonly IChatRoomManager chatRoomManager = chatRoomManager;
+
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task StartSession(
-            [FromServices] IUserService userService,
-            [FromServices] IJwtService jwtService,
-            [FromServices] IUserSessionStore userSessionStore)
+        public async Task StartSession()
         {
-            var claims = this.ExtractClaims(jwtService);
+            var claims = ExtractClaims();
             if (claims == null)
             {
                 return;
@@ -52,11 +61,9 @@ namespace Web.Hubs
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task EndSession(
-            [FromServices] IJwtService jwtService,
-            [FromServices] IUserSessionStore userSessionStore)
+        public async Task EndSession()
         {
-            var claims = this.ExtractClaims(jwtService);
+            var claims = ExtractClaims();
             if (claims == null)
             {
                 return;
@@ -72,7 +79,7 @@ namespace Web.Hubs
         }
 
         [Authorize(Policy = Policies.IsAdminSignalR)]
-        public async Task AddRoleToUser(UpdateRoleViewModel updateRole, [FromServices] IRoleService roleService, [FromServices] IUserSessionStore userSessionStore)
+        public async Task AddRoleToUser(UpdateRoleViewModel updateRole)
         {
             var roleUpdateResult = await roleService.AddRoleByUserId(updateRole);
 
@@ -96,7 +103,7 @@ namespace Web.Hubs
         }
 
         [Authorize(Policy = Policies.IsAdminSignalR)]
-        public async Task RemoveRoleFromUser(UpdateRoleViewModel updateRole, [FromServices] IRoleService roleService, [FromServices] IUserSessionStore userSessionStore)
+        public async Task RemoveRoleFromUser(UpdateRoleViewModel updateRole)
         {
             
             var roleUpdateResult = await roleService.RemoveRoleByUserId(updateRole);
@@ -120,9 +127,9 @@ namespace Web.Hubs
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task JoinChatRoom(JoinChatRoomViewModel roomToJoin, [FromServices] IJwtService jwtService, [FromServices] IChatRoomManager chatRoomManager)
+        public async Task JoinChatRoom(JoinChatRoomViewModel roomToJoin)
         {
-            var claims = this.ExtractClaims(jwtService)!;
+            var claims = ExtractClaims()!;
 
             await Groups.AddToGroupAsync(Context.ConnectionId, HubPrefixes.ChatRoomGroupPrefix(roomToJoin.Id));
             bool userIsNew = await chatRoomManager.AddUserToRoom(Context.ConnectionId, claims, roomToJoin.Id);
@@ -143,9 +150,9 @@ namespace Web.Hubs
         }
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task LeaveChatRoom(JoinChatRoomViewModel roomToLeave, [FromServices] IJwtService jwtService, [FromServices] IChatRoomManager chatRoomManager)
+        public async Task LeaveChatRoom(JoinChatRoomViewModel roomToLeave)
         {
-            var claims = this.ExtractClaims(jwtService)!;
+            var claims = ExtractClaims()!;
 
             await Groups.RemoveFromGroupAsync(Context.ConnectionId, HubPrefixes.ChatRoomGroupPrefix(roomToLeave.Id));
             bool userIsCompletelyGone = await chatRoomManager.RemoveUserFromRoom(Context.ConnectionId, claims, roomToLeave.Id);
@@ -156,13 +163,32 @@ namespace Web.Hubs
             }
         }
 
+        public async override Task OnDisconnectedAsync(Exception? exception)
+        {
+            var claims = ExtractClaims();
+            if (claims is null)
+            {
+                return;
+            }
+
+            IEnumerable<int> roomsWhereUserHasCurrentlyJoined = await this.chatRoomManager.GetRoomsOfUser(claims.Id);
+
+            foreach (int roomId in roomsWhereUserHasCurrentlyJoined)
+            {
+                var roomToLeave = new JoinChatRoomViewModel() { Id = roomId };
+                await this.LeaveChatRoom(roomToLeave);
+            }
+
+            await base.OnDisconnectedAsync(exception);
+        }
+
         private async Task NotifyCallerThatRoleUpdateFailed(UpdateRoleViewModel roleData, RoleUpdateResult result)
         {
             string error = RoleErrorMessages.GenerateErrorMessage(roleData.Role, result);
             await this.Clients.Caller.RoleUpdateFailed(error);
         }
 
-        private UserClaimsViewModel? ExtractClaims(IJwtService jwtService)
+        private UserClaimsViewModel? ExtractClaims()
         {
             var context = this.Context.GetHttpContext();
             if (context == null)
