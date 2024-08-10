@@ -88,5 +88,24 @@ namespace Web.Services.Chat
             await rooms.SaveAsync();
             return result && connectionIds.Count == 0;
         }
+
+        public async Task RemoveUserFromRoom(UserClaimsViewModel claims, int chatRoomId)
+        {
+            var room = await rooms.FirstOrDefaultAsync(r => r.Id == chatRoomId);
+            if (room is null)
+            {
+                return;
+            }
+
+            var user = room.Users.FirstOrDefault(u => u.UserId == claims.Id);
+
+            if (user is null)
+            {
+                return;
+            }
+
+            user.Users = [];
+            await rooms.SaveAsync();
+        }
     }
 }

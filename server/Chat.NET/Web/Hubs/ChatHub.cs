@@ -75,6 +75,14 @@ namespace Web.Hubs
                 return;
             }
 
+            var roomsWhereUserHasJoined = await this.chatRoomManager.GetRoomsOfUser(claims.Id);
+
+            foreach (int roomId in roomsWhereUserHasJoined)
+            {
+                await this.chatRoomManager.RemoveUserFromRoom(claims, roomId);
+                await Clients.Group(HubPrefixes.ChatRoomGroupPrefix(roomId)).UserLeave(claims);
+            }
+
             await Clients.Group(HubPrefixes.UserGroupPrefix(claims.Id)).EndSession();
         }
 
