@@ -2,6 +2,7 @@
 using Common.Authentication;
 using Common.Hubs;
 using Contracts;
+using FluentValidation;
 using Infrastructure.Extensions;
 using Infrastructure.Postgres;
 using Infrastructure.Postgres.Entities;
@@ -23,6 +24,8 @@ using Web.Services.Admin;
 using Web.Services.Authentication;
 using Web.Services.Chat;
 using Web.Services.Session;
+using Web.Validators;
+using Web.ViewModels.ChatRoom;
 
 namespace Chat.NET
 {
@@ -75,6 +78,7 @@ namespace Chat.NET
             builder.Services.AddScoped<IChatRoomService, ChatRoomService>();
             builder.Services.AddScoped<IChatRoomMessageService, ChatRoomMessageService>();
             builder.Services.AddSingleton<IChatRoomManager, ChatRoomManager>();
+            builder.Services.AddTransient<IValidator<SendChatRoomMessageViewModel>, CreateChatRoomMessageValidator>();
 
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {

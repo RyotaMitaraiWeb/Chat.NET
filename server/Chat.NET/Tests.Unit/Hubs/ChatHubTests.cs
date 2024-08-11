@@ -12,6 +12,7 @@ using Common.Enums;
 using Common.ErrorMessages;
 using Web.ViewModels.ChatRoom;
 using System.Security.Claims;
+using FluentValidation;
 
 namespace Tests.Unit.Hubs
 {
@@ -26,6 +27,7 @@ namespace Tests.Unit.Hubs
         public IGroupManager Groups { get; set; } = Substitute.For<IGroupManager>();
         public IChatRoomManager ChatRoomManager { get; set; } = Substitute.For<IChatRoomManager>();
         public IChatRoomMessageService ChatRoomMessageService { get; set; } = Substitute.For<IChatRoomMessageService>();
+        public IValidator<SendChatRoomMessageViewModel> MessageValidator { get; set; } = Substitute.For<IValidator<SendChatRoomMessageViewModel>>();
         public ChatHub Hub { get; set; }
 
         [SetUp]
@@ -37,7 +39,8 @@ namespace Tests.Unit.Hubs
                     this.UserService,
                     this.RoleService,
                     this.ChatRoomManager,
-                    this.ChatRoomMessageService
+                    this.ChatRoomMessageService,
+                    this.MessageValidator
                 )
             {
                 Clients = this.Clients,

@@ -1,4 +1,6 @@
-﻿namespace Web.ViewModels.ChatRoom
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Web.ViewModels.ChatRoom
 {
     public class SendChatRoomMessageViewModel
     {

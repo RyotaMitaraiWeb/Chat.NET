@@ -1,13 +1,12 @@
 ﻿using Common.Authentication;
 using Common.Enums;
 using Common.ErrorMessages;
-using Common.Exceptions;
 using Common.Hubs;
 using Contracts;
 using Contracts.Hubs;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Web.ViewModels.Authentication;
 using Web.ViewModels.ChatRoom;
@@ -22,7 +21,8 @@ namespace Web.Hubs
             IUserService userService,
             IRoleService roleService,
             IChatRoomManager chatRoomManager,
-            IChatRoomMessageService chatRoomMessageService
+            IChatRoomMessageService chatRoomMessageService,
+            IValidator<SendChatRoomMessageViewModel> messageValidator
         ) : Hub<IChatHubClient>
     {
         private readonly IJwtService jwtService = jwtService;
@@ -31,6 +31,7 @@ namespace Web.Hubs
         private readonly IRoleService roleService = roleService;
         private readonly IChatRoomManager chatRoomManager = chatRoomManager;
         private readonly IChatRoomMessageService chatRoomMessageService = chatRoomMessageService;
+        private readonly IValidator<SendChatRoomMessageViewModel> messageValidator = messageValidator;
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task StartSession()
@@ -164,6 +165,12 @@ namespace Web.Hubs
         {
             var claims = ExtractClaims();
             if (claims is null)
+            {
+                return;
+            }
+
+            var validation = await this.messageValidator.ValidateAsync(messageToSend);
+            if (!validation.IsValid)
             {
                 return;
             }
