@@ -2,7 +2,6 @@
 using Infrastructure.Redis.Models;
 using Redis.OM;
 using Redis.OM.Searching;
-using System.Security.Claims;
 using Web.ViewModels.Authentication;
 using Web.ViewModels.User;
 

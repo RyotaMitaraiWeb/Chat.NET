@@ -2,17 +2,17 @@
 using Contracts;
 using Microsoft.AspNetCore.SignalR;
 using NSubstitute;
-using Web.Controllers.Areas.Authentication;
 using Web.Hubs;
 using Common.Authentication;
 using Web.ViewModels.Authentication;
 using Web.ViewModels.User;
 using Web.ViewModels.Role;
-using NSubstitute.ExceptionExtensions;
-using Common.Exceptions;
 using Common.Hubs;
 using Common.Enums;
 using Common.ErrorMessages;
+using Web.ViewModels.ChatRoom;
+using System.Security.Claims;
+using FluentValidation;
 
 namespace Tests.Unit.Hubs
 {
@@ -25,12 +25,23 @@ namespace Tests.Unit.Hubs
         public IRoleService RoleService { get; set; } = Substitute.For<IRoleService>();
         public HubCallerContext HubCallerContext { get; set; } = Substitute.For<HubCallerContext>();
         public IGroupManager Groups { get; set; } = Substitute.For<IGroupManager>();
+        public IChatRoomManager ChatRoomManager { get; set; } = Substitute.For<IChatRoomManager>();
+        public IChatRoomMessageService ChatRoomMessageService { get; set; } = Substitute.For<IChatRoomMessageService>();
+        public IValidator<SendChatRoomMessageViewModel> MessageValidator { get; set; } = Substitute.For<IValidator<SendChatRoomMessageViewModel>>();
         public ChatHub Hub { get; set; }
 
         [SetUp]
         public void Setup()
         {
-            this.Hub = new ChatHub
+            this.Hub = new ChatHub(
+                    this.JwtService,
+                    this.UserSessionStore,
+                    this.UserService,
+                    this.RoleService,
+                    this.ChatRoomManager,
+                    this.ChatRoomMessageService,
+                    this.MessageValidator
+                )
             {
                 Clients = this.Clients,
                 Context = this.HubCallerContext,
@@ -59,7 +70,7 @@ namespace Tests.Unit.Hubs
             this.UserService.FindUserById(claims.Id).Returns(user);
             this.UserSessionStore.AddUser(Arg.Is<UserViewModel>(u => u.Id == claims.Id)).Returns(user);
 
-            await this.Hub.StartSession(this.UserService, this.JwtService, this.UserSessionStore);
+            await this.Hub.StartSession();
 
             await this.UserSessionStore.Received(1).AddUser(Arg.Is<UserViewModel>(u => u.Id == user.Id));
             await this.Hub.Clients.Group(HubPrefixes.UserGroupPrefix(claims.Id))
@@ -87,7 +98,7 @@ namespace Tests.Unit.Hubs
             this.JwtService.ExtractUserFromJWT("").Returns(claims);
             this.UserSessionStore.RemoveUser(Arg.Is<UserClaimsViewModel>(u => u.Id == claims.Id)).Returns(user);
 
-            await this.Hub.EndSession(this.JwtService, this.UserSessionStore);
+            await this.Hub.EndSession();
 
             await this.UserSessionStore.Received(1).RemoveUser(Arg.Is<UserClaimsViewModel>(u => u.Id == user.Id));
             await this.Hub.Clients.Group(HubPrefixes.UserGroupPrefix(claims.Id))
@@ -114,7 +125,7 @@ namespace Tests.Unit.Hubs
             this.RoleService.AddRoleByUserId(role).Returns(RoleUpdateResult.Success);
             this.UserSessionStore.GetUser(role.UserId).Returns(user);
 
-            await this.Hub.AddRoleToUser(role, this.RoleService, this.UserSessionStore);
+            await this.Hub.AddRoleToUser(role);
 
             await this.UserSessionStore.Received(1).UpdateRoles(user.Id, Arg.Any<string[]>());
             await this.Hub.Clients.Caller.Received().RoleUpdateSucceeded(Arg.Any<UpdateRoleViewModel>());
@@ -134,7 +145,7 @@ namespace Tests.Unit.Hubs
             this.RoleService.AddRoleByUserId(role).Returns(RoleUpdateResult.Success);
             this.UserSessionStore.GetUser(role.UserId).Returns(user);
 
-            await this.Hub.AddRoleToUser(role, this.RoleService, this.UserSessionStore);
+            await this.Hub.AddRoleToUser(role);
 
             await this.UserSessionStore
                 .DidNotReceiveWithAnyArgs()
@@ -170,7 +181,7 @@ namespace Tests.Unit.Hubs
 
             this.RoleService.AddRoleByUserId(role).Returns(result);
 
-            await this.Hub.AddRoleToUser(role, this.RoleService, this.UserSessionStore);
+            await this.Hub.AddRoleToUser(role);
 
             string error = RoleErrorMessages.GenerateErrorMessage(role.Role, result);
 
@@ -196,7 +207,7 @@ namespace Tests.Unit.Hubs
             this.RoleService.RemoveRoleByUserId(role).Returns(RoleUpdateResult.Success);
             this.UserSessionStore.GetUser(role.UserId).Returns(user);
 
-            await this.Hub.RemoveRoleFromUser(role, this.RoleService, this.UserSessionStore);
+            await this.Hub.RemoveRoleFromUser(role);
 
             await this.UserSessionStore.Received(1).UpdateRoles(user.Id, Arg.Any<string[]>());
             await this.Hub.Clients.Caller.Received().RoleUpdateSucceeded(Arg.Any<UpdateRoleViewModel>());
@@ -216,7 +227,7 @@ namespace Tests.Unit.Hubs
             this.RoleService.RemoveRoleByUserId(role).Returns(RoleUpdateResult.Success);
             this.UserSessionStore.GetUser(role.UserId).Returns(user);
 
-            await this.Hub.RemoveRoleFromUser(role, this.RoleService, this.UserSessionStore);
+            await this.Hub.RemoveRoleFromUser(role);
 
             await this.UserSessionStore
                 .DidNotReceive()
@@ -248,11 +259,36 @@ namespace Tests.Unit.Hubs
 
             this.RoleService.RemoveRoleByUserId(role).Returns(result);
 
-            await this.Hub.RemoveRoleFromUser(role, this.RoleService, this.UserSessionStore);
+            await this.Hub.RemoveRoleFromUser(role);
 
             string error = RoleErrorMessages.GenerateErrorMessage(role.Role, result);
 
             await this.Hub.Clients.Caller.Received().RoleUpdateFailed(error);
         }
+
+        //[Test]
+        //public async Task Test_JoinRoomWorksWhenTheUserIsAuthenticated()
+        //{
+        //    var room = new JoinChatRoomViewModel()
+        //    {
+        //        Id = 1,
+        //    };
+
+        //    var user = new UserClaimsViewModel()
+        //    {
+        //        Username = "a",
+        //        Id = "a",
+        //    };
+
+        //    this.JwtService.ExtractUserFromJWT("a").Returns(user);
+        //    this.HubCallerContext.ConnectionId.Returns("connection");
+
+        //    await this.Hub.JoinChatRoom(this.JwtService, room);
+
+        //    await this.Hub.Clients.Group(HubPrefixes.ChatRoomGroupPrefix(room.Id))
+        //        .Received()
+        //        .UserJoin(Arg.Is<UserClaimsViewModel>(u => 
+        //            u.Id == user.Id && u.Username == user.Username));
+        //}
     }
 }

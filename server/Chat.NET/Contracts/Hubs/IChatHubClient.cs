@@ -1,4 +1,6 @@
-﻿using Web.ViewModels.Role;
+﻿using Web.ViewModels.Authentication;
+using Web.ViewModels.ChatRoom;
+using Web.ViewModels.Role;
 using Web.ViewModels.User;
 
 namespace Contracts.Hubs
@@ -12,5 +14,11 @@ namespace Contracts.Hubs
 
         Task RoleUpdateSucceeded(UpdateRoleViewModel role);
         Task RoleUpdateFailed(string error);
+
+        Task MessageSent(GetChatRoomMessageViewModel message);
+        Task UserJoin(UserClaimsViewModel user);
+        Task UserLeave(UserClaimsViewModel user);
+        Task SendInitialChatRoomState(InitialChatRoomStateViewModel state);
+        Task RoomDoesNotExist();
     }
 }

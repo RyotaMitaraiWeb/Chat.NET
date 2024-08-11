@@ -2,6 +2,7 @@
 using Common.Authentication;
 using Common.Hubs;
 using Contracts;
+using FluentValidation;
 using Infrastructure.Extensions;
 using Infrastructure.Postgres;
 using Infrastructure.Postgres.Entities;
@@ -23,6 +24,8 @@ using Web.Services.Admin;
 using Web.Services.Authentication;
 using Web.Services.Chat;
 using Web.Services.Session;
+using Web.Validators;
+using Web.ViewModels.ChatRoom;
 
 namespace Chat.NET
 {
@@ -62,6 +65,7 @@ namespace Chat.NET
 
             builder.Services.AddSingleton(new RedisConnectionProvider(options));
             builder.Services.AddHostedService<UserSessionCreationService>();
+            builder.Services.AddHostedService<ChatRoomsCreationService>();
             builder.Services.AddSingleton<IUserSessionStore, UserSessionStore>();
             builder.Services.AddScoped<IRepository, Repository>();
             builder.Services.AddScoped<IUserService, UserService>();
@@ -72,6 +76,9 @@ namespace Chat.NET
             builder.Services.AddScoped<IAuthorizationHandler, HasRoleHandler>();
             builder.Services.AddScoped<IAuthorizationHandler, HasRoleSignalRHandler>();
             builder.Services.AddScoped<IChatRoomService, ChatRoomService>();
+            builder.Services.AddScoped<IChatRoomMessageService, ChatRoomMessageService>();
+            builder.Services.AddSingleton<IChatRoomManager, ChatRoomManager>();
+            builder.Services.AddTransient<IValidator<SendChatRoomMessageViewModel>, CreateChatRoomMessageValidator>();
 
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
@@ -152,7 +159,7 @@ namespace Chat.NET
             });
 
             builder.Services.AddAuthorizationBuilder()
-                .AddPolicy(Policies.IsAuthenticated, policy => policy.Requirements.Add(
+                .AddPolicy(Policies.IsAuthenticatedSignalR, policy => policy.Requirements.Add(
                     new IsAuthenticatedSignalRRequirement()))
                 .AddPolicy(Policies.IsModeratorSignalR, policy =>
                 {
