@@ -1,4 +1,3 @@
-version: "3.5"
 name: chatnet
 services:
   client:
@@ -10,7 +9,7 @@ services:
       dockerfile: dev.Dockerfile
     
     environment:
-      - NEXT_API_URL=http://localhost:7000
+      - NEXT_API_URL=http://server:80
       - WATCHPACK_POLLING=true
     volumes:
       - ./client/src:/app/src
