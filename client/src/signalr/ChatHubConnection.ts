@@ -5,12 +5,19 @@ export type chatHubClientMethods =
   | 'EndSession'
   | 'UpdateUser'
   | 'RoleUpdateSucceeded'
-  | 'RoleUpdateFailed';
+  | 'RoleUpdateFailed'
+  | 'UserJoin'
+  | 'UserLeave'
+  | 'SendInitialChatRoomState'
+  | 'MessageSent';
 export type chatHubServerMethods =
   | 'StartSession'
   | 'EndSession'
   | 'AddRoleToUser'
-  | 'RemoveRoleFromUser';
+  | 'RemoveRoleFromUser'
+  | 'JoinChatRoom'
+  | 'LeaveChatRoom'
+  | 'SendMessage';
 
 class ChatHubConnection extends SignalrConnection<chatHubClientMethods, chatHubServerMethods> {
   constructor() {
