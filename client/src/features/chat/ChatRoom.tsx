@@ -59,9 +59,11 @@ function ChatRoom(props: ChatRoomProps): React.JSX.Element {
   return (
     <div className="chat-room">
       <RoomHeader room={props.room} users={alphabetizedUserList} />
-      {messages.map((m) => (
-        <ChatRoomMessage message={m} key={m.id} />
-      ))}
+      <section className="chat-room-messages">
+        {messages.map((m) => (
+          <ChatRoomMessage message={m} key={m.id} />
+        ))}
+      </section>
       <MessageField chatRoomId={props.room.id} />
     </div>
   );

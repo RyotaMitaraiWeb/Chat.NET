@@ -1,0 +1,8 @@
+.chat-room {
+  .chat-room-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin: 1.5em auto;
+  }
+}
