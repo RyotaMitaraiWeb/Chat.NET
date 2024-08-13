@@ -9,7 +9,8 @@ services:
       dockerfile: dev.Dockerfile
     
     environment:
-      - NEXT_API_URL=http://server:80
+      - NEXT_PUBLIC_API_URL=http://server:80
+      - NEXT_PUBLIC_CLIENT_COMPONENTS_API_URL=http://localhost:5000
       - WATCHPACK_POLLING=true
     volumes:
       - ./client/src:/app/src
