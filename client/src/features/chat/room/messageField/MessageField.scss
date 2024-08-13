@@ -1,8 +1,16 @@
+@import '../../../../styles/viewports.scss';
+
 .chat-room-message-field {
   display: flex;
   align-items: center;
+  justify-content: center;
   width: 100%;
   gap: 16px;
+  margin: 0 auto;
+
+  @media (min-width: $large) {
+    width: 50%;
+  }
 
   .message-field {
     width: 100% !important;

@@ -5,10 +5,16 @@
 .chat-room-message {
   display: flex;
   flex-direction: column;
-  width: 66%;
+  width: auto;
+
+  &.other-user {
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
 
   .chat-room-message-content {
     padding: 16px 8px;
+    max-width: 80%;
     border-radius: 16px;
     @include apply-accent-background();
     white-space: pre-wrap;
@@ -22,8 +28,10 @@
   }
 
   &.own {
-    margin-left: auto;
-    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
 
     .chat-room-message-content {
       @include apply-palette-bg('info');
@@ -46,5 +54,10 @@
         text-decoration: underline;
       }
     }
+  }
+
+  .chat-room-message-date {
+    margin-bottom: 8px;
+    padding: 0 8px;
   }
 }
