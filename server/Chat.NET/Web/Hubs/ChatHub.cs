@@ -153,10 +153,13 @@ namespace Web.Hubs
             }
 
             var users = await chatRoomManager.GetUsersOnline(roomToJoin.Id);
+            var messages = await chatRoomMessageService.GetRecentMessages(roomToJoin.Id);
 
             var initialState = new InitialChatRoomStateViewModel()
             {
                 Users = users,
+                Messages = messages,
+                
             };
 
             await Clients.Caller.SendInitialChatRoomState(initialState);

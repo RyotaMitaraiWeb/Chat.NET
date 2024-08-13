@@ -5,6 +5,7 @@ export type ChatUser = {
 
 export type ChatRoomInitialState = {
   users: ChatUser[];
+  messages: ChatMessage[];
 };
 
 export type Chat = {
