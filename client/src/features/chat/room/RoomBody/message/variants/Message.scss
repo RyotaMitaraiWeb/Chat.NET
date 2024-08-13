@@ -11,7 +11,7 @@
     padding: 16px 8px;
     border-radius: 16px;
     @include apply-accent-background();
-    white-space: pre;
+    white-space: pre-wrap;
   }
 
   &.other-user .chat-room-message-content {
