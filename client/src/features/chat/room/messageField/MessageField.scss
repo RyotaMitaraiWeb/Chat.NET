@@ -1,0 +1,11 @@
+.chat-room-message-field {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 16px;
+
+  .message-field {
+    width: 100% !important;
+    display: block;
+  }
+}

@@ -21,3 +21,8 @@ export type ChatMessage = {
   chatRoomId: number;
   content: string;
 };
+
+export type SendMessage = {
+  message: string;
+  chatRoomId: number;
+};
