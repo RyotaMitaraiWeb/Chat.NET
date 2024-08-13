@@ -12,3 +12,11 @@ export type Chat = {
   title: string;
   description: string;
 };
+
+export type ChatMessage = {
+  sender: ChatUser;
+  date: string;
+  id: number;
+  chatRoomId: number;
+  content: string;
+};

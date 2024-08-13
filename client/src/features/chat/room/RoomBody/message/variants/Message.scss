@@ -1,0 +1,51 @@
+@use 'sass:map';
+@import '../../../../../../styles/colors.scss';
+@import '../../../../../../styles/util.scss';
+
+.chat-room-message {
+  display: flex;
+  flex-direction: column;
+  width: 66%;
+
+  .chat-room-message-content {
+    padding: 8px;
+    border-radius: 16px;
+    @include apply-accent-background();
+  }
+
+  &.other-user .chat-room-message-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &.own {
+    margin-left: auto;
+    width: 50%;
+
+    .chat-room-message-content {
+      padding: 16px 8px;
+
+      @include apply-palette-bg('info');
+      @include apply-values-for-modes(
+        color,
+        map.get($info-colors, 'contrast-text-dark'),
+        map.get($info-colors, 'contrast-text-light')
+      );
+    }
+  }
+
+  .chat-room-message-sender-username {
+    @include apply-theme-emphasis-text();
+
+    .chat-room-message-sender-link {
+      color: inherit;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
