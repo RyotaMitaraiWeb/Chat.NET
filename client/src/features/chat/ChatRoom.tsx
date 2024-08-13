@@ -3,7 +3,7 @@ import './ChatRoom.scss';
 
 import { chatHubConnection } from '@/signalr/ChatHubConnection';
 import { Chat, ChatMessage, ChatRoomInitialState, ChatUser } from '@/types/chat';
-import { useEffect, useReducer } from 'react';
+import { useEffect, useMemo, useReducer } from 'react';
 import RoomHeader from './room/RoomHeader';
 import ChatRoomMessage from './room/RoomBody/message/ChatRoomMessage';
 import { usersOnlineReducer } from './reducers/usersOnlineReducer';
@@ -17,6 +17,12 @@ type ChatRoomProps = {
 function ChatRoom(props: ChatRoomProps): React.JSX.Element {
   const [users, dispatchUsers] = useReducer(usersOnlineReducer, []);
   const [messages, dispatchMessages] = useReducer(messagesReducer, []);
+
+  const alphabetizedUserList = useMemo(() => {
+    const alphabetizedUsers = [...users];
+    alphabetizedUsers.sort((a, b) => a.username.localeCompare(b.username));
+    return alphabetizedUsers;
+  }, [users]);
 
   useEffect(() => {
     chatHubConnection
@@ -52,7 +58,7 @@ function ChatRoom(props: ChatRoomProps): React.JSX.Element {
 
   return (
     <div className="chat-room">
-      <RoomHeader room={props.room} users={users} />
+      <RoomHeader room={props.room} users={alphabetizedUserList} />
       {messages.map((m) => (
         <ChatRoomMessage message={m} key={m.id} />
       ))}
