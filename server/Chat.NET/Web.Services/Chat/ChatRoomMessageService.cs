@@ -64,6 +64,7 @@ namespace Web.Services.Chat
                         Username = crm.Sender.UserName!,
                     }
                 })
+                .OrderBy(crm => crm.Date)
                 .ToListAsync();
         }
     }
