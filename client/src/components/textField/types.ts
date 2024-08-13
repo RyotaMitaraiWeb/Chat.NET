@@ -34,4 +34,6 @@ export interface TextFieldProps extends BaseInputProps {
    * Appears below the text field.
    */
   helperText?: string;
+
+  onKeyUp?: (event: React.KeyboardEvent) => void;
 }
