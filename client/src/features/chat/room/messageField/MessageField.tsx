@@ -23,6 +23,8 @@ function MessageField(props: MessageFieldProps): React.JSX.Element {
   */
   const [actualMessage, setActualMessage] = useState(message);
 
+  const [sending, setSending] = useState(false);
+
   function handleChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     event.preventDefault();
     if (event.target.value !== '\n') {
@@ -31,18 +33,31 @@ function MessageField(props: MessageFieldProps): React.JSX.Element {
   }
 
   function handleSubmit(event?: React.FormEvent) {
+    setSending(true);
     event?.preventDefault();
     const messageToSend: SendMessage = {
       message: actualMessage,
       chatRoomId: props.chatRoomId,
     };
 
-    chatHubConnection.invoke('SendMessage', messageToSend).then(() => {
-      setMessage('');
-      setActualMessage('');
-      const field = form.current?.querySelector('#message-field') as HTMLElement;
-      field.focus();
-    });
+    chatHubConnection
+      .invoke('SendMessage', messageToSend)
+      .then(() => {
+        setMessage('');
+        setActualMessage('');
+      })
+      .finally(() => {
+        setSending(false);
+        const field = form.current?.querySelector('textarea') as HTMLTextAreaElement;
+
+        // Focus when the DOM updates
+        const timerId: ReturnType<typeof setInterval> = setInterval(() => {
+          if (!field.disabled) {
+            field.focus();
+            clearInterval(timerId);
+          }
+        }, 500);
+      });
   }
 
   /*
@@ -67,6 +82,7 @@ function MessageField(props: MessageFieldProps): React.JSX.Element {
       <form ref={form} className="chat-room-message-field" onSubmit={handleSubmit}>
         <TextField
           onChange={handleChange}
+          disabled={sending}
           value={message}
           autoresize
           placeholder="Type your message here..."
@@ -75,10 +91,11 @@ function MessageField(props: MessageFieldProps): React.JSX.Element {
           name="message"
           onKeyUp={handleEnter}
           id="message-field"
+          label={sending ? 'Sending message...' : undefined}
         />
         <ExtraSmallScreen to="large">
           <IconButton
-            disabled={!message}
+            disabled={!message.trim() || sending}
             aria-label="Send message"
             color="primary"
             type="submit"
@@ -89,7 +106,7 @@ function MessageField(props: MessageFieldProps): React.JSX.Element {
         </ExtraSmallScreen>
         <LargeScreen>
           <IconButton
-            disabled={!message.trim()}
+            disabled={!message.trim() || sending}
             aria-label="Send message"
             color="primary"
             type="submit"
