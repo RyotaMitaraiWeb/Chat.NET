@@ -3,7 +3,7 @@ import './ChatRoom.scss';
 
 import { chatHubConnection } from '@/signalr/ChatHubConnection';
 import { Chat, ChatMessage, ChatRoomInitialState, ChatUser } from '@/types/chat';
-import { useEffect, useMemo, useReducer } from 'react';
+import { useEffect, useMemo, useReducer, useRef } from 'react';
 import RoomHeader from './room/RoomHeader';
 import ChatRoomMessage from './room/RoomBody/message/ChatRoomMessage';
 import { usersOnlineReducer } from './reducers/usersOnlineReducer';
@@ -42,7 +42,15 @@ function ChatRoom(props: ChatRoomProps): React.JSX.Element {
         });
 
         chatHubConnection.on('MessageSent', (message: ChatMessage) => {
+          const chatBox = chatMessagesRef.current!;
+          const isAtBottom = chatBox.scrollTop + chatBox.offsetHeight >= chatBox.scrollHeight - 120;
           dispatchMessages({ type: 'add', message });
+
+          if (isAtBottom) {
+            setTimeout(() => {
+              chatBox.scrollTop = chatBox.scrollHeight;
+            }, 200);
+          }
         });
       })
       .catch();
@@ -56,10 +64,12 @@ function ChatRoom(props: ChatRoomProps): React.JSX.Element {
     };
   }, [props.room.id]);
 
+  const chatMessagesRef = useRef<HTMLElement>(null);
+
   return (
     <div className="chat-room">
       <RoomHeader room={props.room} users={alphabetizedUserList} />
-      <section className="chat-room-messages">
+      <section id="chat-room" ref={chatMessagesRef} className="chat-room-messages">
         {messages.map((m) => (
           <ChatRoomMessage message={m} key={m.id} />
         ))}

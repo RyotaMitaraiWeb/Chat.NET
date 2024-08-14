@@ -3,7 +3,7 @@ import { ExtraSmallScreen, LargeScreen } from '@/components/screen/Screen';
 import './MessageField.scss';
 import IconButton from '@/components/button/iconButton/IconButton';
 import TextField from '@/components/textField/client/TextField';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { MdSend } from 'react-icons/md';
 import { chatHubConnection } from '@/signalr/ChatHubConnection';
 import { SendMessage } from '@/types/chat';
@@ -50,16 +50,6 @@ function MessageField(props: MessageFieldProps): React.JSX.Element {
     from here
   */
   const form = useRef<HTMLFormElement>(null);
-
-  /*
-    When the user sends a message (at which point the field will be cleared),
-    bring them to the bottom of the page
-  */
-  useEffect(() => {
-    if (!message) {
-      window.scrollTo(0, document.body.scrollHeight);
-    }
-  }, [message]);
 
   function handleEnter(event: React.KeyboardEvent) {
     if (event.key === 'Enter' && !event.shiftKey) {

@@ -9,6 +9,16 @@
     border: 1px solid gray;
     padding: 16px;
     border-radius: 16px;
+    height: 240px;
+    overflow-y: auto;
+
+    @media (min-width: $small) {
+      height: $small * 3/4;
+    }
+
+    @media (min-width: $medium) {
+      height: $medium * 1/2;
+    }
 
     @media (min-width: $large) {
       width: 50%;
