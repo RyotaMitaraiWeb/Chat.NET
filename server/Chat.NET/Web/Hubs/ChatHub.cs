@@ -141,20 +141,25 @@ namespace Web.Hubs
         public async Task JoinChatRoom(JoinChatRoomViewModel roomToJoin)
         {
             var claims = ExtractClaims()!;
-
+            string connectionId = Context.ConnectionId;
             await Groups.AddToGroupAsync(Context.ConnectionId, HubPrefixes.ChatRoomGroupPrefix(roomToJoin.Id));
-            bool userIsNew = await chatRoomManager.AddUserToRoom(Context.ConnectionId, claims, roomToJoin.Id);
+            bool userIsNew = await chatRoomManager.AddUserToRoom(connectionId, claims, roomToJoin.Id);
 
             if (userIsNew)
             {
-                await Clients.Groups(HubPrefixes.ChatRoomGroupPrefix(roomToJoin.Id)).UserJoin(claims);
+                await Clients
+                    .GroupExcept(HubPrefixes.ChatRoomGroupPrefix(roomToJoin.Id), connectionId)
+                    .UserJoin(claims);
             }
 
             var users = await chatRoomManager.GetUsersOnline(roomToJoin.Id);
+            var messages = await chatRoomMessageService.GetRecentMessages(roomToJoin.Id);
 
             var initialState = new InitialChatRoomStateViewModel()
             {
                 Users = users,
+                Messages = messages,
+                
             };
 
             await Clients.Caller.SendInitialChatRoomState(initialState);

@@ -15,7 +15,6 @@ export abstract class SignalrConnection<TC extends string, TS extends string>
   implements ISignalrConnection<TC, TS>
 {
   private connection?: signalr.HubConnection;
-  private connectionIsActive = false;
   private hub;
 
   private events: EventListener<TC>[] = [];
@@ -35,8 +34,8 @@ export abstract class SignalrConnection<TC extends string, TS extends string>
   /**
    * Establishes a connection to the hub if one has not been established already
    */
-  async start(): Promise<void> {
-    if (!this.connectionIsActive) {
+  start(): Promise<void> {
+    if (this.connection?.state !== signalr.HubConnectionState.Connected) {
       this.connection = new signalr.HubConnectionBuilder()
         .withUrl(`http://localhost:5000/${this.hub}`, {
           accessTokenFactory() {
@@ -48,9 +47,7 @@ export abstract class SignalrConnection<TC extends string, TS extends string>
         })
         .withAutomaticReconnect()
         .build();
-      return this.connection.start().then(() => {
-        this.connectionIsActive = true;
-      });
+      return this.connection.start();
     }
 
     return Promise.resolve(undefined);
@@ -59,19 +56,20 @@ export abstract class SignalrConnection<TC extends string, TS extends string>
   /**
    * Disconnects from the hub if there is an active connection to it.
    */
-  async stop(): Promise<void> {
-    if (this.connectionIsActive) {
-      return this.connection?.stop().then(() => {
-        this.connectionIsActive = false;
-        this.events = [];
-      });
+  stop(): Promise<void> {
+    if (this.connection?.state === signalr.HubConnectionState.Connected) {
+      return this.connection.stop();
     }
 
     return Promise.resolve(undefined);
   }
 
   async invoke(event: TS, ...args: unknown[]): Promise<void> {
-    return await this.connection?.invoke(event, ...args);
+    try {
+      return await this.connection!.invoke(event, ...args);
+    } catch (err) {
+      asyncTimeout(() => this.invoke(event, ...args), 5000);
+    }
   }
 
   on(event: TC, callback: (...args: never[]) => void): void {
@@ -105,3 +103,12 @@ export abstract class SignalrConnection<TC extends string, TS extends string>
     }
   }
 }
+
+const asyncTimeout = (callback: (...args: unknown[]) => void, timeout: number) =>
+  new Promise((resolve) => {
+    setTimeout(() => {
+      Promise.resolve(callback()).then(() => {
+        resolve(undefined);
+      });
+    }, timeout);
+  });

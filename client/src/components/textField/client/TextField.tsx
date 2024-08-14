@@ -25,6 +25,7 @@ function TextField(props: TextFieldProps): React.JSX.Element {
     name,
     disabled,
     form,
+    onKeyUp,
     ...others
   } = props;
   const ref = useRef<HTMLTextAreaElement>(null);
@@ -67,6 +68,7 @@ function TextField(props: TextFieldProps): React.JSX.Element {
           name={name}
           readOnly={readonly}
           required={required}
+          onKeyUp={onKeyUp}
         ></textarea>
         <HelperText helperText={helperText} />
       </label>
@@ -88,6 +90,7 @@ function TextField(props: TextFieldProps): React.JSX.Element {
         readOnly={readonly}
         required={required}
         list={list}
+        onKeyUp={onKeyUp}
       />
       <HelperText disabled={disabled} helperText={helperText} />
     </label>

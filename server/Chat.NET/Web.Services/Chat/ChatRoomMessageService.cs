@@ -50,7 +50,8 @@ namespace Web.Services.Chat
         {
             return await this.repository
                 .AllReadonly<ChatRoomMessage>()
-                .TakeLast(50)
+                .OrderByDescending(crm => crm.Date)
+                .Take(50)
                 .Select(crm => new GetChatRoomMessageViewModel()
                 {
                     ChatRoomId = crm.ChatRoomId,
@@ -63,6 +64,7 @@ namespace Web.Services.Chat
                         Username = crm.Sender.UserName!,
                     }
                 })
+                .OrderBy(crm => crm.Date)
                 .ToListAsync();
         }
     }
