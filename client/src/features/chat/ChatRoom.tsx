@@ -3,12 +3,13 @@ import './ChatRoom.scss';
 
 import { chatHubConnection } from '@/signalr/ChatHubConnection';
 import { Chat, ChatMessage, ChatRoomInitialState, ChatUser } from '@/types/chat';
-import { useEffect, useMemo, useReducer, useRef } from 'react';
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import RoomHeader from './room/RoomHeader';
 import ChatRoomMessage from './room/RoomBody/message/ChatRoomMessage';
 import { usersOnlineReducer } from './reducers/usersOnlineReducer';
 import { messagesReducer } from './reducers/messagesReducer';
 import MessageField from './room/messageField/MessageField';
+import Loader from '@/components/loader/Loader';
 
 type ChatRoomProps = {
   room: Chat;
@@ -17,6 +18,7 @@ type ChatRoomProps = {
 function ChatRoom(props: ChatRoomProps): React.JSX.Element {
   const [users, dispatchUsers] = useReducer(usersOnlineReducer, []);
   const [messages, dispatchMessages] = useReducer(messagesReducer, []);
+  const [isLoading, setLoading] = useState(true);
 
   const alphabetizedUserList = useMemo(() => {
     const alphabetizedUsers = [...users];
@@ -31,6 +33,7 @@ function ChatRoom(props: ChatRoomProps): React.JSX.Element {
         chatHubConnection.on('SendInitialChatRoomState', (state: ChatRoomInitialState) => {
           dispatchUsers({ type: 'populate', usersToPopulate: state.users });
           dispatchMessages({ type: 'populate', message: state.messages });
+          setLoading(false);
         });
 
         chatHubConnection.on('UserJoin', (user: ChatUser) => {
@@ -65,6 +68,15 @@ function ChatRoom(props: ChatRoomProps): React.JSX.Element {
   }, [props.room.id]);
 
   const chatMessagesRef = useRef<HTMLElement>(null);
+
+  if (isLoading) {
+    return (
+      <Loader
+        size="large"
+        text={`Loading chat room "${props.room.title}", please wait a moment!`}
+      />
+    );
+  }
 
   return (
     <div className="chat-room">
