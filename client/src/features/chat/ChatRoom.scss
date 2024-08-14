@@ -1,16 +1,26 @@
 @import '../../styles/viewports.scss';
 
 .chat-room {
+  @media (min-width: $large) {
+    width: 50%;
+    margin: 1.5em auto;
+  }
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
   .chat-room-messages {
     display: flex;
     flex-direction: column;
     gap: 24px;
-    margin: 1.5em auto;
     border: 1px solid gray;
     padding: 16px;
     border-radius: 16px;
-    height: 240px;
+    height: 50vh;
+    margin: 1.5em auto;
     overflow-y: auto;
+    width: 100%;
 
     @media (min-width: $small) {
       height: $small * 3/4;
@@ -18,10 +28,6 @@
 
     @media (min-width: $medium) {
       height: $medium * 1/2;
-    }
-
-    @media (min-width: $large) {
-      width: 50%;
     }
   }
 }

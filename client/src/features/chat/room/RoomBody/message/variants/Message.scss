@@ -18,6 +18,8 @@
     border-radius: 16px;
     @include apply-accent-background();
     white-space: pre-wrap;
+    overflow-wrap: break-word;
+    word-break: normal;
   }
 
   &.other-user .chat-room-message-content {
