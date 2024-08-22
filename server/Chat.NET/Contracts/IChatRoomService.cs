@@ -11,5 +11,11 @@ namespace Contracts
         public Task<ChatRoomUpdateResult> Update(UpdateChatRoomViewModel chatRoom, int chatRoomId);
         public Task<ChatRoomDeleteResult> Delete(int chatRoomId);
 
+        public Task<AddChatRoomFavoriteResult> AddFavorite(int chatRoomId, string userId);
+        public Task<AddChatRoomFavoriteResult> AddFavorite(int chatRoomId, Guid userId);
+
+        public Task<RemoveChatRoomFavoriteResult?> RemoveFavorite(int chatRoomId, string userId);
+        public Task<RemoveChatRoomFavoriteResult?> RemoveFavorite(int chatRoomId, Guid userId);
+
     }
 }

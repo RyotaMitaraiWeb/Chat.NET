@@ -2,6 +2,7 @@
 using Contracts;
 using Infrastructure.Postgres.Entities;
 using Infrastructure.Postgres.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Web.ViewModels.ChatRoom;
 
@@ -10,6 +11,60 @@ namespace Web.Services.Chat
     public class ChatRoomService(IRepository repository) : IChatRoomService
     {
         private readonly IRepository repository = repository;
+       
+
+        public async Task<AddChatRoomFavoriteResult> AddFavorite(int chatRoomId, string userId)
+        {
+            bool idIsValid = Guid.TryParse(userId, out Guid id);
+            if (!idIsValid)
+            {
+                return AddChatRoomFavoriteResult.UserOrChatRoomDoesNotExist;
+            }
+
+            return await this.AddFavorite(chatRoomId, id);
+        }
+
+        public async Task<AddChatRoomFavoriteResult> AddFavorite(int chatRoomId, Guid userId)
+        {
+            var chatRoom = await this.repository.GetByIdAsync<ChatRoom>(chatRoomId);
+            if (chatRoom is null || chatRoom?.IsDeleted == true)
+            {
+                return AddChatRoomFavoriteResult.UserOrChatRoomDoesNotExist;
+            }
+
+            var userFavorites = await this.repository
+                .All<UserFavoriteChatRoom>()
+                .Where(ufcr => ufcr.UserId.Equals(userId) && !ufcr.ChatRoom.IsDeleted)
+                .Select(ufcr => new AddChatRoomFavoriteViewModel()
+                {
+                    Id = ufcr.ChatRoomId,
+                    IsDeleted = ufcr.ChatRoom.IsDeleted,
+                })
+                .ToListAsync();
+
+            bool roomIsAlreadyAdded = userFavorites.Find(uf => uf.Id == chatRoomId) is not null;
+            if (roomIsAlreadyAdded)
+            {
+                return AddChatRoomFavoriteResult.AlreadyFavorite;
+            }
+
+            try
+            {
+                await this.repository.AddAsync(new UserFavoriteChatRoom()
+                {
+                    ChatRoomId = chatRoomId,
+                    UserId = userId,
+                });
+
+                await this.repository.SaveChangesAsync();
+            } catch (DbUpdateException)
+            {
+                return AddChatRoomFavoriteResult.UserOrChatRoomDoesNotExist;
+            }
+
+            return AddChatRoomFavoriteResult.Success;
+
+        }
 
         public async Task<int> Create(CreateChatRoomViewModel chatRoom)
         {
@@ -53,6 +108,41 @@ namespace Web.Services.Chat
                 .FirstOrDefaultAsync();
 
             return room;
+        }
+
+        public async Task<RemoveChatRoomFavoriteResult?> RemoveFavorite(int chatRoomId, string userId)
+        {
+            bool idIsValid = Guid.TryParse(userId, out Guid id);
+            if (!idIsValid)
+            {
+                return RemoveChatRoomFavoriteResult.NotFavorite;
+            }
+
+            return await this.RemoveFavorite(chatRoomId, id);
+        }
+
+        public async Task<RemoveChatRoomFavoriteResult?> RemoveFavorite(int chatRoomId, Guid userId)
+        {
+            var chatRoom = await this.repository.GetByIdAsync<ChatRoom>(chatRoomId);
+            if (chatRoom == null || chatRoom?.IsDeleted == true)
+            {
+                return RemoveChatRoomFavoriteResult.ChatRoomDoesNotExist;
+            }
+
+            var userFavorite = await repository
+                .All<UserFavoriteChatRoom>()
+                .FirstOrDefaultAsync(ufcr => ufcr.ChatRoomId == chatRoomId && userId.Equals(ufcr.UserId));
+
+            if (userFavorite is null)
+            {
+                return RemoveChatRoomFavoriteResult.NotFavorite;
+            }
+
+            await this.repository.DeleteAsync<UserFavoriteChatRoom>(userFavorite.Id);
+            await this.repository.SaveChangesAsync();
+
+            return RemoveChatRoomFavoriteResult.Success;
+
         }
 
         public async Task<IEnumerable<GetChatRoomsViewModel>> Search(string title = "")

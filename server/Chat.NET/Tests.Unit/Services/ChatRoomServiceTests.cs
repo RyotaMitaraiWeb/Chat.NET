@@ -3,6 +3,8 @@ using Infrastructure.Postgres.Entities;
 using Infrastructure.Postgres.Repository;
 using MockQueryable.NSubstitute;
 using NSubstitute;
+using NSubstitute.ExceptionExtensions;
+using System.Data.Common;
 using Web.Services.Chat;
 using Web.ViewModels.ChatRoom;
 
@@ -10,13 +12,8 @@ namespace Tests.Unit.Services
 {
     public class ChatRoomServiceTests
     {
-        public IRepository Repository { get; set; } = Substitute.For<IRepository>();
+        public IRepository Repository { get; set; }
         public ChatRoomService ChatRoomService { get; set; }
-
-        public ChatRoomServiceTests()
-        {
-            this.ChatRoomService = new ChatRoomService(this.Repository);
-        }
 
         public CreateChatRoomViewModel MockCreateRoom = new()
         {
@@ -36,6 +33,13 @@ namespace Tests.Unit.Services
             Title = "Test",
             Description= "Some length description",
         };
+
+        [SetUp]
+        public void SetUp()
+        {
+            this.Repository = Substitute.For<IRepository>();
+            this.ChatRoomService = new ChatRoomService(this.Repository);
+        }
 
 
         [Test]
@@ -112,6 +116,163 @@ namespace Tests.Unit.Services
             ChatRoomDeleteResult result = await this.ChatRoomService.Delete(2);
 
             Assert.That(result, Is.EqualTo(ChatRoomDeleteResult.DoesNotExist));
+        }
+
+        [Test]
+        public async Task Test_AddFavoriteReturnsANoExistResultIfChatRoomDoesNotExist()
+        {
+            Guid userId = Guid.NewGuid();
+
+            ChatRoom? chatRoom = null;
+
+            this.Repository.GetByIdAsync<ChatRoom>(userId).Returns(chatRoom);
+
+            var result = await this.ChatRoomService.AddFavorite(1, userId);
+
+            Assert.That(result, Is.EqualTo(AddChatRoomFavoriteResult.UserOrChatRoomDoesNotExist));
+        }
+
+        [Test]
+        public async Task Test_AddFavoriteReturnsANoExistResultIfChatRoomIsDeleted()
+        {
+            Guid userId = Guid.NewGuid();
+
+            var favorite = CreateMockFavorite(userId, 1, true);
+            var chatRoom = favorite.ChatRoom;
+
+            this.Repository.GetByIdAsync<ChatRoom>(userId).Returns(chatRoom);
+
+            var result = await this.ChatRoomService.AddFavorite(chatRoom.Id, userId);
+
+            Assert.That(result, Is.EqualTo(AddChatRoomFavoriteResult.UserOrChatRoomDoesNotExist));
+        }
+
+        [Test]
+        public async Task Test_AddFavoriteReturnsAlreadyFavoriteIfTheRoomHasAlreadyBeenMarkedAsFavorite()
+        {
+            Guid userId = Guid.NewGuid();
+
+            var favorite = CreateMockFavorite(userId, 1, false);
+            var chatRoom = favorite.ChatRoom;
+
+            this.Repository.GetByIdAsync<ChatRoom>(favorite.ChatRoomId).Returns(chatRoom);
+
+            var query = CreateMockFavoriteQueryable(favorite);
+
+            this.Repository.All<UserFavoriteChatRoom>().Returns(query);
+
+            var result = await this.ChatRoomService.AddFavorite(chatRoom.Id, userId);
+
+            Assert.That(result, Is.EqualTo(AddChatRoomFavoriteResult.AlreadyFavorite));
+        }
+
+        [Test]
+        public async Task Test_AddFavoriteReturnsNoExistResultIfDbExceptionIsThrown()
+        {
+            Guid userId = Guid.NewGuid();
+
+            var mockException = Substitute.For<DbException>();
+
+            this.Repository.SaveChangesAsync().ThrowsAsync(mockException);
+
+            var result = await this.ChatRoomService.AddFavorite(1, userId);
+
+            Assert.That(result, Is.EqualTo(AddChatRoomFavoriteResult.UserOrChatRoomDoesNotExist));
+        }
+
+        [Test]
+        public async Task Test_AddFavoriteReturnsSuccessWhenSuccessful()
+        {
+            Guid userId = Guid.NewGuid();
+
+            var favorite = CreateMockFavorite(userId, 1, false);
+
+            this.Repository.GetByIdAsync<ChatRoom>(2).Returns(new ChatRoom() { Id = 2 });
+
+            var query = CreateMockFavoriteQueryable(favorite);
+
+            this.Repository.All<UserFavoriteChatRoom>().Returns(query);
+
+            var result = await this.ChatRoomService.AddFavorite(2, userId);
+
+            Assert.That(result, Is.EqualTo(AddChatRoomFavoriteResult.Success));
+        }
+
+        [Test]
+        public async Task Test_RemoveFavoriteReturnsNoExistResultIfTheChatRoomDoesNotExist()
+        {
+            var userId = Guid.NewGuid();
+
+            ChatRoom? room = null;
+
+            this.Repository.GetByIdAsync<ChatRoom>(1).Returns(room);
+
+            var result = await this.ChatRoomService.RemoveFavorite(1, userId);
+
+            Assert.That(result, Is.EqualTo(RemoveChatRoomFavoriteResult.ChatRoomDoesNotExist));
+        }
+
+        [Test]
+        public async Task Test_RemoveFavoriteReturnsNoExistResultIfTheChatRoomIsDeleted()
+        {
+            var userId = Guid.NewGuid();
+
+            var favorite = CreateMockFavorite(userId, 1, true);
+
+            this.Repository.GetByIdAsync<ChatRoom>(1).Returns(favorite.ChatRoom);
+
+            var result = await this.ChatRoomService.RemoveFavorite(1, userId);
+
+            Assert.That(result, Is.EqualTo(RemoveChatRoomFavoriteResult.ChatRoomDoesNotExist));
+        }
+
+        [Test]
+        public async Task Test_RemoveFavoriteReturnsNotFavoriteResultIfTheUserDoesNotHaveTheRoomAsAFavorite()
+        {
+            var userId = Guid.NewGuid();
+
+            var favorite = CreateMockFavorite(userId, 2);
+            var query = CreateMockFavoriteQueryable(favorite);
+
+            this.Repository.GetByIdAsync<ChatRoom>(1).Returns(new ChatRoom() { Id = 1 });
+            this.Repository.All<UserFavoriteChatRoom>().Returns(query);
+
+            var result = await this.ChatRoomService.RemoveFavorite(1, userId);
+
+            Assert.That(result, Is.EqualTo(RemoveChatRoomFavoriteResult.NotFavorite));
+        }
+
+        [Test]
+        public async Task Test_RemoveFavoriteReturnsSucccessWhenSuccessful()
+        {
+            var userId = Guid.NewGuid();
+
+            var favorite = CreateMockFavorite(userId, 1);
+            var query = CreateMockFavoriteQueryable(favorite);
+
+            this.Repository.GetByIdAsync<ChatRoom>(1).Returns(favorite.ChatRoom);
+            this.Repository.All<UserFavoriteChatRoom>().Returns(query);
+
+            var result = await this.ChatRoomService.RemoveFavorite(1, userId);
+
+            Assert.That(result, Is.EqualTo(RemoveChatRoomFavoriteResult.Success));
+        }
+
+        private static UserFavoriteChatRoom CreateMockFavorite(Guid userId, int chatRoomId, bool isDeleted = false, int id = 1)
+        {
+            return new UserFavoriteChatRoom()
+            {
+                Id = 1,
+                UserId = userId,
+                ChatRoomId = chatRoomId,
+                ChatRoom = new ChatRoom() { Id = chatRoomId, IsDeleted = isDeleted },
+                User = new ApplicationUser() { Id = userId },
+            };
+        }
+
+        private static IQueryable<UserFavoriteChatRoom> CreateMockFavoriteQueryable(params UserFavoriteChatRoom[] favorites)
+        {
+            return favorites.BuildMock();
         }
     }
 }
