@@ -14,8 +14,8 @@ namespace Contracts
         public Task<AddChatRoomFavoriteResult> AddFavorite(int chatRoomId, string userId);
         public Task<AddChatRoomFavoriteResult> AddFavorite(int chatRoomId, Guid userId);
 
-        public Task<RemoveChatRoomFavoriteResult?> RemoveFavorite(int chatRoomId, string userId);
-        public Task<RemoveChatRoomFavoriteResult?> RemoveFavorite(int chatRoomId, Guid userId);
+        public Task<RemoveChatRoomFavoriteResult> RemoveFavorite(int chatRoomId, string userId);
+        public Task<RemoveChatRoomFavoriteResult> RemoveFavorite(int chatRoomId, Guid userId);
 
     }
 }

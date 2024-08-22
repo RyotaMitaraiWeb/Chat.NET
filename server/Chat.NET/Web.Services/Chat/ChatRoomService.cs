@@ -110,7 +110,7 @@ namespace Web.Services.Chat
             return room;
         }
 
-        public async Task<RemoveChatRoomFavoriteResult?> RemoveFavorite(int chatRoomId, string userId)
+        public async Task<RemoveChatRoomFavoriteResult> RemoveFavorite(int chatRoomId, string userId)
         {
             bool idIsValid = Guid.TryParse(userId, out Guid id);
             if (!idIsValid)
@@ -121,7 +121,7 @@ namespace Web.Services.Chat
             return await this.RemoveFavorite(chatRoomId, id);
         }
 
-        public async Task<RemoveChatRoomFavoriteResult?> RemoveFavorite(int chatRoomId, Guid userId)
+        public async Task<RemoveChatRoomFavoriteResult> RemoveFavorite(int chatRoomId, Guid userId)
         {
             var chatRoom = await this.repository.GetByIdAsync<ChatRoom>(chatRoomId);
             if (chatRoom == null || chatRoom?.IsDeleted == true)

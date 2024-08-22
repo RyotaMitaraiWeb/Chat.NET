@@ -1,8 +1,11 @@
 ﻿using Common.Authentication;
 using Common.Enums;
+using Common.ErrorMessages;
+using Common.Util;
 using Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.ViewModels.Authentication;
 using Web.ViewModels.ChatRoom;
 
 namespace Web.Controllers
@@ -78,6 +81,48 @@ namespace Web.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPut]
+        [Route("{id}/favorite")]
+        public async Task<IActionResult> AddFavorite(int id, [ModelBinder] UserClaimsViewModel claims)
+        {
+            AddChatRoomFavoriteResult result = await this.chatRoomService.AddFavorite(id, claims.Id);
+
+            if (result == AddChatRoomFavoriteResult.Success)
+            {
+                return NoContent();
+            }
+
+            ErrorResponse error = FavoriteChatRoomsErrorMessages.GenerateErrorMessage(result);
+
+            if (result == AddChatRoomFavoriteResult.UserOrChatRoomDoesNotExist)
+            {
+                return NotFound(error);
+            }
+
+            return BadRequest(error);
+        }
+
+        [HttpDelete]
+        [Route("{id}/favorite")]
+        public async Task<IActionResult> RemoveFavorite(int id, [ModelBinder] UserClaimsViewModel claims)
+        {
+            RemoveChatRoomFavoriteResult result = await this.chatRoomService.RemoveFavorite(id, claims.Id);
+
+            if (result == RemoveChatRoomFavoriteResult.Success)
+            {
+                return NoContent();
+            }
+
+            ErrorResponse error = FavoriteChatRoomsErrorMessages.GenerateErrorMessage(result);
+
+            if (result == RemoveChatRoomFavoriteResult.ChatRoomDoesNotExist)
+            {
+                return NotFound(error);
+            }
+
+            return BadRequest(error);
         }
     }
 }

@@ -3,17 +3,26 @@ using Contracts;
 using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Web.Controllers;
+using Web.ViewModels.Authentication;
 using Web.ViewModels.ChatRoom;
 
 namespace Tests.Unit.Controllers
 {
     public class ChatRoomControllerTests
     {
-        public IChatRoomService ChatRoomService { get; set; } = Substitute.For<IChatRoomService>();
+        public IChatRoomService ChatRoomService { get; set; }
         public ChatRoomController ChatRoomController { get; set; }
 
-        public ChatRoomControllerTests()
+        public UserClaimsViewModel Claims = new()
         {
+            Id = "1",
+            Username = "a"
+        };
+
+        [SetUp]
+        public void SetUp()
+        {
+            this.ChatRoomService = Substitute.For<IChatRoomService>();
             this.ChatRoomController = new ChatRoomController(this.ChatRoomService);
         }
 
@@ -92,6 +101,78 @@ namespace Tests.Unit.Controllers
             var result = await this.ChatRoomController.Delete(1);
 
             Assert.That(result, Is.TypeOf<NotFoundResult>());
+        }
+
+        [Test]
+        public async Task Test_AddFavoriteReturnsNoContentWhenSuccessful()
+        {
+            string userId = "1";
+
+            this.ChatRoomService.AddFavorite(1, userId).Returns(AddChatRoomFavoriteResult.Success);
+
+            var result = await this.ChatRoomController.AddFavorite(1, this.Claims);
+
+            Assert.That(result, Is.TypeOf<NoContentResult>());
+        }
+
+        [Test]
+        public async Task Test_AddFavoriteReturns404IfRoomDoesNotExist()
+        {
+            string userId = "1";
+
+            this.ChatRoomService.AddFavorite(1, userId).Returns(AddChatRoomFavoriteResult.UserOrChatRoomDoesNotExist);
+
+            var result = await this.ChatRoomController.AddFavorite(1, this.Claims);
+
+            Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
+        }
+
+        [Test]
+        public async Task Test_AddFavoriteReturnsBadRequestWhenTheRoomIsAlreadyFavorite()
+        {
+            string userId = "1";
+
+            this.ChatRoomService.AddFavorite(1, userId).Returns(AddChatRoomFavoriteResult.AlreadyFavorite);
+
+            var result = await this.ChatRoomController.AddFavorite(1, this.Claims);
+
+            Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
+        }
+
+        [Test]
+        public async Task Test_RemoveFavoriteReturnsNoContentWhenSuccessful()
+        {
+            string userId = "1";
+
+            this.ChatRoomService.RemoveFavorite(1, userId).Returns(RemoveChatRoomFavoriteResult.Success);
+
+            var result = await this.ChatRoomController.RemoveFavorite(1, this.Claims);
+
+            Assert.That(result, Is.TypeOf<NoContentResult>());
+        }
+
+        [Test]
+        public async Task Test_RemoveFavoriteReturns404IfRoomDoesNotExist()
+        {
+            string userId = "1";
+
+            this.ChatRoomService.RemoveFavorite(1, userId).Returns(RemoveChatRoomFavoriteResult.ChatRoomDoesNotExist);
+
+            var result = await this.ChatRoomController.RemoveFavorite(1, this.Claims);
+
+            Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
+        }
+
+        [Test]
+        public async Task Test_RemoveFavoriteReturnsBadRequestWhenTheRoomIsAlreadyFavorite()
+        {
+            string userId = "1";
+
+            this.ChatRoomService.RemoveFavorite(1, userId).Returns(RemoveChatRoomFavoriteResult.NotFavorite);
+
+            var result = await this.ChatRoomController.RemoveFavorite(1, this.Claims);
+
+            Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
         }
     }
 }
