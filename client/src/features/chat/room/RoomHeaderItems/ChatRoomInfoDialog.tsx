@@ -7,6 +7,7 @@ import DialogFooter from '@/components/dialog/dialogFooter/DialogFooter';
 import DialogTitle from '@/components/dialog/dialogTitle/DialogTitle';
 import { Chat } from '@/types/chat';
 import React from 'react';
+import FavoriteButton from './FavoriteButton/FavoriteButton';
 
 type ChatRoomInfoDialogProps = {
   room: Chat;
@@ -20,6 +21,7 @@ function ChatRoomInfoDialog(props: ChatRoomInfoDialogProps): React.JSX.Element {
       <DialogTitle>{props.room.title}</DialogTitle>
       <DialogContent className="chat-room-dialog-content">{props.room.description}</DialogContent>
       <DialogFooter>
+        <FavoriteButton room={props.room} />
         <Button variant="text" onClick={props.onClose}>
           Close
         </Button>

@@ -15,5 +15,8 @@ export const api = {
     update: (id: string | number) => `${chat}/${id}`,
     delete: (id: string | number) => `${chat}/${id}`,
     search: chat,
+    favorite: {
+      change: (id: string | number) => `${chat}/${id}/favorite`,
+    },
   },
 };
