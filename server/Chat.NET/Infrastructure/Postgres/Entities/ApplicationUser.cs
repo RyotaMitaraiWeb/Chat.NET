@@ -10,5 +10,6 @@ namespace Infrastructure.Postgres.Entities
         }
 
         public virtual ICollection<ApplicationUserRole> UserRoles { get; set; } = null!;
+        public ICollection<UserFavoriteChatRoom> FavoriteChatRooms { get; set; } = [];
     }
 }

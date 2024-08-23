@@ -12,6 +12,7 @@ export type Chat = {
   id: number;
   title: string;
   description: string;
+  isFavorite: boolean;
 };
 
 export type ChatMessage = {

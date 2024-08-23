@@ -19,7 +19,7 @@ namespace Web.ModelBinders
            
            try
             {
-                string? jwt = bindingContext.HttpContext?.Request.Headers.Authorization.First();
+                string? jwt = bindingContext.HttpContext?.Request.Headers.Authorization.FirstOrDefault();
                 jwt ??= string.Empty;
                 var user = this.jwtService.ExtractUserFromJWT(jwt);
                 bindingContext.Result = ModelBindingResult.Success(user);

@@ -14,11 +14,11 @@ namespace Tests.Unit.Services
 {
     public class RoleServiceTests
     {
-        public UserManager<ApplicationUser> UserManager { get; set; } = UserManagerMock.Create();
+        public UserManager<ApplicationUser> UserManager { get; set; }
         public RoleService RoleService { get; set; }
 
-        private readonly ICollection<ApplicationUserRole> Roles = new List<ApplicationUserRole>()
-        {
+        private readonly ICollection<ApplicationUserRole> Roles =
+        [
             new()
             {
                 Role = new ApplicationRole() { Name = Moderator }
@@ -27,11 +27,12 @@ namespace Tests.Unit.Services
             {
                 Role = new ApplicationRole() { Name = User }
             }
-        };
+        ];
 
         [SetUp]
         public void SetUp()
         {
+            this.UserManager = UserManagerMock.Create();
             this.RoleService = new RoleService(this.UserManager);
         }
 
@@ -190,6 +191,8 @@ namespace Tests.Unit.Services
                 UserName = "Test",
                 UserRoles = Roles
             };
+
+            this.UserManager.FindByIdAsync(roleData.UserId).Returns(appUser);
 
             var result = await this.RoleService.RemoveRoleByUserId(roleData);
 
