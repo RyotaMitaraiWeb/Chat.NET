@@ -5,6 +5,7 @@ using Common.Util;
 using Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Web.ModelBinders;
 using Web.ViewModels.Authentication;
 using Web.ViewModels.ChatRoom;
 
@@ -12,16 +13,18 @@ namespace Web.Controllers
 {
     [Route("/chat")]
     [ApiController]
-    public class ChatRoomController(IChatRoomService chatRoomService) : BaseController
+    public class ChatRoomController(IChatRoomService chatRoomService, IJwtService jwtService) : BaseController
     {
         private readonly IChatRoomService chatRoomService = chatRoomService;
+        private readonly IJwtService jwtService = jwtService;
 
         [HttpGet]
         [Route("{id}")]
         [AllowAnonymous]
-        public async Task<IActionResult> FindById(int id)
+        public async Task<IActionResult> FindById(int id, [FromHeader(Name = "Authorization")] string token)
         {
-            var room = await this.chatRoomService.GetById(id);
+            var claims = this.jwtService.ExtractUserFromJWT(token);
+            var room = await this.chatRoomService.GetById(id, claims.Id);
             if (room is null)
             {
                 return NotFound();
@@ -85,7 +88,7 @@ namespace Web.Controllers
 
         [HttpPut]
         [Route("{id}/favorite")]
-        public async Task<IActionResult> AddFavorite(int id, [ModelBinder] UserClaimsViewModel claims)
+        public async Task<IActionResult> AddFavorite(int id, [ModelBinder(BinderType = typeof(JwtToClaimsBinder))] UserClaimsViewModel claims)
         {
             AddChatRoomFavoriteResult result = await this.chatRoomService.AddFavorite(id, claims.Id);
 

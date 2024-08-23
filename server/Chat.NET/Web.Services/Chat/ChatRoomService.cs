@@ -2,7 +2,6 @@
 using Contracts;
 using Infrastructure.Postgres.Entities;
 using Infrastructure.Postgres.Repository;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Web.ViewModels.ChatRoom;
 
@@ -95,7 +94,7 @@ namespace Web.Services.Chat
             return ChatRoomDeleteResult.Success;
         }
 
-        public async Task<GetChatRoomViewModel?> GetById(int chatRoomId)
+        public async Task<GetChatRoomViewModel?> GetById(int chatRoomId, string userId)
         {
             var room = await this.repository.AllReadonly<ChatRoom>()
                 .Where(cr => cr.Id == chatRoomId && !cr.IsDeleted)
@@ -104,6 +103,7 @@ namespace Web.Services.Chat
                     Id = cr.Id,
                     Title = cr.Title,
                     Description = cr.Description,
+                    IsFavorite = cr.UserFavorites.FirstOrDefault(cr => cr.UserId.ToString() == userId) != null,
                 })
                 .FirstOrDefaultAsync();
 

@@ -11,6 +11,7 @@ namespace Tests.Unit.Controllers
     public class ChatRoomControllerTests
     {
         public IChatRoomService ChatRoomService { get; set; }
+        public IJwtService JwtService { get; set; }
         public ChatRoomController ChatRoomController { get; set; }
 
         public UserClaimsViewModel Claims = new()
@@ -19,17 +20,22 @@ namespace Tests.Unit.Controllers
             Username = "a"
         };
 
+        public string Token = "1";
+
         [SetUp]
         public void SetUp()
         {
             this.ChatRoomService = Substitute.For<IChatRoomService>();
-            this.ChatRoomController = new ChatRoomController(this.ChatRoomService);
+            this.JwtService = Substitute.For<IJwtService>();
+
+            this.JwtService.ExtractUserFromJWT(this.Token).Returns(this.Claims);
+            this.ChatRoomController = new ChatRoomController(this.ChatRoomService, this.JwtService);
         }
 
         [Test]
         public async Task Test_FindByIdReturnsOkWhenItRetrievesAChatRoom()
         {
-            this.ChatRoomService.GetById(1).Returns(new GetChatRoomViewModel()
+            this.ChatRoomService.GetById(1, this.Claims.Id).Returns(new GetChatRoomViewModel()
                 { 
                     Id = 1, 
                     Title = "a",
@@ -37,7 +43,7 @@ namespace Tests.Unit.Controllers
                 }
             );
 
-            var result = await this.ChatRoomController.FindById(1);
+            var result = await this.ChatRoomController.FindById(1, this.Claims.Id);
 
             var res = result as OkObjectResult;
             var content = res?.Value as GetChatRoomViewModel;
@@ -54,9 +60,9 @@ namespace Tests.Unit.Controllers
         public async Task Test_FindByIdReturnsNotFoundWhenItCannotFindTheChatRoom()
         {
             GetChatRoomViewModel? room = null;
-            this.ChatRoomService.GetById(1).Returns(room);
+            this.ChatRoomService.GetById(1, this.Claims.Id).Returns(room);
 
-            var result = await this.ChatRoomController.FindById(1);
+            var result = await this.ChatRoomController.FindById(1, this.Claims.Id);
 
             Assert.That(result, Is.TypeOf<NotFoundResult>());
         }

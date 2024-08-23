@@ -41,7 +41,6 @@ namespace Tests.Unit.Services
             this.ChatRoomService = new ChatRoomService(this.Repository);
         }
 
-
         [Test]
         public async Task Test_UpdateReturnsSuccessWhenSuccessful()
         {
