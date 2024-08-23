@@ -112,23 +112,18 @@ namespace Tests.Unit.Controllers
         [Test]
         public async Task Test_AddFavoriteReturnsNoContentWhenSuccessful()
         {
-            string userId = "1";
+            this.ChatRoomService.AddFavorite(1, this.Claims.Id).Returns(AddChatRoomFavoriteResult.Success);
 
-            this.ChatRoomService.AddFavorite(1, userId).Returns(AddChatRoomFavoriteResult.Success);
-
-            var result = await this.ChatRoomController.AddFavorite(1, this.Claims);
+            var result = await this.ChatRoomController.AddFavorite(1, this.Token);
 
             Assert.That(result, Is.TypeOf<NoContentResult>());
         }
 
         [Test]
-        public async Task Test_AddFavoriteReturns404IfRoomDoesNotExist()
-        {
-            string userId = "1";
+        public async Task Test_AddFavoriteReturns404IfRoomDoesNotExist() {
+            this.ChatRoomService.AddFavorite(1, Claims.Id).Returns(AddChatRoomFavoriteResult.UserOrChatRoomDoesNotExist);
 
-            this.ChatRoomService.AddFavorite(1, userId).Returns(AddChatRoomFavoriteResult.UserOrChatRoomDoesNotExist);
-
-            var result = await this.ChatRoomController.AddFavorite(1, this.Claims);
+            var result = await this.ChatRoomController.AddFavorite(1, this.Token);
 
             Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
         }
@@ -136,11 +131,9 @@ namespace Tests.Unit.Controllers
         [Test]
         public async Task Test_AddFavoriteReturnsBadRequestWhenTheRoomIsAlreadyFavorite()
         {
-            string userId = "1";
+            this.ChatRoomService.AddFavorite(1, this.Claims.Id).Returns(AddChatRoomFavoriteResult.AlreadyFavorite);
 
-            this.ChatRoomService.AddFavorite(1, userId).Returns(AddChatRoomFavoriteResult.AlreadyFavorite);
-
-            var result = await this.ChatRoomController.AddFavorite(1, this.Claims);
+            var result = await this.ChatRoomController.AddFavorite(1, this.Token);
 
             Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
         }
@@ -148,11 +141,9 @@ namespace Tests.Unit.Controllers
         [Test]
         public async Task Test_RemoveFavoriteReturnsNoContentWhenSuccessful()
         {
-            string userId = "1";
+            this.ChatRoomService.RemoveFavorite(1, this.Claims.Id).Returns(RemoveChatRoomFavoriteResult.Success);
 
-            this.ChatRoomService.RemoveFavorite(1, userId).Returns(RemoveChatRoomFavoriteResult.Success);
-
-            var result = await this.ChatRoomController.RemoveFavorite(1, this.Claims);
+            var result = await this.ChatRoomController.RemoveFavorite(1, this.Token);
 
             Assert.That(result, Is.TypeOf<NoContentResult>());
         }
@@ -160,11 +151,9 @@ namespace Tests.Unit.Controllers
         [Test]
         public async Task Test_RemoveFavoriteReturns404IfRoomDoesNotExist()
         {
-            string userId = "1";
+            this.ChatRoomService.RemoveFavorite(1, this.Claims.Id).Returns(RemoveChatRoomFavoriteResult.ChatRoomDoesNotExist);
 
-            this.ChatRoomService.RemoveFavorite(1, userId).Returns(RemoveChatRoomFavoriteResult.ChatRoomDoesNotExist);
-
-            var result = await this.ChatRoomController.RemoveFavorite(1, this.Claims);
+            var result = await this.ChatRoomController.RemoveFavorite(1, this.Token);
 
             Assert.That(result, Is.TypeOf<NotFoundObjectResult>());
         }
@@ -172,11 +161,9 @@ namespace Tests.Unit.Controllers
         [Test]
         public async Task Test_RemoveFavoriteReturnsBadRequestWhenTheRoomIsAlreadyFavorite()
         {
-            string userId = "1";
+            this.ChatRoomService.RemoveFavorite(1, this.Claims.Id).Returns(RemoveChatRoomFavoriteResult.NotFavorite);
 
-            this.ChatRoomService.RemoveFavorite(1, userId).Returns(RemoveChatRoomFavoriteResult.NotFavorite);
-
-            var result = await this.ChatRoomController.RemoveFavorite(1, this.Claims);
+            var result = await this.ChatRoomController.RemoveFavorite(1, this.Token);
 
             Assert.That(result, Is.TypeOf<BadRequestObjectResult>());
         }

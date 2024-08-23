@@ -88,8 +88,9 @@ namespace Web.Controllers
 
         [HttpPut]
         [Route("{id}/favorite")]
-        public async Task<IActionResult> AddFavorite(int id, [ModelBinder(BinderType = typeof(JwtToClaimsBinder))] UserClaimsViewModel claims)
+        public async Task<IActionResult> AddFavorite(int id, [FromHeader(Name = "Authorization")] string token)
         {
+            var claims = this.jwtService.ExtractUserFromJWT(token);
             AddChatRoomFavoriteResult result = await this.chatRoomService.AddFavorite(id, claims.Id);
 
             if (result == AddChatRoomFavoriteResult.Success)
@@ -109,8 +110,10 @@ namespace Web.Controllers
 
         [HttpDelete]
         [Route("{id}/favorite")]
-        public async Task<IActionResult> RemoveFavorite(int id, [ModelBinder] UserClaimsViewModel claims)
+        public async Task<IActionResult> RemoveFavorite(int id, [FromHeader(Name = "Authorization")] string token)
         {
+            var claims = this.jwtService.ExtractUserFromJWT(token);
+
             RemoveChatRoomFavoriteResult result = await this.chatRoomService.RemoveFavorite(id, claims.Id);
 
             if (result == RemoveChatRoomFavoriteResult.Success)
