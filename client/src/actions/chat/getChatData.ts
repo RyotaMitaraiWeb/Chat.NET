@@ -2,18 +2,20 @@ import { api } from '@/constants/api';
 import { Chat } from '@/types/chat';
 
 export async function getChatRoomData(id: number): Promise<Chat> {
+  const headers = new Headers();
+  headers.set('Content-Type', 'application/json');
+  headers.set('Authorization', localStorage.getItem('access_token') || '');
+
   const res = await fetch(api.chat.get(id), {
     method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
   });
 
   if (!res.ok) {
     throw new Error();
   }
 
-  const data = res.json();
+  const data = await res.json();
 
-  return data as Promise<Chat>;
+  return data;
 }

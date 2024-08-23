@@ -5,8 +5,6 @@ using Common.Util;
 using Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Web.ModelBinders;
-using Web.ViewModels.Authentication;
 using Web.ViewModels.ChatRoom;
 
 namespace Web.Controllers
@@ -88,7 +86,7 @@ namespace Web.Controllers
 
         [HttpPut]
         [Route("{id}/favorite")]
-        public async Task<IActionResult> AddFavorite(int id, [FromHeader(Name = "Authorization")] string token)
+        public async Task<IActionResult> AddFavorite(int id, [FromHeader(Name = "Authorization")] string token = "")
         {
             var claims = this.jwtService.ExtractUserFromJWT(token);
             AddChatRoomFavoriteResult result = await this.chatRoomService.AddFavorite(id, claims.Id);
@@ -110,7 +108,7 @@ namespace Web.Controllers
 
         [HttpDelete]
         [Route("{id}/favorite")]
-        public async Task<IActionResult> RemoveFavorite(int id, [FromHeader(Name = "Authorization")] string token)
+        public async Task<IActionResult> RemoveFavorite(int id, [FromHeader(Name = "Authorization")] string token = "")
         {
             var claims = this.jwtService.ExtractUserFromJWT(token);
 

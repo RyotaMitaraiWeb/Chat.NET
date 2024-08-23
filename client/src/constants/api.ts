@@ -1,7 +1,7 @@
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+// Const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 const clientApiUrl = process.env.NEXT_PUBLIC_CLIENT_COMPONENTS_API_URL;
 const auth = `${clientApiUrl}/auth`;
-const chat = `${apiUrl}/chat`;
+const chat = `${clientApiUrl}/chat`;
 
 export const api = {
   auth: {
