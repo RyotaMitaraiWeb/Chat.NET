@@ -5,6 +5,8 @@ import AddFavorite from './buttons/AddFavorite';
 import RemoveFavorite from './buttons/RemoveFavorite';
 import { addFavorite } from '@/actions/chat/addFavorite';
 import { removeFavorite } from '@/actions/chat/removeFavorite';
+import Button from '@/components/button/Button';
+import { MdOutlineArrowDownward } from 'react-icons/md';
 
 type FavoriteButtonProps = {
   room: Chat;
@@ -12,13 +14,30 @@ type FavoriteButtonProps = {
 
 function FavoriteButton(props: FavoriteButtonProps): React.JSX.Element {
   const [favorite, setFavorite] = useState(props.room.isFavorite);
+  const [loading, setLoading] = useState(false);
 
   function markAsFavorite() {
-    addFavorite(props.room.id).then(() => setFavorite(true));
+    setLoading(true);
+    addFavorite(props.room.id).then(() => {
+      setFavorite(true);
+      setLoading(false);
+    });
   }
 
   function removeAsFavorite() {
-    removeFavorite(props.room.id).then(() => setFavorite(false));
+    setLoading(true);
+    removeFavorite(props.room.id).then(() => {
+      setFavorite(false);
+      setLoading(false);
+    });
+  }
+
+  if (loading) {
+    return (
+      <Button disabled icon={<MdOutlineArrowDownward />}>
+        Processing request...
+      </Button>
+    );
   }
 
   if (!favorite) {

@@ -1,3 +1,4 @@
+'use client';
 import Button from '@/components/button/Button';
 import { MdFavorite } from 'react-icons/md';
 
