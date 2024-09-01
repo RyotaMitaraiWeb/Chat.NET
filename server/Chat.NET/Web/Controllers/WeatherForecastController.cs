@@ -1,7 +1,9 @@
+using Contracts;
 using Infrastructure.Postgres.Entities;
 using Infrastructure.Postgres.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Web.ViewModels.Commands;
 
 namespace Chat.NET.Controllers
 {
@@ -16,22 +18,18 @@ namespace Chat.NET.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
         private readonly UserManager<ApplicationUser> userManager;
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, UserManager<ApplicationUser> userManager)
+        private readonly ICommandService commandService;
+        public WeatherForecastController(ILogger<WeatherForecastController> logger, UserManager<ApplicationUser> userManager, ICommandService commandService)
         {
             _logger = logger;
             this.userManager = userManager;
+            this.commandService = commandService;
         }
 
         [HttpGet("GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        public IActionResult Get()
         {
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            return Ok();
         }
 
         [HttpGet("Test")]
