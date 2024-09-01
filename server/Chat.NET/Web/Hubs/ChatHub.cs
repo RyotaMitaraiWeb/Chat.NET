@@ -2,14 +2,17 @@
 using Common.Enums;
 using Common.ErrorMessages;
 using Common.Hubs;
+using Common.Util;
 using Contracts;
 using Contracts.Hubs;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using System.Security.Claims;
 using Web.ViewModels.Authentication;
 using Web.ViewModels.ChatRoom;
+using Web.ViewModels.Commands;
 using Web.ViewModels.Role;
 using Web.ViewModels.User;
 
@@ -22,7 +25,8 @@ namespace Web.Hubs
             IRoleService roleService,
             IChatRoomManager chatRoomManager,
             IChatRoomMessageService chatRoomMessageService,
-            IValidator<SendChatRoomMessageViewModel> messageValidator
+            IValidator<SendChatRoomMessageViewModel> messageValidator,
+            ICommandService commandService
         ) : Hub<IChatHubClient>
     {
         private readonly IJwtService jwtService = jwtService;
@@ -32,6 +36,7 @@ namespace Web.Hubs
         private readonly IChatRoomManager chatRoomManager = chatRoomManager;
         private readonly IChatRoomMessageService chatRoomMessageService = chatRoomMessageService;
         private readonly IValidator<SendChatRoomMessageViewModel> messageValidator = messageValidator;
+        private readonly ICommandService commandService = commandService;
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task StartSession()
@@ -203,6 +208,51 @@ namespace Web.Hubs
             {
                 await Clients.Groups(HubPrefixes.ChatRoomGroupPrefix(roomToLeave.Id)).UserLeave(claims);
             }
+        }
+
+        [Authorize(Policy = Policies.IsChatModeratorSignalR)]
+        public async Task BanUser(BanCommandViewModel command)
+        {
+            var user = await this.userService.FindUserByUsername(command.Username);
+            if (user is null)
+            {
+                var response = new ErrorResponse("User does not exist");
+                await this.Clients.Caller.CommandFailed(response);
+                return;
+            }
+
+            command.UserId = user.Id;
+
+            BanCommandResult result = await this.commandService.Ban(command);
+            if (result == BanCommandResult.AlreadyBanned)
+            {
+                var response = new ErrorResponse("User is already banned");
+                await this.Clients.Caller.CommandFailed(response);
+                return;
+            }
+
+            IEnumerable<string> connectionIds = await this.chatRoomManager
+                .BanUser(command.ChatRoomId, user.Id);
+
+            var bannedUserClaims = new UserClaimsViewModel()
+            {
+                Id = user.Id,
+                Username = user.Username,
+            };
+
+            foreach (var connectionId in connectionIds)
+            {
+                await Groups
+                    .RemoveFromGroupAsync(connectionId, HubPrefixes.ChatRoomGroupPrefix(command.ChatRoomId));
+
+                await Clients.Client(connectionId).Ban();
+            }
+
+            await Clients
+                .Groups(HubPrefixes.ChatRoomGroupPrefix(command.ChatRoomId))
+                .UserLeave(bannedUserClaims);
+
+            
         }
 
         public async override Task OnDisconnectedAsync(Exception? exception)
