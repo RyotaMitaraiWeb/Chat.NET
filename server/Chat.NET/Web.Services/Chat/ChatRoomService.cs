@@ -110,6 +110,12 @@ namespace Web.Services.Chat
             return room;
         }
 
+        public async Task<bool> CheckIfRoomExists(int chatRoomId)
+        {
+            var room = await this.repository.AllReadonly<ChatRoom>().FirstOrDefaultAsync(cr => cr.Id == chatRoomId && !cr.IsDeleted);
+            return room is not null;
+        }
+
         public async Task<RemoveChatRoomFavoriteResult> RemoveFavorite(int chatRoomId, string userId)
         {
             bool idIsValid = Guid.TryParse(userId, out Guid id);

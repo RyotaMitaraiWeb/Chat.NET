@@ -9,7 +9,6 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using System.Security.Claims;
 using Web.ViewModels.Authentication;
 using Web.ViewModels.ChatRoom;
 using Web.ViewModels.Commands;
@@ -26,7 +25,8 @@ namespace Web.Hubs
             IChatRoomManager chatRoomManager,
             IChatRoomMessageService chatRoomMessageService,
             IValidator<SendChatRoomMessageViewModel> messageValidator,
-            ICommandService commandService
+            ICommandService commandService,
+            IChatRoomService chatRoomService
         ) : Hub<IChatHubClient>
     {
         private readonly IJwtService jwtService = jwtService;
@@ -37,6 +37,7 @@ namespace Web.Hubs
         private readonly IChatRoomMessageService chatRoomMessageService = chatRoomMessageService;
         private readonly IValidator<SendChatRoomMessageViewModel> messageValidator = messageValidator;
         private readonly ICommandService commandService = commandService;
+        private readonly IChatRoomService chatRoomService = chatRoomService;
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task StartSession()
@@ -221,6 +222,14 @@ namespace Web.Hubs
                 return;
             }
 
+            bool roomExists = await this.chatRoomService.CheckIfRoomExists(command.ChatRoomId);
+            if (!roomExists)
+            {
+                var response = new ErrorResponse("Room does not exist");
+                await this.Clients.Caller.CommandFailed(response);
+                return;
+            }
+
             command.UserId = user.Id;
 
             BanCommandResult result = await this.commandService.Ban(command);
@@ -300,5 +309,4 @@ namespace Web.Hubs
             return claims;
         }
     }
-
 }

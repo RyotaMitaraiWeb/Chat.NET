@@ -17,5 +17,7 @@ namespace Contracts
         public Task<RemoveChatRoomFavoriteResult> RemoveFavorite(int chatRoomId, string userId);
         public Task<RemoveChatRoomFavoriteResult> RemoveFavorite(int chatRoomId, Guid userId);
 
+        public Task<bool> CheckIfRoomExists(int chatRoomId);
+
     }
 }
