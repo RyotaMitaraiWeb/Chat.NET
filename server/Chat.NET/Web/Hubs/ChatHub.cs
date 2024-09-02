@@ -255,8 +255,9 @@ namespace Web.Hubs
                 return;
             }
 
-            bool roomExists = await this.chatRoomService.CheckIfRoomExists(command.ChatRoomId);
-            if (!roomExists)
+            var room = await this.chatRoomService.GetById(command.ChatRoomId);
+
+            if (room is null)
             {
                 var response = new ErrorResponse("Room does not exist");
                 await this.Clients.Caller.CommandFailed(response);
@@ -288,7 +289,14 @@ namespace Web.Hubs
                     .RemoveFromGroupAsync(connectionId, HubPrefixes.ChatRoomGroupPrefix(command.ChatRoomId));
             }
 
-            await Clients.Groups(HubPrefixes.UserGroupPrefix(user.Id)).Ban();
+            ChatRoomPunishmentNotificationViewModel notification = new()
+            {
+                ChatRoomId = command.ChatRoomId,
+                ChatRoomName = room.Title,
+                Message = command.Reason,
+            };
+
+            await Clients.Groups(HubPrefixes.UserGroupPrefix(user.Id)).Ban(notification);
 
             await Clients
                 .Groups(HubPrefixes.ChatRoomGroupPrefix(command.ChatRoomId))

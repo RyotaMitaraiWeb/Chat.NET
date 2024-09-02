@@ -23,7 +23,7 @@ namespace Contracts.Hubs
         Task SendInitialChatRoomState(InitialChatRoomStateViewModel state);
         Task RoomDoesNotExist();
         Task Warn(ChatRoomPunishmentNotificationViewModel notification);
-        Task Ban();
+        Task Ban(ChatRoomPunishmentNotificationViewModel notification);
         Task Unban();
         Task CommandFailed(ErrorResponse error);
     }
