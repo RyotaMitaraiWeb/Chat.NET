@@ -212,6 +212,39 @@ namespace Web.Hubs
         }
 
         [Authorize(Policy = Policies.IsChatModeratorSignalR)]
+        public async Task WarnUser(WarnCommandViewModel command)
+        {
+            var user = await this.userService.FindUserByUsername(command.Username);
+            if (user is null)
+            {
+                var response = new ErrorResponse("User does not exist");
+                await this.Clients.Caller.CommandFailed(response);
+                return;
+            }
+
+            GetChatRoomViewModel? room = await this.chatRoomService.GetById(command.ChatRoomId);
+            if (room is null)
+            {
+                var response = new ErrorResponse("Room does not exist");
+                await this.Clients.Caller.CommandFailed(response);
+                return;
+            }
+
+            command.UserId = user.Id;
+
+            await this.commandService.Warn(command);
+
+            ChatRoomPunishmentNotificationViewModel notification = new()
+            {
+                ChatRoomId = command.ChatRoomId,
+                ChatRoomName = room.Title,
+                Message = command.Reason,
+            };
+
+            await Clients.Groups(HubPrefixes.UserGroupPrefix(user.Id)).Warn(notification);
+        }
+
+        [Authorize(Policy = Policies.IsChatModeratorSignalR)]
         public async Task BanUser(BanCommandViewModel command)
         {
             var user = await this.userService.FindUserByUsername(command.Username);
@@ -260,8 +293,28 @@ namespace Web.Hubs
             await Clients
                 .Groups(HubPrefixes.ChatRoomGroupPrefix(command.ChatRoomId))
                 .UserLeave(bannedUserClaims);
+        }
 
-            
+        [Authorize(Policy = Policies.IsChatModeratorSignalR)]
+        public async Task UnbanUser(UnbanCommandViewModel command)
+        {
+            var user = await this.userService.FindUserByUsername(command.Username);
+            if (user is null)
+            {
+                var response = new ErrorResponse("User does not exist");
+                await this.Clients.Caller.CommandFailed(response);
+                return;
+            }
+
+            command.UserId = user.Id;
+            UnbanCommandResult result = await this.commandService.Unban(command);
+
+            if (result == UnbanCommandResult.NotBanned)
+            {
+                var response = new ErrorResponse("User not banned from specified room");
+                await this.Clients.Caller.CommandFailed(response);
+                return;
+            }
         }
 
         public async override Task OnDisconnectedAsync(Exception? exception)

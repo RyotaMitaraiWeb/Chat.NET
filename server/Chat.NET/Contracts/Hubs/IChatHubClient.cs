@@ -1,6 +1,7 @@
 ﻿using Common.Util;
 using Web.ViewModels.Authentication;
 using Web.ViewModels.ChatRoom;
+using Web.ViewModels.Commands;
 using Web.ViewModels.Role;
 using Web.ViewModels.User;
 
@@ -21,7 +22,7 @@ namespace Contracts.Hubs
         Task UserLeave(UserClaimsViewModel user);
         Task SendInitialChatRoomState(InitialChatRoomStateViewModel state);
         Task RoomDoesNotExist();
-        Task Warn();
+        Task Warn(ChatRoomPunishmentNotificationViewModel notification);
         Task Ban();
         Task Unban();
         Task CommandFailed(ErrorResponse error);

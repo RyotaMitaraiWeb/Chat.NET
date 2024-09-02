@@ -110,6 +110,22 @@ namespace Web.Services.Chat
             return room;
         }
 
+        public async Task<GetChatRoomViewModel?> GetById(int chatRoomId)
+        {
+            var room = await this.repository.AllReadonly<ChatRoom>()
+                .Where(cr => cr.Id == chatRoomId && !cr.IsDeleted)
+                .Select(cr => new GetChatRoomViewModel()
+                {
+                    Id = cr.Id,
+                    Title = cr.Title,
+                    Description = cr.Description,
+                    IsFavorite = false,
+                })
+                .FirstOrDefaultAsync();
+
+            return room;
+        }
+
         public async Task<bool> CheckIfRoomExists(int chatRoomId)
         {
             var room = await this.repository.AllReadonly<ChatRoom>().FirstOrDefaultAsync(cr => cr.Id == chatRoomId && !cr.IsDeleted);
