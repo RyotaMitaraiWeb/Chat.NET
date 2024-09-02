@@ -253,9 +253,9 @@ namespace Web.Hubs
             {
                 await Groups
                     .RemoveFromGroupAsync(connectionId, HubPrefixes.ChatRoomGroupPrefix(command.ChatRoomId));
-
-                await Clients.Client(connectionId).Ban();
             }
+
+            await Clients.Groups(HubPrefixes.UserGroupPrefix(user.Id)).Ban();
 
             await Clients
                 .Groups(HubPrefixes.ChatRoomGroupPrefix(command.ChatRoomId))
