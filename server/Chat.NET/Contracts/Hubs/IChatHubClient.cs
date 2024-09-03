@@ -24,7 +24,7 @@ namespace Contracts.Hubs
         Task RoomDoesNotExist();
         Task Warn(ChatRoomPunishmentNotificationViewModel notification);
         Task Ban(ChatRoomPunishmentNotificationViewModel notification);
-        Task Unban();
+        Task Unban(ChatRoomPunishmentNotificationViewModel notification);
         Task CommandFailed(ErrorResponse error);
     }
 }

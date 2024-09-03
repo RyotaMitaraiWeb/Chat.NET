@@ -9,6 +9,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using Web.Validators;
 using Web.ViewModels.Authentication;
 using Web.ViewModels.ChatRoom;
 using Web.ViewModels.Commands;
@@ -214,57 +215,46 @@ namespace Web.Hubs
         [Authorize(Policy = Policies.IsChatModeratorSignalR)]
         public async Task WarnUser(WarnCommandViewModel command)
         {
-            var user = await this.userService.FindUserByUsername(command.Username);
-            if (user is null)
+            var commandValidationResult = new CommandValidator(this.userService, this.chatRoomService);
+            await commandValidationResult.Validate(command.ChatRoomId, command.Username);
+
+            if (!commandValidationResult.IsValid)
             {
-                var response = new ErrorResponse("User does not exist");
-                await this.Clients.Caller.CommandFailed(response);
+                await this.Clients.Caller.CommandFailed(commandValidationResult.Error!);
                 return;
             }
 
-            GetChatRoomViewModel? room = await this.chatRoomService.GetById(command.ChatRoomId);
-            if (room is null)
-            {
-                var response = new ErrorResponse("Room does not exist");
-                await this.Clients.Caller.CommandFailed(response);
-                return;
-            }
+            string userId = commandValidationResult.User?.Id ?? string.Empty;
 
-            command.UserId = user.Id;
+            command.UserId = userId;
 
             await this.commandService.Warn(command);
 
             ChatRoomPunishmentNotificationViewModel notification = new()
             {
                 ChatRoomId = command.ChatRoomId,
-                ChatRoomName = room.Title,
+                ChatRoomName = commandValidationResult.ChatRoom!.Title,
                 Message = command.Reason,
             };
 
-            await Clients.Groups(HubPrefixes.UserGroupPrefix(user.Id)).Warn(notification);
+            await Clients.Groups(HubPrefixes.UserGroupPrefix(userId)).Warn(notification);
         }
 
         [Authorize(Policy = Policies.IsChatModeratorSignalR)]
         public async Task BanUser(BanCommandViewModel command)
         {
-            var user = await this.userService.FindUserByUsername(command.Username);
-            if (user is null)
+            var commandValidationResult = new CommandValidator(this.userService, this.chatRoomService);
+            await commandValidationResult.Validate(command.ChatRoomId, command.Username);
+
+            if (!commandValidationResult.IsValid)
             {
-                var response = new ErrorResponse("User does not exist");
-                await this.Clients.Caller.CommandFailed(response);
+                await this.Clients.Caller.CommandFailed(commandValidationResult.Error!);
                 return;
             }
 
-            var room = await this.chatRoomService.GetById(command.ChatRoomId);
+            string userId = commandValidationResult.User?.Id ?? string.Empty;
 
-            if (room is null)
-            {
-                var response = new ErrorResponse("Room does not exist");
-                await this.Clients.Caller.CommandFailed(response);
-                return;
-            }
-
-            command.UserId = user.Id;
+            command.UserId = userId;
 
             BanCommandResult result = await this.commandService.Ban(command);
             if (result == BanCommandResult.AlreadyBanned)
@@ -275,12 +265,12 @@ namespace Web.Hubs
             }
 
             IEnumerable<string> connectionIds = await this.chatRoomManager
-                .BanUser(command.ChatRoomId, user.Id);
+                .BanUser(command.ChatRoomId, userId);
 
             var bannedUserClaims = new UserClaimsViewModel()
             {
-                Id = user.Id,
-                Username = user.Username,
+                Id = userId,
+                Username = command.Username,
             };
 
             foreach (var connectionId in connectionIds)
@@ -292,11 +282,11 @@ namespace Web.Hubs
             ChatRoomPunishmentNotificationViewModel notification = new()
             {
                 ChatRoomId = command.ChatRoomId,
-                ChatRoomName = room.Title,
+                ChatRoomName = commandValidationResult.ChatRoom!.Title,
                 Message = command.Reason,
             };
 
-            await Clients.Groups(HubPrefixes.UserGroupPrefix(user.Id)).Ban(notification);
+            await Clients.Groups(HubPrefixes.UserGroupPrefix(userId)).Ban(notification);
 
             await Clients
                 .Groups(HubPrefixes.ChatRoomGroupPrefix(command.ChatRoomId))
@@ -306,15 +296,18 @@ namespace Web.Hubs
         [Authorize(Policy = Policies.IsChatModeratorSignalR)]
         public async Task UnbanUser(UnbanCommandViewModel command)
         {
-            var user = await this.userService.FindUserByUsername(command.Username);
-            if (user is null)
+            var commandValidationResult = new CommandValidator(this.userService, this.chatRoomService);
+            await commandValidationResult.Validate(command.ChatRoomId, command.Username);
+
+            if (!commandValidationResult.IsValid)
             {
-                var response = new ErrorResponse("User does not exist");
-                await this.Clients.Caller.CommandFailed(response);
+                await this.Clients.Caller.CommandFailed(commandValidationResult.Error!);
                 return;
             }
 
-            command.UserId = user.Id;
+            string userId = commandValidationResult.User?.Id ?? string.Empty;
+
+            command.UserId = userId;
             UnbanCommandResult result = await this.commandService.Unban(command);
 
             if (result == UnbanCommandResult.NotBanned)
@@ -323,6 +316,15 @@ namespace Web.Hubs
                 await this.Clients.Caller.CommandFailed(response);
                 return;
             }
+
+            ChatRoomPunishmentNotificationViewModel notification = new()
+            {
+                ChatRoomId = command.ChatRoomId,
+                ChatRoomName = commandValidationResult.ChatRoom!.Title,
+                Message = "You can now rejoin the room. If this ban was in error, we are very sorry about this! If not, please behave so you don't get banned again!",
+            };
+
+            await Clients.Groups(HubPrefixes.UserGroupPrefix(userId)).Unban(notification);
         }
 
         public async override Task OnDisconnectedAsync(Exception? exception)
