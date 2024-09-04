@@ -4,7 +4,7 @@
     {
         public int ChatRoomId { get; set; }
         public string ChatRoomName { get; set; } = string.Empty;
-        public string? Message { get; set; };
+        public string? Message { get; set; }
 
     }
 }

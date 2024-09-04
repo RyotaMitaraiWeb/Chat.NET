@@ -1,3 +1,5 @@
+// eslint-disable-next-line max-len
+import { PunishmentNotificationContext } from '@/context/punishmentNotification/PunishmentNotificationContext';
 import { SessionContext } from '@/context/session/SessionContext';
 import { chatHubConnection } from '@/signalr/ChatHubConnection';
 import { useRouter } from 'next/navigation';
@@ -5,6 +7,7 @@ import { use } from 'react';
 
 export const useSession = () => {
   const { setUser, restartUser } = use(SessionContext);
+  const { close, open } = use(PunishmentNotificationContext);
   const router = useRouter();
 
   async function startSession() {
@@ -16,6 +19,9 @@ export const useSession = () => {
 
         chatHubConnection.on('UpdateUser', setUser);
         chatHubConnection.on('EndSession', restartUser);
+        chatHubConnection.on('Ban', open);
+        chatHubConnection.on('Warn', open);
+        chatHubConnection.on('Unban', open);
       })
       .catch(restartUser);
   }
@@ -27,6 +33,7 @@ export const useSession = () => {
       .then(() => {
         restartUser();
         router.push('/auth/login');
+        close();
       });
   }
 

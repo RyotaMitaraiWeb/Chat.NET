@@ -7,6 +7,8 @@ import Toolbar from '@/features/toolbar/Toolbar';
 import { cookies } from 'next/headers';
 import App from './App';
 import { SessionContextProvider } from '@/context/session/SessionContext';
+// eslint-disable-next-line max-len
+import { PunishmentNotificationContextProvider } from '@/context/punishmentNotification/PunishmentNotificationContext';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -22,12 +24,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }):
   return (
     <html lang="en">
       <body className={`${inter.className} ${theme} animations-${animations}`}>
-        <SessionContextProvider>
-          <SnackbarContextProvider>
-            <Toolbar />
-            <App>{children}</App>
-          </SnackbarContextProvider>
-        </SessionContextProvider>
+        <PunishmentNotificationContextProvider>
+          <SessionContextProvider>
+            <SnackbarContextProvider>
+              <Toolbar />
+              <App>{children}</App>
+            </SnackbarContextProvider>
+          </SessionContextProvider>
+        </PunishmentNotificationContextProvider>
       </body>
     </html>
   );

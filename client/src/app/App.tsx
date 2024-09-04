@@ -1,5 +1,6 @@
 'use client';
-
+// eslint-disable-next-line max-len
+import PunishmentNotificationDialog from '@/features/punishmentNotification/PunishmentNotificationDialog';
 import { useInit } from '@/hooks/useInit/useInit';
 import { useSession } from '@/hooks/useSession/useSession';
 
@@ -12,7 +13,12 @@ function App({ children }: { children: React.ReactNode }): React.JSX.Element {
     }
   });
 
-  return <main>{children}</main>;
+  return (
+    <main>
+      {children}
+      <PunishmentNotificationDialog />
+    </main>
+  );
 }
 
 export default App;
