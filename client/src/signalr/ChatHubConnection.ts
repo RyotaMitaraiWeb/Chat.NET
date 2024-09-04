@@ -9,7 +9,11 @@ export type chatHubClientMethods =
   | 'UserJoin'
   | 'UserLeave'
   | 'SendInitialChatRoomState'
-  | 'MessageSent';
+  | 'MessageSent'
+  | 'CommandFailed'
+  | 'Ban'
+  | 'Unban'
+  | 'Warn';
 export type chatHubServerMethods =
   | 'StartSession'
   | 'EndSession'
@@ -17,7 +21,10 @@ export type chatHubServerMethods =
   | 'RemoveRoleFromUser'
   | 'JoinChatRoom'
   | 'LeaveChatRoom'
-  | 'SendMessage';
+  | 'SendMessage'
+  | 'BanUser'
+  | 'WarnUser'
+  | 'UnbanUser';
 
 class ChatHubConnection extends SignalrConnection<chatHubClientMethods, chatHubServerMethods> {
   constructor() {
