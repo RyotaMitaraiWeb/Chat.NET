@@ -259,7 +259,7 @@ namespace Web.Hubs
             BanCommandResult result = await this.commandService.Ban(command);
             if (result == BanCommandResult.AlreadyBanned)
             {
-                var response = new ErrorResponse("User is already banned");
+                var response = new ErrorResponse(CommandFailedErrorMessages.Ban.UserAlreadyBanned(command.Username,commandValidationResult.ChatRoom?.Title ?? string.Empty));
                 await this.Clients.Caller.CommandFailed(response);
                 return;
             }
@@ -312,7 +312,7 @@ namespace Web.Hubs
 
             if (result == UnbanCommandResult.NotBanned)
             {
-                var response = new ErrorResponse("User not banned from specified room");
+                var response = new ErrorResponse(CommandFailedErrorMessages.Unban.UserIsNotBanned(command.Username, commandValidationResult.ChatRoom?.Title ?? string.Empty));
                 await this.Clients.Caller.CommandFailed(response);
                 return;
             }
@@ -321,7 +321,6 @@ namespace Web.Hubs
             {
                 ChatRoomId = command.ChatRoomId,
                 ChatRoomName = commandValidationResult.ChatRoom!.Title,
-                Message = "You can now rejoin the room. If this ban was in error, we are very sorry about this! If not, please behave so you don't get banned again!",
             };
 
             await Clients.Groups(HubPrefixes.UserGroupPrefix(userId)).Unban(notification);

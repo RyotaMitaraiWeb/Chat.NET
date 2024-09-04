@@ -1,4 +1,5 @@
-﻿using Common.Util;
+﻿using Common.ErrorMessages;
+using Common.Util;
 using Contracts;
 using Web.ViewModels.ChatRoom;
 using Web.ViewModels.User;
@@ -22,7 +23,7 @@ namespace Web.Validators
             if (user is null)
             {
                 this.IsValid = false;
-                this.Error = new ErrorResponse("User does not exist");
+                this.Error = new ErrorResponse(CommandFailedErrorMessages.UserDoesNotExist(username));
                 return;
             }
 
@@ -33,7 +34,7 @@ namespace Web.Validators
             if (room is null)
             {
                 this.IsValid = false;
-                this.Error = new ErrorResponse("Chat room does not exist");
+                this.Error = new ErrorResponse(CommandFailedErrorMessages.ChatRoomDoesNotExist);
                 return;
             }
 
