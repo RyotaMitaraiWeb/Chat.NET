@@ -1,4 +1,5 @@
 ﻿using Common.Authentication;
+using Common.CommandMessages;
 using Common.Enums;
 using Common.ErrorMessages;
 using Common.Hubs;
@@ -235,6 +236,8 @@ namespace Web.Hubs
                 ChatRoomId = command.ChatRoomId,
                 ChatRoomName = commandValidationResult.ChatRoom!.Title,
                 Message = command.Reason,
+                Title = CommandMessages.Warn.Title(commandValidationResult.ChatRoom!.Title),
+                Details = CommandMessages.Warn.Details,
             };
 
             await Clients.Groups(HubPrefixes.UserGroupPrefix(userId)).Warn(notification);
@@ -284,6 +287,8 @@ namespace Web.Hubs
                 ChatRoomId = command.ChatRoomId,
                 ChatRoomName = commandValidationResult.ChatRoom!.Title,
                 Message = command.Reason,
+                Title = CommandMessages.Ban.Title(commandValidationResult.ChatRoom!.Title),
+                Details = CommandMessages.Ban.Details,
             };
 
             await Clients.Groups(HubPrefixes.UserGroupPrefix(userId)).Ban(notification);
@@ -321,6 +326,8 @@ namespace Web.Hubs
             {
                 ChatRoomId = command.ChatRoomId,
                 ChatRoomName = commandValidationResult.ChatRoom!.Title,
+                Title = CommandMessages.Unban.Title(commandValidationResult.ChatRoom!.Title),
+                Details = CommandMessages.Unban.Details,
             };
 
             await Clients.Groups(HubPrefixes.UserGroupPrefix(userId)).Unban(notification);

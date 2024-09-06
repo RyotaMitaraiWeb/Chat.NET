@@ -13,6 +13,8 @@ export function PunishmentNotificationContextProvider({
   const [notification, setNotification] = useState<PunishmentNotification>({
     chatRoomId: 0,
     chatRoomName: '',
+    title: '',
+    details: '',
   });
 
   const [isOpen, setOpen] = useState(false);

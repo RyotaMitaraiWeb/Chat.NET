@@ -21,4 +21,6 @@ export type PunishmentNotification = {
   chatRoomId: number;
   chatRoomName: string;
   message?: string | null;
+  title: string;
+  details: string;
 };
