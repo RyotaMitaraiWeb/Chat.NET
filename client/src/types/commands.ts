@@ -9,6 +9,7 @@ export type WarnCommand = {
   userId: string;
   username: string;
   chatRoomId: number;
+  reason: string;
 };
 
 export type UnbanCommand = {

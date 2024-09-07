@@ -10,7 +10,6 @@ import { usersOnlineReducer } from './reducers/usersOnlineReducer';
 import { messagesReducer } from './reducers/messagesReducer';
 import MessageField from './room/messageField/MessageField';
 import Loader from '@/components/loader/Loader';
-import { BanCommand, UnbanCommand } from '@/types/commands';
 
 type ChatRoomProps = {
   room: Chat;
@@ -80,27 +79,6 @@ function ChatRoom(props: ChatRoomProps): React.JSX.Element {
     );
   }
 
-  function banRyota15() {
-    const ban: Partial<BanCommand> = {
-      username: 'ryota15',
-      userId: 'string',
-      chatRoomId: props.room.id,
-      reason: 'Bad user',
-    };
-
-    chatHubConnection.invoke('BanUser', ban);
-  }
-
-  function unban() {
-    const unban: Partial<UnbanCommand> = {
-      username: 'ryota15',
-      userId: 'string',
-      chatRoomId: props.room.id,
-    };
-
-    chatHubConnection.invoke('UnbanUser', unban);
-  }
-
   return (
     <div className="chat-room">
       <RoomHeader room={props.room} users={alphabetizedUserList} />
@@ -110,8 +88,6 @@ function ChatRoom(props: ChatRoomProps): React.JSX.Element {
         ))}
       </section>
       <MessageField chatRoomId={props.room.id} />
-      <button onClick={banRyota15}>Ban ryota15</button>
-      <button onClick={unban}>Unban ryota15</button>
     </div>
   );
 }
