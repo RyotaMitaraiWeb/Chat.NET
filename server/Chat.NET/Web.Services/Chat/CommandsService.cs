@@ -24,7 +24,10 @@ namespace Web.Services.Chat
         public async Task<BanCommandResult> Ban(BanCommandViewModel ban)
         {
             var currentBansDocuments = await this.punishmentsCollection
-                .FindAsync(b => b.IsActive && b.ChatRoomId == ban.ChatRoomId && b.NormalizedUsername == ban.Username.ToUpper(), new FindOptions<Punishment>() { Limit = 1 });
+                .FindAsync(b => 
+                    b.IsActive && b.ChatRoomId == ban.ChatRoomId 
+                    && b.NormalizedUsername == ban.Username.ToUpper()
+                    && b.Type == Punishments.Ban, new FindOptions<Punishment>() { Limit = 1 });
             
             var currentBan = await currentBansDocuments.FirstOrDefaultAsync();
             if (currentBan is not null)
@@ -38,6 +41,7 @@ namespace Web.Services.Chat
                 NormalizedUsername = ban.Username.ToUpper(),
                 IsActive = true,
                 Reason = ban.Reason,
+                Type = Punishments.Ban,
             };
 
             await this.punishmentsCollection.InsertOneAsync(punishment);
@@ -49,7 +53,10 @@ namespace Web.Services.Chat
             var update = Builders<Punishment>.Update.Set(ban => ban.IsActive, false);
 
             var result = await this.punishmentsCollection
-                .UpdateOneAsync(b => b.IsActive && b.ChatRoomId == unban.ChatRoomId && b.NormalizedUsername == unban.Username.ToUpper(),
+                .UpdateOneAsync(b => 
+                    b.IsActive && b.ChatRoomId == unban.ChatRoomId
+                    && b.NormalizedUsername == unban.Username.ToUpper()
+                    && b.Type == Punishments.Ban,
                 update);
 
            if (result.IsAcknowledged && result.ModifiedCount > 0)
@@ -69,6 +76,7 @@ namespace Web.Services.Chat
                 NormalizedUsername = warn.Username.ToUpper(),
                 Reason = warn.Reason,
                 IsActive = false,
+                Type = Punishments.Warn,
             };
 
             await this.punishmentsCollection.InsertOneAsync(punishment);

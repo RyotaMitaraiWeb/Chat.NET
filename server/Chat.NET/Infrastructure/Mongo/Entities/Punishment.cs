@@ -1,5 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
+using Common.Enums;
 
 namespace Infrastructure.Mongo.Entities
 {
@@ -16,5 +17,6 @@ namespace Infrastructure.Mongo.Entities
 
         public string Reason { get; set; } = string.Empty;
         public bool IsActive { get; set; }
+        public Punishments Type { get; set; }
     }
 }
