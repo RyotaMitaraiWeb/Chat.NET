@@ -9,7 +9,6 @@ namespace Infrastructure.Mongo.Entities
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id { get; set; }
 
-        public string? UserId { get; set; }
         public string? Username { get; set; }
         public string? NormalizedUsername { get; set; }
 

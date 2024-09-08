@@ -34,7 +34,6 @@ namespace Web.Services.Chat
 
             Punishment punishment = new () {
                 ChatRoomId = ban.ChatRoomId,
-                UserId = ban.UserId,
                 Username = ban.Username,
                 NormalizedUsername = ban.Username.ToUpper(),
                 IsActive = true,
@@ -68,7 +67,6 @@ namespace Web.Services.Chat
                 ChatRoomId = warn.ChatRoomId,
                 Username = warn.Username,
                 NormalizedUsername = warn.Username.ToUpper(),
-                UserId = warn.UserId,
                 Reason = warn.Reason,
                 IsActive = false,
             };
