@@ -10,6 +10,8 @@ namespace Infrastructure.Mongo.Entities
         public string? Id { get; set; }
 
         public string? UserId { get; set; }
+        public string? Username { get; set; }
+        public string? NormalizedUsername { get; set; }
 
         public int ChatRoomId { get; set; }
 

@@ -24,7 +24,7 @@ namespace Web.Services.Chat
         public async Task<BanCommandResult> Ban(BanCommandViewModel ban)
         {
             var currentBansDocuments = await this.punishmentsCollection
-                .FindAsync(b => b.IsActive && b.ChatRoomId == ban.ChatRoomId && ban.UserId == b.UserId, new FindOptions<Punishment>() { Limit = 1 });
+                .FindAsync(b => b.IsActive && b.ChatRoomId == ban.ChatRoomId && b.NormalizedUsername == ban.Username.ToUpper(), new FindOptions<Punishment>() { Limit = 1 });
             
             var currentBan = await currentBansDocuments.FirstOrDefaultAsync();
             if (currentBan is not null)
@@ -35,6 +35,8 @@ namespace Web.Services.Chat
             Punishment punishment = new () {
                 ChatRoomId = ban.ChatRoomId,
                 UserId = ban.UserId,
+                Username = ban.Username,
+                NormalizedUsername = ban.Username.ToUpper(),
                 IsActive = true,
                 Reason = ban.Reason,
             };
@@ -48,7 +50,7 @@ namespace Web.Services.Chat
             var update = Builders<Punishment>.Update.Set(ban => ban.IsActive, false);
 
             var result = await this.punishmentsCollection
-                .UpdateOneAsync(b => b.IsActive && b.ChatRoomId == unban.ChatRoomId && b.UserId == unban.UserId,
+                .UpdateOneAsync(b => b.IsActive && b.ChatRoomId == unban.ChatRoomId && b.NormalizedUsername == unban.Username.ToUpper(),
                 update);
 
            if (result.IsAcknowledged && result.ModifiedCount > 0)
@@ -64,6 +66,8 @@ namespace Web.Services.Chat
             Punishment punishment = new()
             {
                 ChatRoomId = warn.ChatRoomId,
+                Username = warn.Username,
+                NormalizedUsername = warn.Username.ToUpper(),
                 UserId = warn.UserId,
                 Reason = warn.Reason,
                 IsActive = false,
