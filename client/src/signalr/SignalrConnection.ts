@@ -65,11 +65,7 @@ export abstract class SignalrConnection<TC extends string, TS extends string>
   }
 
   async invoke(event: TS, ...args: unknown[]): Promise<void> {
-    try {
-      return await this.connection!.invoke(event, ...args);
-    } catch (err) {
-      asyncTimeout(() => this.invoke(event, ...args), 5000);
-    }
+    return await this._retry(() => this.connection!.invoke(event, ...args), 5);
   }
 
   on(event: TC, callback: (...args: never[]) => void): void {
@@ -102,13 +98,19 @@ export abstract class SignalrConnection<TC extends string, TS extends string>
       }
     }
   }
+
+  private async _retry(
+    callback: (...args: unknown[]) => Promise<void>,
+    attempts: number,
+  ): Promise<void> {
+    return callback().catch(async (err) => {
+      if (attempts > 0) {
+        return wait(1000).then(() => this._retry(callback, attempts - 1));
+      }
+
+      throw err;
+    });
+  }
 }
 
-const asyncTimeout = (callback: (...args: unknown[]) => void, timeout: number) =>
-  new Promise((resolve) => {
-    setTimeout(() => {
-      Promise.resolve(callback()).then(() => {
-        resolve(undefined);
-      });
-    }, timeout);
-  });
+const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
