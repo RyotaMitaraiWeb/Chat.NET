@@ -11,5 +11,6 @@ namespace Contracts
 
         public Task<IEnumerable<UserOnUserListViewModel>> GetUsersOnline(int chatRoomId);
         public Task<IEnumerable<int>> GetRoomsOfUser(string userId);
+        public Task<IEnumerable<string>> BanUser(int chatRoomId, string userId);
     }
 }

@@ -42,6 +42,7 @@ services:
       - REDIS_CONNECTION_STRING=redis
       - ALLOWED_ORIGINS=http://localhost:3000
       - REDIS_HOST=redis
+      - MONGO_CONNECTION_STRING=mongo
     env_file:
       - .env
     ports:

@@ -41,6 +41,30 @@ namespace Web.Services.Chat
             return userIsNew;
         }
 
+        public async Task<IEnumerable<string>> BanUser(int chatRoomId, string userId)
+        {
+            var room = await rooms
+                .FirstOrDefaultAsync((room => room.Id == chatRoomId));
+            if (room == null)
+            {
+                return [];
+            }
+
+            var user = room.Users
+                .FirstOrDefault(user => user.UserId == userId);
+
+            if (user is null)
+            {
+                return [];
+            }
+
+            room.Users.Remove(user);
+            await this.rooms.SaveAsync();
+
+            return user.Users;
+            
+        }
+
         public async Task<IEnumerable<int>> GetRoomsOfUser(string userId)
         {
             var userRooms = await rooms.AsNoTracking().ToListAsync();

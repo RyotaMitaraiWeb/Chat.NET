@@ -1,15 +1,21 @@
 ﻿using Common.Authentication;
+using Common.CommandMessages;
 using Common.Enums;
 using Common.ErrorMessages;
 using Common.Hubs;
+using Common.Util;
 using Contracts;
 using Contracts.Hubs;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using System.Net;
+using Web.Validators;
 using Web.ViewModels.Authentication;
 using Web.ViewModels.ChatRoom;
+using Web.ViewModels.Commands;
+using Web.ViewModels.General;
 using Web.ViewModels.Role;
 using Web.ViewModels.User;
 
@@ -22,7 +28,9 @@ namespace Web.Hubs
             IRoleService roleService,
             IChatRoomManager chatRoomManager,
             IChatRoomMessageService chatRoomMessageService,
-            IValidator<SendChatRoomMessageViewModel> messageValidator
+            IValidator<SendChatRoomMessageViewModel> messageValidator,
+            ICommandService commandService,
+            IChatRoomService chatRoomService
         ) : Hub<IChatHubClient>
     {
         private readonly IJwtService jwtService = jwtService;
@@ -32,6 +40,8 @@ namespace Web.Hubs
         private readonly IChatRoomManager chatRoomManager = chatRoomManager;
         private readonly IChatRoomMessageService chatRoomMessageService = chatRoomMessageService;
         private readonly IValidator<SendChatRoomMessageViewModel> messageValidator = messageValidator;
+        private readonly ICommandService commandService = commandService;
+        private readonly IChatRoomService chatRoomService = chatRoomService;
 
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task StartSession()
@@ -140,6 +150,20 @@ namespace Web.Hubs
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task JoinChatRoom(JoinChatRoomViewModel roomToJoin)
         {
+            bool userIsBannedFromChatRoom = await this.UserIsBanned(roomToJoin.Id);
+
+            if (userIsBannedFromChatRoom)
+            {
+                var error = new SignalRErrorViewModel()
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                    Message = "You are banned from the chat room and cannot join it",
+                };
+
+                await this.Clients.Caller.UserIsBanned(error);
+                return;
+            }
+
             var claims = ExtractClaims()!;
             string connectionId = Context.ConnectionId;
             await Groups.AddToGroupAsync(Context.ConnectionId, HubPrefixes.ChatRoomGroupPrefix(roomToJoin.Id));
@@ -174,6 +198,20 @@ namespace Web.Hubs
                 return;
             }
 
+            bool userIsBannedFromChatRoom = await this.UserIsBanned(messageToSend.ChatRoomId);
+
+            if (userIsBannedFromChatRoom)
+            {
+                var error = new SignalRErrorViewModel()
+                {
+                    StatusCode = HttpStatusCode.Forbidden,
+                    Message = "You are banned from the chat room and cannot send this message to it",
+                };
+
+                await this.Clients.Caller.UserIsBanned(error);
+                return;
+            }
+
             var validation = await this.messageValidator.ValidateAsync(messageToSend);
             if (!validation.IsValid)
             {
@@ -203,6 +241,121 @@ namespace Web.Hubs
             {
                 await Clients.Groups(HubPrefixes.ChatRoomGroupPrefix(roomToLeave.Id)).UserLeave(claims);
             }
+        }
+
+        [Authorize(Policy = Policies.IsChatModeratorSignalR)]
+        public async Task WarnUser(WarnCommandViewModel command)
+        {
+            var commandValidationResult = new CommandValidator(this.userService, this.chatRoomService);
+            await commandValidationResult.Validate(command.ChatRoomId, command.Username);
+
+            if (!commandValidationResult.IsValid)
+            {
+                await this.Clients.Caller.CommandFailed(commandValidationResult.Error!);
+                return;
+            }
+
+            string userId = commandValidationResult.User?.Id ?? string.Empty;
+
+            await this.commandService.Warn(command);
+
+            ChatRoomPunishmentNotificationViewModel notification = new()
+            {
+                ChatRoomId = command.ChatRoomId,
+                ChatRoomName = commandValidationResult.ChatRoom!.Title,
+                Message = command.Reason,
+                Title = CommandMessages.Warn.Title(commandValidationResult.ChatRoom!.Title),
+                Details = CommandMessages.Warn.Details,
+            };
+
+            await Clients.Groups(HubPrefixes.UserGroupPrefix(userId)).Warn(notification);
+        }
+
+        [Authorize(Policy = Policies.IsChatModeratorSignalR)]
+        public async Task BanUser(BanCommandViewModel command)
+        {
+            var commandValidationResult = new CommandValidator(this.userService, this.chatRoomService);
+            await commandValidationResult.Validate(command.ChatRoomId, command.Username);
+
+            if (!commandValidationResult.IsValid)
+            {
+                await this.Clients.Caller.CommandFailed(commandValidationResult.Error!);
+                return;
+            }
+
+            string userId = commandValidationResult.User?.Id ?? string.Empty;
+
+            BanCommandResult result = await this.commandService.Ban(command);
+            if (result == BanCommandResult.AlreadyBanned)
+            {
+                var response = new ErrorResponse(CommandFailedErrorMessages.Ban.UserAlreadyBanned(command.Username,commandValidationResult.ChatRoom?.Title ?? string.Empty));
+                await this.Clients.Caller.CommandFailed(response);
+                return;
+            }
+
+            IEnumerable<string> connectionIds = await this.chatRoomManager
+                .BanUser(command.ChatRoomId, userId);
+
+            var bannedUserClaims = new UserClaimsViewModel()
+            {
+                Id = userId,
+                Username = command.Username,
+            };
+
+            foreach (var connectionId in connectionIds)
+            {
+                await Groups
+                    .RemoveFromGroupAsync(connectionId, HubPrefixes.ChatRoomGroupPrefix(command.ChatRoomId));
+            }
+
+            ChatRoomPunishmentNotificationViewModel notification = new()
+            {
+                ChatRoomId = command.ChatRoomId,
+                ChatRoomName = commandValidationResult.ChatRoom!.Title,
+                Message = command.Reason,
+                Title = CommandMessages.Ban.Title(commandValidationResult.ChatRoom!.Title),
+                Details = CommandMessages.Ban.Details,
+            };
+
+            await Clients.Groups(HubPrefixes.UserGroupPrefix(userId)).Ban(notification);
+
+            await Clients
+                .Groups(HubPrefixes.ChatRoomGroupPrefix(command.ChatRoomId))
+                .UserLeave(bannedUserClaims);
+        }
+
+        [Authorize(Policy = Policies.IsChatModeratorSignalR)]
+        public async Task UnbanUser(UnbanCommandViewModel command)
+        {
+            var commandValidationResult = new CommandValidator(this.userService, this.chatRoomService);
+            await commandValidationResult.Validate(command.ChatRoomId, command.Username);
+
+            if (!commandValidationResult.IsValid)
+            {
+                await this.Clients.Caller.CommandFailed(commandValidationResult.Error!);
+                return;
+            }
+
+            string userId = commandValidationResult.User?.Id ?? string.Empty;
+
+            UnbanCommandResult result = await this.commandService.Unban(command);
+
+            if (result == UnbanCommandResult.NotBanned)
+            {
+                var response = new ErrorResponse(CommandFailedErrorMessages.Unban.UserIsNotBanned(command.Username, commandValidationResult.ChatRoom?.Title ?? string.Empty));
+                await this.Clients.Caller.CommandFailed(response);
+                return;
+            }
+
+            ChatRoomPunishmentNotificationViewModel notification = new()
+            {
+                ChatRoomId = command.ChatRoomId,
+                ChatRoomName = commandValidationResult.ChatRoom!.Title,
+                Title = CommandMessages.Unban.Title(commandValidationResult.ChatRoom!.Title),
+                Details = CommandMessages.Unban.Details,
+            };
+
+            await Clients.Groups(HubPrefixes.UserGroupPrefix(userId)).Unban(notification);
         }
 
         public async override Task OnDisconnectedAsync(Exception? exception)
@@ -249,6 +402,17 @@ namespace Web.Hubs
             var claims = jwtService.ExtractUserFromJWT(token);
             return claims;
         }
-    }
 
+        private async Task<bool> UserIsBanned(int chatRoomId)
+        {
+            var claims = this.ExtractClaims();
+            if (claims is null)
+            {
+                return true;
+            }
+
+            bool isBanned = await this.commandService.CheckIfUserIsBanned(claims.Username, chatRoomId);
+            return isBanned;
+        }
+    }
 }

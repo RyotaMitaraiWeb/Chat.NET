@@ -7,6 +7,8 @@ import React, { useRef, useState } from 'react';
 import { MdSend } from 'react-icons/md';
 import { chatHubConnection } from '@/signalr/ChatHubConnection';
 import { SendMessage } from '@/types/chat';
+import { commandParser } from '@/util/commandParser/commandParser';
+import { commands } from './commands';
 
 type MessageFieldProps = {
   chatRoomId: number;
@@ -32,9 +34,8 @@ function MessageField(props: MessageFieldProps): React.JSX.Element {
     }
   }
 
-  function handleSubmit(event?: React.FormEvent) {
+  function sendMessage() {
     setSending(true);
-    event?.preventDefault();
     const messageToSend: SendMessage = {
       message: actualMessage,
       chatRoomId: props.chatRoomId,
@@ -58,6 +59,47 @@ function MessageField(props: MessageFieldProps): React.JSX.Element {
           }
         }, 500);
       });
+  }
+
+  function handleSubmit(event?: React.FormEvent) {
+    event?.preventDefault();
+    if (!message.startsWith('/')) {
+      sendMessage();
+    } else {
+      try {
+        const args = commandParser(message);
+        const cmd = message.match(/(?<=^\/)[a-z0-9]+/i)?.toString() || '';
+
+        const command = commands[cmd];
+        command.action(args, props.chatRoomId).finally(() => {
+          setSending(false);
+          setMessage('');
+          const field = form.current?.querySelector('textarea') as HTMLTextAreaElement;
+
+          // Focus when the DOM updates
+          const timerId: ReturnType<typeof setInterval> = setInterval(() => {
+            if (!field.disabled) {
+              field.focus();
+              clearInterval(timerId);
+            }
+          }, 500);
+        });
+      } catch (err) {
+        // TO-DO: add local messages
+        setSending(false);
+        setMessage('');
+        const field = form.current?.querySelector('textarea') as HTMLTextAreaElement;
+
+        // Focus when the DOM updates
+        const timerId: ReturnType<typeof setInterval> = setInterval(() => {
+          if (!field.disabled) {
+            field.focus();
+            clearInterval(timerId);
+          }
+        }, 500);
+        return;
+      }
+    }
   }
 
   /*

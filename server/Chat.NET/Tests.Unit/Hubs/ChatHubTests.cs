@@ -28,6 +28,8 @@ namespace Tests.Unit.Hubs
         public IChatRoomManager ChatRoomManager { get; set; } = Substitute.For<IChatRoomManager>();
         public IChatRoomMessageService ChatRoomMessageService { get; set; } = Substitute.For<IChatRoomMessageService>();
         public IValidator<SendChatRoomMessageViewModel> MessageValidator { get; set; } = Substitute.For<IValidator<SendChatRoomMessageViewModel>>();
+        public IChatRoomService ChatRoomService = Substitute.For<IChatRoomService>();
+        public ICommandService CommandService = Substitute.For<ICommandService>();
         public ChatHub Hub { get; set; }
 
         [SetUp]
@@ -40,7 +42,9 @@ namespace Tests.Unit.Hubs
                     this.RoleService,
                     this.ChatRoomManager,
                     this.ChatRoomMessageService,
-                    this.MessageValidator
+                    this.MessageValidator,
+                    this.CommandService,
+                    this.ChatRoomService
                 )
             {
                 Clients = this.Clients,

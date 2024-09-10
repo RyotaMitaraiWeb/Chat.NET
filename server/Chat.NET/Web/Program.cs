@@ -4,6 +4,7 @@ using Common.Hubs;
 using Contracts;
 using FluentValidation;
 using Infrastructure.Extensions;
+using Infrastructure.Mongo;
 using Infrastructure.Postgres;
 using Infrastructure.Postgres.Entities;
 using Infrastructure.Postgres.Repository;
@@ -13,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using MongoDB.Driver;
 using Npgsql;
 using Redis.OM;
 using StackExchange.Redis;
@@ -79,6 +81,25 @@ namespace Chat.NET
             builder.Services.AddScoped<IChatRoomMessageService, ChatRoomMessageService>();
             builder.Services.AddSingleton<IChatRoomManager, ChatRoomManager>();
             builder.Services.AddTransient<IValidator<SendChatRoomMessageViewModel>, CreateChatRoomMessageValidator>();
+            builder.Services.AddSingleton<ICommandService, CommandsService>();
+
+            var address = new MongoServerAddress(builder.Configuration["MONGO_CONNECTION_STRING"]);
+
+            string connStringMongo = new MongoUrlBuilder()
+            {
+                Server = address,
+                Username = builder.Configuration["MONGO_INITDB_ROOT_USERNAME"],
+                Password = builder.Configuration["MONGO_INITDB_ROOT_PASSWORD"],
+            }.ToString();
+
+            builder.Services.Configure<PunishmentDatabaseSettings>(settings =>
+            {
+                settings.ConnectionString = connStringMongo;
+                settings.DatabaseName = "PunishmentsStore";
+                settings.PunishmentCollectionName = "PunishmentsCollection";
+            });
+
+            
 
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
