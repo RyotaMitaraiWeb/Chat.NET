@@ -14,6 +14,7 @@ using Web.Validators;
 using Web.ViewModels.Authentication;
 using Web.ViewModels.ChatRoom;
 using Web.ViewModels.Commands;
+using Web.ViewModels.General;
 using Web.ViewModels.Role;
 using Web.ViewModels.User;
 
@@ -148,6 +149,19 @@ namespace Web.Hubs
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task JoinChatRoom(JoinChatRoomViewModel roomToJoin)
         {
+            bool userIsBannedFromChatRoom = await this.UserIsBanned(roomToJoin);
+
+            if (userIsBannedFromChatRoom)
+            {
+                var error = new SignalRErrorViewModel()
+                {
+                    StatusCode = System.Net.HttpStatusCode.Forbidden,
+                    Message = "You are banned from the chat room and cannot join it",
+                };
+
+                await this.Clients.Caller.UserIsBanned(error);
+                return;
+            }
             var claims = ExtractClaims()!;
             string connectionId = Context.ConnectionId;
             await Groups.AddToGroupAsync(Context.ConnectionId, HubPrefixes.ChatRoomGroupPrefix(roomToJoin.Id));
@@ -227,8 +241,6 @@ namespace Web.Hubs
 
             string userId = commandValidationResult.User?.Id ?? string.Empty;
 
-            command.UserId = userId;
-
             await this.commandService.Warn(command);
 
             ChatRoomPunishmentNotificationViewModel notification = new()
@@ -256,8 +268,6 @@ namespace Web.Hubs
             }
 
             string userId = commandValidationResult.User?.Id ?? string.Empty;
-
-            command.UserId = userId;
 
             BanCommandResult result = await this.commandService.Ban(command);
             if (result == BanCommandResult.AlreadyBanned)
@@ -312,7 +322,6 @@ namespace Web.Hubs
 
             string userId = commandValidationResult.User?.Id ?? string.Empty;
 
-            command.UserId = userId;
             UnbanCommandResult result = await this.commandService.Unban(command);
 
             if (result == UnbanCommandResult.NotBanned)
@@ -376,6 +385,18 @@ namespace Web.Hubs
 
             var claims = jwtService.ExtractUserFromJWT(token);
             return claims;
+        }
+
+        private async Task<bool> UserIsBanned(JoinChatRoomViewModel chat)
+        {
+            var claims = this.ExtractClaims();
+            if (claims is null)
+            {
+                return true;
+            }
+
+            bool isBanned = await this.commandService.CheckIfUserIsBanned(claims.Username, chat.Id);
+            return isBanned;
         }
     }
 }
