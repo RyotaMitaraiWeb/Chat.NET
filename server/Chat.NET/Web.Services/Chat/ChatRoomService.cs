@@ -168,15 +168,19 @@ namespace Web.Services.Chat
 
         }
 
-        public async Task<IEnumerable<GetChatRoomsViewModel>> Search(string title = "")
+        public async Task<IEnumerable<GetChatRoomsViewModel>> Search(string[] tags, string title = "")
         {
             var rooms = await this.repository.AllReadonly<ChatRoom>()
-                .Where(cr => cr.Title.Contains(title) && !cr.IsDeleted)
+                .Where(cr => 
+                    cr.Title.Contains(title)
+                    && !cr.IsDeleted
+                    && tags.All(t => cr.Tags.Select(tag => tag.NormalizedName).Contains(t)))
                 .Select(cr => new GetChatRoomsViewModel()
                 {
                     Id = cr.Id,
                     Title = cr.Title,
                     Description = cr.Description,
+                    Tags = cr.Tags.Select(t => t.Name).ToArray(),
                 })
                 .ToListAsync();
 

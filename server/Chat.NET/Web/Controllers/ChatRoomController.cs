@@ -34,9 +34,9 @@ namespace Web.Controllers
         [HttpGet]
         [Route("")]
         [AllowAnonymous]
-        public async Task<IActionResult> Search([FromQuery] string title = "")
+        public async Task<IActionResult> Search([FromQuery] string title = "", [FromQuery] string[]? tags = null)
         {
-            var rooms = await this.chatRoomService.Search(title: title);
+            var rooms = await this.chatRoomService.Search(title: title, tags: tags ?? []);
             return Ok(rooms);
         }
 
