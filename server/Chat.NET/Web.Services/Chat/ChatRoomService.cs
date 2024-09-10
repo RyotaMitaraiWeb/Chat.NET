@@ -71,12 +71,7 @@ namespace Web.Services.Chat
             {
                 Title = chatRoom.Title,
                 Description = chatRoom.Description,
-                Tags = chatRoom.Tags.Select(t => new ChatRoomTag()
-                    {
-                        Name = t,
-                        NormalizedName = t.ToUpper(),
-                    }
-                )
+                Tags = CreateTags(chatRoom.Tags),
             };
 
             await this.repository.AddAsync(room);
@@ -198,10 +193,30 @@ namespace Web.Services.Chat
 
             room.Title = chatRoom.Title;
             room.Description = chatRoom.Description;
+            room.Tags = CreateTags(chatRoom.Tags, chatRoomId);
 
             await this.repository.SaveChangesAsync();
 
             return ChatRoomUpdateResult.Success;
+        }
+
+        private static IEnumerable<ChatRoomTag> CreateTags(string[] tags)
+        {
+            return tags.Select(t => new ChatRoomTag()
+            {
+                Name = t,
+                NormalizedName = t.ToUpper(),
+            });
+        }
+
+        private static IEnumerable<ChatRoomTag> CreateTags(string[] tags, int chatRoomId)
+        {
+            return tags.Select(t => new ChatRoomTag()
+            {
+                ChatRoomId = chatRoomId,
+                Name = t,
+                NormalizedName = t.ToUpper()
+            });
         }
     }
 }

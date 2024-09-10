@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Common.ErrorMessages;
+using System.ComponentModel.DataAnnotations;
 using Web.ViewModels.ValidationAttributes;
 
 namespace Web.ViewModels.ChatRoom
@@ -9,8 +10,8 @@ namespace Web.ViewModels.ChatRoom
         public string Description { get; set; } = string.Empty;
 
         [UniqueTags]
-        [MaxLength(Common.Rules.ChatRoom.Tags.MaxLength)]
-        public IEnumerable<string> Tags { get; set;} = [];
+        [MaxLength(Common.Rules.ChatRoom.Tags.MaxLength, ErrorMessage = ChatRoomErrorMessages.Tags.MaxLength)]
+        public string[] Tags = [];
 
     }
 }
