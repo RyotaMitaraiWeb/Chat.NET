@@ -5,6 +5,7 @@ using Infrastructure.Mongo.Entities;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Linq.Expressions;
 using Web.ViewModels.Commands;
 
 namespace Web.Services.Chat
@@ -24,10 +25,7 @@ namespace Web.Services.Chat
         public async Task<BanCommandResult> Ban(BanCommandViewModel ban)
         {
             var currentBansDocuments = await this.punishmentsCollection
-                .FindAsync(b => 
-                    b.IsActive && b.ChatRoomId == ban.ChatRoomId 
-                    && b.NormalizedUsername == ban.Username.ToUpper()
-                    && b.Type == Punishments.Ban, new FindOptions<Punishment>() { Limit = 1 });
+                .FindAsync(BanExpression(ban.ChatRoomId, ban.Username), PunishmentFindOptions);
             
             var currentBan = await currentBansDocuments.FirstOrDefaultAsync();
             if (currentBan is not null)
@@ -53,10 +51,7 @@ namespace Web.Services.Chat
             var update = Builders<Punishment>.Update.Set(ban => ban.IsActive, false);
 
             var result = await this.punishmentsCollection
-                .UpdateOneAsync(b => 
-                    b.IsActive && b.ChatRoomId == unban.ChatRoomId
-                    && b.NormalizedUsername == unban.Username.ToUpper()
-                    && b.Type == Punishments.Ban,
+                .UpdateOneAsync(BanExpression(unban.ChatRoomId, unban.Username),
                 update);
 
            if (result.IsAcknowledged && result.ModifiedCount > 0)
@@ -81,5 +76,24 @@ namespace Web.Services.Chat
 
             await this.punishmentsCollection.InsertOneAsync(punishment);
         }
+
+        public async Task<bool> CheckIfUserIsBanned(string username, int chatRoomId)
+        {
+            var currentBansDocuments = await this.punishmentsCollection
+                .FindAsync(BanExpression(chatRoomId, username), PunishmentFindOptions);
+
+            var currentBan = await currentBansDocuments.FirstOrDefaultAsync();
+            return currentBan is not null;
+        }
+
+        private static Expression<Func<Punishment, bool>> BanExpression(int chatRoomId, string username)
+        {
+            return b => b.IsActive
+                && b.ChatRoomId == chatRoomId
+                && b.NormalizedUsername == username.ToUpper()
+                && b.Type == Punishments.Ban;
+        }
+
+        private static readonly FindOptions<Punishment> PunishmentFindOptions = new () { Limit = 1 };
     }
 }

@@ -9,5 +9,7 @@ namespace Contracts
         public Task<BanCommandResult> Ban(BanCommandViewModel ban);
 
         public Task<UnbanCommandResult> Unban(UnbanCommandViewModel unban);
+
+        public Task<bool> CheckIfUserIsBanned(string username, int chatRoomId);
     }
 }
