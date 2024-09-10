@@ -10,6 +10,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using System.Net;
 using Web.Validators;
 using Web.ViewModels.Authentication;
 using Web.ViewModels.ChatRoom;
@@ -155,7 +156,7 @@ namespace Web.Hubs
             {
                 var error = new SignalRErrorViewModel()
                 {
-                    StatusCode = System.Net.HttpStatusCode.Forbidden,
+                    StatusCode = HttpStatusCode.Forbidden,
                     Message = "You are banned from the chat room and cannot join it",
                 };
 
@@ -203,7 +204,7 @@ namespace Web.Hubs
             {
                 var error = new SignalRErrorViewModel()
                 {
-                    StatusCode = System.Net.HttpStatusCode.Forbidden,
+                    StatusCode = HttpStatusCode.Forbidden,
                     Message = "You are banned from the chat room and cannot send this message to it",
                 };
 
