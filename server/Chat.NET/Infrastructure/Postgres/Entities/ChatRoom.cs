@@ -12,5 +12,7 @@ namespace Infrastructure.Postgres.Entities
 
         public IEnumerable<ChatRoomMessage> Messages { get; set; } = [];
         public ICollection<UserFavoriteChatRoom> UserFavorites { get; set; } = [];
+
+        public IEnumerable<ChatRoomTag> Tags { get; set; } = Enumerable.Empty<ChatRoomTag>();
     }
 }

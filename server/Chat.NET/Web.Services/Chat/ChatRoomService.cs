@@ -71,6 +71,7 @@ namespace Web.Services.Chat
             {
                 Title = chatRoom.Title,
                 Description = chatRoom.Description,
+                Tags = CreateTags(chatRoom.Tags),
             };
 
             await this.repository.AddAsync(room);
@@ -167,15 +168,27 @@ namespace Web.Services.Chat
 
         }
 
-        public async Task<IEnumerable<GetChatRoomsViewModel>> Search(string title = "")
+        public async Task<IEnumerable<GetChatRoomsViewModel>> Search(string title, string[] tags)
         {
+            IEnumerable<string> normalizedTags = tags.Select(t => t.ToUpper());
+
             var rooms = await this.repository.AllReadonly<ChatRoom>()
-                .Where(cr => cr.Title.Contains(title) && !cr.IsDeleted)
+                .Include(cr => cr.Tags)
+                .Where(cr =>
+                    cr.Title.Contains(title)
+                    && !cr.IsDeleted
+                    && normalizedTags
+                        .All(normalizedTag => cr.Tags
+                            .Any(tag => tag.NormalizedName
+                            .Contains(normalizedTag))
+                        )
+                )
                 .Select(cr => new GetChatRoomsViewModel()
                 {
                     Id = cr.Id,
                     Title = cr.Title,
                     Description = cr.Description,
+                    Tags = cr.Tags.Select(t => t.Name).ToArray(),
                 })
                 .ToListAsync();
 
@@ -192,10 +205,30 @@ namespace Web.Services.Chat
 
             room.Title = chatRoom.Title;
             room.Description = chatRoom.Description;
+            room.Tags = CreateTags(chatRoom.Tags, chatRoomId);
 
             await this.repository.SaveChangesAsync();
 
             return ChatRoomUpdateResult.Success;
+        }
+
+        private static List<ChatRoomTag> CreateTags(string[] tags)
+        {
+            return tags.Select(t => new ChatRoomTag()
+            {
+                Name = t,
+                NormalizedName = t.ToUpper(),
+            }).ToList();
+        }
+
+        private static List<ChatRoomTag> CreateTags(string[] tags, int chatRoomId)
+        {
+            return tags.Select(t => new ChatRoomTag()
+            {
+                ChatRoomId = chatRoomId,
+                Name = t,
+                NormalizedName = t.ToUpper()
+            }).ToList();
         }
     }
 }
