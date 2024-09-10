@@ -87,7 +87,7 @@ namespace Chat.NET
 
             string connStringMongo = new MongoUrlBuilder()
             {
-                Server =  address,
+                Server = address,
                 Username = builder.Configuration["MONGO_INITDB_ROOT_USERNAME"],
                 Password = builder.Configuration["MONGO_INITDB_ROOT_PASSWORD"],
             }.ToString();

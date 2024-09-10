@@ -1,4 +1,5 @@
-﻿using Chat.NET;
+﻿using Amazon.Runtime.Internal.Transform;
+using Chat.NET;
 using Infrastructure.Postgres;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Testcontainers.MongoDb;
 using Testcontainers.PostgreSql;
 using Testcontainers.Redis;
 
@@ -25,6 +27,13 @@ namespace Tests.Integration
             .WithPortBinding(6000, true)
             .Build();
 
+        private readonly MongoDbContainer mongoDbContainer = new MongoDbBuilder()
+            .WithCleanUp(true)
+            .WithImage("mongo:7.0")
+            .WithName("mongo")
+            .WithPortBinding(27017, true)
+            .Build();
+
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             this.InitializeAsync().Wait();
@@ -33,7 +42,8 @@ namespace Tests.Integration
             var configurations = new Dictionary<string, string?>()
             {
                 { "JWT_SECRET", "WEHMKWEHMLWEHLWKEMHLKWEMHLKWEHW" },
-                { "REDIS_HOST", redisContainer.GetConnectionString() }
+                { "REDIS_HOST", redisContainer.GetConnectionString() },
+                { "MONGO_CONNECTION_STRING", "mongo" }
             };
 
             var c = new ConfigurationManager();
@@ -73,6 +83,7 @@ namespace Tests.Integration
         {
             await postgreSqlContainer.StartAsync();
             await redisContainer.StartAsync();
+            await mongoDbContainer.StartAsync();
         }
 
         public override async ValueTask DisposeAsync()
@@ -80,8 +91,10 @@ namespace Tests.Integration
             await this.Context.DisposeAsync();
             await postgreSqlContainer.DisposeAsync();
             await redisContainer.DisposeAsync();
+            await mongoDbContainer.DisposeAsync();
         }
 
         private ChatDbContext Context { get; set; } = null!;
     }
+
 }
