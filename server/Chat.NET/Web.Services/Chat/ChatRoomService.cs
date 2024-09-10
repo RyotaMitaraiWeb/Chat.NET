@@ -204,23 +204,23 @@ namespace Web.Services.Chat
             return ChatRoomUpdateResult.Success;
         }
 
-        private static IEnumerable<ChatRoomTag> CreateTags(string[] tags)
+        private static List<ChatRoomTag> CreateTags(string[] tags)
         {
             return tags.Select(t => new ChatRoomTag()
             {
                 Name = t,
                 NormalizedName = t.ToUpper(),
-            });
+            }).ToList();
         }
 
-        private static IEnumerable<ChatRoomTag> CreateTags(string[] tags, int chatRoomId)
+        private static List<ChatRoomTag> CreateTags(string[] tags, int chatRoomId)
         {
             return tags.Select(t => new ChatRoomTag()
             {
                 ChatRoomId = chatRoomId,
                 Name = t,
                 NormalizedName = t.ToUpper()
-            });
+            }).ToList();
         }
     }
 }
