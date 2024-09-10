@@ -84,7 +84,7 @@ function MessageField(props: MessageFieldProps): React.JSX.Element {
             }
           }, 500);
         });
-      } catch {
+      } catch (err) {
         // TO-DO: add local messages
         setSending(false);
         setMessage('');

@@ -10,6 +10,10 @@ import { usersOnlineReducer } from './reducers/usersOnlineReducer';
 import { messagesReducer } from './reducers/messagesReducer';
 import MessageField from './room/messageField/MessageField';
 import Loader from '@/components/loader/Loader';
+import { useRouter } from 'next/navigation';
+import { useSnackbar } from '@/hooks/useSnackbar/useSnackbar';
+import { SignalRError } from '@/types/global';
+import { HttpStatusCode } from '@/constants/httpStatusCode';
 
 type ChatRoomProps = {
   room: Chat;
@@ -19,6 +23,8 @@ function ChatRoom(props: ChatRoomProps): React.JSX.Element {
   const [users, dispatchUsers] = useReducer(usersOnlineReducer, []);
   const [messages, dispatchMessages] = useReducer(messagesReducer, []);
   const [isLoading, setLoading] = useState(true);
+  const router = useRouter();
+  const snackbar = useSnackbar();
 
   const alphabetizedUserList = useMemo(() => {
     const alphabetizedUsers = [...users];
@@ -55,6 +61,13 @@ function ChatRoom(props: ChatRoomProps): React.JSX.Element {
             }, 200);
           }
         });
+
+        chatHubConnection.on('UserIsBanned', (error: SignalRError) => {
+          if (error.statusCode === HttpStatusCode.FORBIDDEN) {
+            router.push('/');
+            snackbar.error(error.message || '', 10_000);
+          }
+        });
       })
       .catch();
 
@@ -65,8 +78,9 @@ function ChatRoom(props: ChatRoomProps): React.JSX.Element {
       chatHubConnection.off('SendInitialChatRoomState');
       chatHubConnection.off('MessageSent');
       chatHubConnection.off('CommandFailed');
+      chatHubConnection.off('UserIsBanned');
     };
-  }, [props.room.id]);
+  }, [props.room.id, snackbar, router]);
 
   const chatMessagesRef = useRef<HTMLElement>(null);
 

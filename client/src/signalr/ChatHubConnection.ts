@@ -13,7 +13,8 @@ export type chatHubClientMethods =
   | 'CommandFailed'
   | 'Ban'
   | 'Unban'
-  | 'Warn';
+  | 'Warn'
+  | 'UserIsBanned';
 export type chatHubServerMethods =
   | 'StartSession'
   | 'EndSession'
