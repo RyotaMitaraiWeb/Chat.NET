@@ -149,7 +149,7 @@ namespace Web.Hubs
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task JoinChatRoom(JoinChatRoomViewModel roomToJoin)
         {
-            bool userIsBannedFromChatRoom = await this.UserIsBanned(roomToJoin);
+            bool userIsBannedFromChatRoom = await this.UserIsBanned(roomToJoin.Id);
 
             if (userIsBannedFromChatRoom)
             {
@@ -162,6 +162,7 @@ namespace Web.Hubs
                 await this.Clients.Caller.UserIsBanned(error);
                 return;
             }
+
             var claims = ExtractClaims()!;
             string connectionId = Context.ConnectionId;
             await Groups.AddToGroupAsync(Context.ConnectionId, HubPrefixes.ChatRoomGroupPrefix(roomToJoin.Id));
@@ -193,6 +194,20 @@ namespace Web.Hubs
             var claims = ExtractClaims();
             if (claims is null)
             {
+                return;
+            }
+
+            bool userIsBannedFromChatRoom = await this.UserIsBanned(messageToSend.ChatRoomId);
+
+            if (userIsBannedFromChatRoom)
+            {
+                var error = new SignalRErrorViewModel()
+                {
+                    StatusCode = System.Net.HttpStatusCode.Forbidden,
+                    Message = "You are banned from the chat room and cannot send this message to it",
+                };
+
+                await this.Clients.Caller.UserIsBanned(error);
                 return;
             }
 
@@ -387,7 +402,7 @@ namespace Web.Hubs
             return claims;
         }
 
-        private async Task<bool> UserIsBanned(JoinChatRoomViewModel chat)
+        private async Task<bool> UserIsBanned(int chatRoomId)
         {
             var claims = this.ExtractClaims();
             if (claims is null)
@@ -395,7 +410,7 @@ namespace Web.Hubs
                 return true;
             }
 
-            bool isBanned = await this.commandService.CheckIfUserIsBanned(claims.Username, chat.Id);
+            bool isBanned = await this.commandService.CheckIfUserIsBanned(claims.Username, chatRoomId);
             return isBanned;
         }
     }
