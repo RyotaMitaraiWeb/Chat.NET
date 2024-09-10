@@ -1,7 +1,7 @@
 ﻿using Common.ErrorMessages;
 using System.ComponentModel.DataAnnotations;
 
-namespace Web.Validators
+namespace Web.ViewModels.ValidationAttributes
 {
     /// <summary>
     /// Performs a case insensitive check as to whether the collection of tags contains

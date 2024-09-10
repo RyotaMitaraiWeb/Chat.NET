@@ -71,6 +71,12 @@ namespace Web.Services.Chat
             {
                 Title = chatRoom.Title,
                 Description = chatRoom.Description,
+                Tags = chatRoom.Tags.Select(t => new ChatRoomTag()
+                    {
+                        Name = t,
+                        NormalizedName = t.ToUpper(),
+                    }
+                )
             };
 
             await this.repository.AddAsync(room);

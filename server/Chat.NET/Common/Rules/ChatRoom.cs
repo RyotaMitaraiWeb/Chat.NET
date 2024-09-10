@@ -6,5 +6,10 @@
         {
             public const int MaxLength = 500;
         }
+
+        public static class Tags
+        {
+            public const int MaxLength = 40;
+        }
     }
 }

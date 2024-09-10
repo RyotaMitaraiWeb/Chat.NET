@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Web.Validators;
+using Web.ViewModels.ValidationAttributes;
 
 namespace Tests.Unit.Validators
 {
