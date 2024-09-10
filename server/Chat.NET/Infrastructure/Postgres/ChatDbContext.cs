@@ -12,6 +12,8 @@ namespace Infrastructure.Postgres
         public DbSet<ChatRoom> ChatRooms { get; set; }
         public DbSet<ChatRoomMessage> ChatRoomMessages { get; set; }
 
+        public DbSet<ChatRoomTag> ChatRoomTags { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
